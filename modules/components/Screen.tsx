@@ -5,5 +5,5 @@ interface ScreenProps {
 }
 
 export const ScreenWrapper = ({ children }: ScreenProps) => {
-  return <Box className="px-4">{children}</Box>
+  return <Box className="px-4 w-full h-full">{children}</Box>
 }
