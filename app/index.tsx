@@ -1,11 +1,9 @@
-import { useRootNavigationState, useRouter } from "expo-router"
-import { useEffect } from "react"
-import { ActivityIndicator } from "react-native"
-
+import { useRootNavigationState, useRouter } from 'expo-router'
+import { useEffect } from 'react'
+import { ActivityIndicator } from 'react-native'
 
 export default function Index() {
-
-    const router = useRouter()
+  const router = useRouter()
   const navigationState = useRootNavigationState()
 
   useEffect(() => {
@@ -14,8 +12,5 @@ export default function Index() {
     }
   }, [navigationState?.key])
 
-
-    return (
-        <ActivityIndicator />
-    )
+  return <ActivityIndicator />
 }

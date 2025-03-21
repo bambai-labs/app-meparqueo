@@ -1,2 +1,2 @@
-export { HomeScreen } from "./Home"
-export { SearchScreen } from "./Search"
+export { HomeScreen } from './Home'
+export { SearchScreen } from './Search'
