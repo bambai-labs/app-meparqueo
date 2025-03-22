@@ -5,10 +5,12 @@ import { ArrowRightIcon, Icon } from '@/components/ui/icon'
 import { Input, InputField } from '@/components/ui/input'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import Constants from 'expo-constants'
 import { Stack } from 'expo-router'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { FlatList, Image, Text, View } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { RecentParkingCard } from '../components'
 import {
   ParkingLotAvailability,
@@ -34,79 +36,102 @@ const recentParkings: RecentParkingLot[] = [
 
 export const HomeScreen = () => {
   const [chipSelected, setChipSelected] = useState(false)
+  const bottomSheetRef = useRef<BottomSheet>(null)
 
   const toggleChip = () => {
     setChipSelected(!chipSelected)
   }
 
+  const expandParkingDetailsSheet = () => {
+    bottomSheetRef.current?.expand()
+  }
+
   return (
-    <ScreenWrapper>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <VStack
-        style={{
-          paddingTop: Constants.statusBarHeight + 20,
-        }}
-      >
-        <HStack>
-          <Input
-            style={{
-              borderEndStartRadius: 0,
-              borderEndEndRadius: 0,
-              borderStartStartRadius: 8,
-              borderStartEndRadius: 8,
-            }}
-            className="flex-1"
-            variant="outline"
-            size="xl"
-            isDisabled={false}
-            isInvalid={false}
-            isReadOnly={false}
-          >
-            <InputField placeholder="A que dirección quieres ir?" />
-          </Input>
-
-          <Button
-            size="xl"
-            style={{
-              borderStartStartRadius: 0,
-              borderStartEndRadius: 0,
-              borderEndStartRadius: 8,
-              borderEndEndRadius: 8,
-            }}
-          >
-            <Icon as={ArrowRightIcon} size="md" color="white" />
-          </Button>
-        </HStack>
-
-        <Box className="w-full items-start mt-6">
-          <Chip selected={chipSelected} onPress={toggleChip}>
-            <ButtonText>Recientes</ButtonText>
-          </Chip>
-        </Box>
-
-        {!chipSelected && (
-          <VStack className="h-[80%] flex-col justify-center items-center">
-            <Image source={require('@/assets/images/parking.png')} />
-            <View>
-              <Text className="font-bold text-2xl text-center">
-                Comienza tu experiencia con Me Parqueo. Busca tu destino 👆
-              </Text>
-            </View>
-          </VStack>
-        )}
-
-        <FlatList
-          className="mt-5"
-          data={recentParkings}
-          renderItem={({ item }) => <RecentParkingCard recentParking={item} />}
-          keyExtractor={(item) => item.name}
+    <GestureHandlerRootView>
+      <ScreenWrapper>
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
         />
-      </VStack>
-    </ScreenWrapper>
+
+        <VStack
+          style={{
+            paddingTop: Constants.statusBarHeight + 20,
+          }}
+        >
+          <HStack>
+            <Input
+              style={{
+                borderEndStartRadius: 0,
+                borderEndEndRadius: 0,
+                borderStartStartRadius: 8,
+                borderStartEndRadius: 8,
+              }}
+              className="flex-1"
+              variant="outline"
+              size="xl"
+              isDisabled={false}
+              isInvalid={false}
+              isReadOnly={false}
+            >
+              <InputField placeholder="A que dirección quieres ir?" />
+            </Input>
+
+            <Button
+              size="xl"
+              style={{
+                borderStartStartRadius: 0,
+                borderStartEndRadius: 0,
+                borderEndStartRadius: 8,
+                borderEndEndRadius: 8,
+              }}
+            >
+              <Icon as={ArrowRightIcon} size="md" color="white" />
+            </Button>
+          </HStack>
+
+          <Box className="w-full items-start mt-6">
+            <Chip selected={chipSelected} onPress={toggleChip}>
+              <ButtonText>Recientes</ButtonText>
+            </Chip>
+          </Box>
+
+          {chipSelected ? (
+            <FlatList
+              className="mt-5"
+              data={recentParkings}
+              renderItem={({ item }) => (
+                <RecentParkingCard
+                  recentParking={item}
+                  onPress={expandParkingDetailsSheet}
+                />
+              )}
+              keyExtractor={(item) => item.name}
+            />
+          ) : (
+            <VStack className="h-[80%] flex-col justify-center items-center">
+              <Image source={require('@/assets/images/parking.png')} />
+              <View>
+                <Text className="font-bold text-2xl text-center">
+                  Comienza tu experiencia con Me Parqueo. Busca tu destino 👆
+                </Text>
+              </View>
+            </VStack>
+          )}
+        </VStack>
+
+        <BottomSheet
+          ref={bottomSheetRef}
+          enablePanDownToClose={true}
+          index={-1}
+          snapPoints={['80%']}
+        >
+          <BottomSheetView className="px-4">
+            <Text>Gaspar lloraa 😭😭</Text>
+          </BottomSheetView>
+        </BottomSheet>
+      </ScreenWrapper>
+    </GestureHandlerRootView>
   )
 }

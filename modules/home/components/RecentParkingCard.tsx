@@ -8,9 +8,13 @@ import { formatTimestamp } from '../utils'
 
 interface Props {
   recentParking: RecentParkingLot
+  onPress?: () => void
 }
 
-export const RecentParkingCard = ({ recentParking }: Props) => {
+export const RecentParkingCard = ({
+  recentParking,
+  onPress = () => {},
+}: Props) => {
   const openMapDirection = async () => {
     //Los current se reemplazaran por la ubicación precisa del dispositivo
     const currentLat = 8.800618
@@ -46,7 +50,7 @@ export const RecentParkingCard = ({ recentParking }: Props) => {
   }
 
   return (
-    <Pressable onPress={openMapDirection}>
+    <Pressable onPress={onPress}>
       <VStack className="w-full py-3 px-4 bg-white rounded-xl border border-gray-600 shadow-2xl">
         <HStack className="w-full justify-between">
           <Text>{formatTimestamp(recentParking.timestamp)}</Text>
@@ -59,7 +63,7 @@ export const RecentParkingCard = ({ recentParking }: Props) => {
             <Text className="font-bold">Disponible</Text>
           </HStack>
 
-          <Text className="text-gray-600">A 150m de Calle 41 Crr 2</Text>
+          <Text className="text-gray-600">A 150 m de Calle 41 Crr 2</Text>
         </HStack>
       </VStack>
     </Pressable>
