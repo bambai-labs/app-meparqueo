@@ -7,16 +7,20 @@ import { getAvailabilityIndicatorStyles } from '../utils'
 
 interface Props {
   availability: ParkingLotAvailability
+  className?: string
 }
 
-export const AvailabilityIndicator = ({ availability }: Props) => {
+export const AvailabilityIndicator = ({
+  availability,
+  className = '',
+}: Props) => {
   const indicatorStyles = useMemo(
     () => getAvailabilityIndicatorStyles(availability),
     [availability],
   )
 
   return (
-    <HStack space="sm" className="items-center">
+    <HStack space="sm" className={`${className} items-center`}>
       <Box className={`${indicatorStyles.indicatorColor} p-4 rounded-full`} />
       <Text className="font-bold">{indicatorStyles.indicatorText}</Text>
     </HStack>

@@ -8,7 +8,7 @@ import { AvailabilityIndicator } from './AvailabilityIndicator'
 
 interface Props {
   recentParking: RecentParkingLot
-  onPress?: () => void
+  onPress?: (parkingLot: RecentParkingLot) => void
 }
 
 export const RecentParkingCard = ({
@@ -50,7 +50,7 @@ export const RecentParkingCard = ({
   }
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={() => onPress(recentParking)}>
       <VStack className="w-full py-3 px-4 bg-white rounded-xl border border-gray-600 shadow-2xl">
         <HStack className="w-full justify-between">
           <Text>{formatTimestamp(recentParking.timestamp)}</Text>
