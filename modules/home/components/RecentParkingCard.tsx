@@ -1,10 +1,10 @@
-import { Box } from '@/components/ui/box'
 import { HStack } from '@/components/ui/hstack'
 import { ExternalLinkIcon, Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
 import { Linking, Platform, Pressable, Text } from 'react-native'
 import { RecentParkingLot } from '../types'
 import { formatTimestamp } from '../utils'
+import { AvailabilityIndicator } from './AvailabilityIndicator'
 
 interface Props {
   recentParking: RecentParkingLot
@@ -58,10 +58,7 @@ export const RecentParkingCard = ({
         </HStack>
         <Text className="mt-2 font-bold text-2xl">{recentParking.name}</Text>
         <HStack className="w-full justify-between mt-2 items-center">
-          <HStack space="sm" className="items-center">
-            <Box className="bg-green-950 p-4 rounded-full" />
-            <Text className="font-bold">Disponible</Text>
-          </HStack>
+          <AvailabilityIndicator availability={recentParking.availability} />
 
           <Text className="text-gray-600">A 150 m de Calle 41 Crr 2</Text>
         </HStack>
