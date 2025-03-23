@@ -4,14 +4,12 @@ import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
 import {
   AlertCircleIcon,
-  ArrowRightIcon,
   ChevronDownIcon,
   CloseIcon,
   Icon,
   PhoneIcon,
 } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
-import { Input, InputField } from '@/components/ui/input'
 import {
   Modal,
   ModalBackdrop,
@@ -38,7 +36,7 @@ import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import Constants from 'expo-constants'
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import { useRef, useState } from 'react'
@@ -52,7 +50,11 @@ import {
   View,
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { AvailabilityIndicator, RecentParkingCard } from '../components'
+import {
+  AvailabilityIndicator,
+  RecentParkingCard,
+  SearchBar,
+} from '../components'
 import {
   ParkingLot,
   ParkingLotAvailability,
@@ -84,6 +86,7 @@ const carouselImages = [
 ]
 
 export const HomeScreen = () => {
+  const router = useRouter()
   const [chipSelected, setChipSelected] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
@@ -157,6 +160,10 @@ export const HomeScreen = () => {
     setIsReportModalOpen(true)
   }
 
+  const handleSearchBarPress = () => {
+    router.push('/home/search')
+  }
+
   return (
     <GestureHandlerRootView>
       <ScreenWrapper>
@@ -171,36 +178,11 @@ export const HomeScreen = () => {
             paddingTop: Constants.statusBarHeight + 20,
           }}
         >
-          <HStack>
-            <Input
-              style={{
-                borderEndStartRadius: 0,
-                borderEndEndRadius: 0,
-                borderStartStartRadius: 8,
-                borderStartEndRadius: 8,
-              }}
-              className="flex-1"
-              variant="outline"
-              size="xl"
-              isDisabled={false}
-              isInvalid={false}
-              isReadOnly={false}
-            >
-              <InputField placeholder="A que dirección quieres ir?" />
-            </Input>
-
-            <Button
-              size="xl"
-              style={{
-                borderStartStartRadius: 0,
-                borderStartEndRadius: 0,
-                borderEndStartRadius: 8,
-                borderEndEndRadius: 8,
-              }}
-            >
-              <Icon as={ArrowRightIcon} size="md" color="white" />
-            </Button>
-          </HStack>
+          <SearchBar
+            readonly={true}
+            onPress={handleSearchBarPress}
+            pointerEvents="none"
+          />
 
           <Box className="w-full items-start mt-6">
             <Chip selected={chipSelected} onPress={toggleChip}>
