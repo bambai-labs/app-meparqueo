@@ -4,21 +4,23 @@ import { Image } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
 import { MapPin } from 'lucide-react-native'
 import { Pressable, Text } from 'react-native'
-import { ParkingLotAvailability } from '../types'
+import { ParkingLot } from '../types'
 import { formatCurrency } from '../utils'
 import { AvailabilityIndicator } from './AvailabilityIndicator'
 
 interface Props {
+  parkingLot: ParkingLot
   className?: string
-  onPress?: (parkingLocation: [number, number]) => void
+  onPress?: (parkingLot: ParkingLot) => void
 }
 
 export const ParkingResultCard = ({
+  parkingLot,
   className = '',
-  onPress = ([]) => {},
+  onPress = () => {},
 }: Props) => {
   return (
-    <Pressable onPress={() => onPress([-75.861874, 8.785986])}>
+    <Pressable onPress={() => onPress(parkingLot)}>
       <HStack space="md" className={`${className} rounded-lg p-2 bg-white`}>
         <Image
           source={{
@@ -27,15 +29,13 @@ export const ParkingResultCard = ({
           className="w-[150px] h-full rounded-xl"
         />
         <VStack>
-          <Text>Parking Splash</Text>
+          <Text>{parkingLot.name}</Text>
           <HStack className="items-center">
-            <Text className="text-xl">{formatCurrency(2000)}</Text>
+            <Text className="text-xl">{formatCurrency(parkingLot.price)}</Text>
             <Text className="text-gray-600"> / hora</Text>
           </HStack>
           <HStack className="items-center mt-3" space="sm">
-            <AvailabilityIndicator
-              availability={ParkingLotAvailability.MORE_THAN_FIVE}
-            />
+            <AvailabilityIndicator availability={parkingLot.availability} />
 
             <Icon as={MapPin} size="md" />
             <Text>1.2 Km</Text>
