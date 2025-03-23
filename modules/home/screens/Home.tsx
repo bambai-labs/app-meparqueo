@@ -1,14 +1,39 @@
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
+import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
 import {
   AlertCircleIcon,
   ArrowRightIcon,
+  ChevronDownIcon,
+  CloseIcon,
   Icon,
   PhoneIcon,
 } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { Input, InputField } from '@/components/ui/input'
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from '@/components/ui/modal'
+import {
+  Select,
+  SelectBackdrop,
+  SelectContent,
+  SelectDragIndicator,
+  SelectDragIndicatorWrapper,
+  SelectIcon,
+  SelectInput,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
+} from '@/components/ui/select'
+import { Textarea, TextareaInput } from '@/components/ui/textarea'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
@@ -17,7 +42,15 @@ import { Stack } from 'expo-router'
 import { MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import { useRef, useState } from 'react'
-import { FlatList, Image, Text, View } from 'react-native'
+import {
+  Alert,
+  FlatList,
+  Image,
+  Linking,
+  Platform,
+  Text,
+  View,
+} from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { AvailabilityIndicator, RecentParkingCard } from '../components'
 import {
@@ -68,6 +101,60 @@ export const HomeScreen = () => {
   const handleParkingCardPress = (parking: ParkingLot) => {
     setCurrentParking(parking)
     expandParkingDetailsSheet()
+  }
+
+  const openMapDirection = async () => {
+    //Los current se reemplazaran por la ubicación precisa del dispositivo
+    const currentLat = 8.800618
+    const currentLon = -75.7180332
+    const destinationLat = 8.7985081
+    const destinationLon = -75.7149219
+
+    if (Platform.OS === 'ios') {
+      const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
+      const appleMapsFallback = `http://maps.apple.com/?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
+
+      const canOpenApple = await Linking.canOpenURL(appleMapsScheme)
+
+      if (canOpenApple) {
+        Linking.openURL(appleMapsScheme)
+      } else {
+        Linking.openURL(appleMapsFallback)
+      }
+
+      return
+    }
+
+    const schemeURL = `comgooglemaps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}&directionsmode=driving`
+    const fallbackURL = `https://www.google.com/maps/dir/${currentLat},${currentLon}/${destinationLat},${destinationLon}/`
+
+    const canOpenGoogle = await Linking.canOpenURL(schemeURL)
+
+    if (canOpenGoogle) {
+      Linking.openURL(schemeURL)
+    } else {
+      Linking.openURL(fallbackURL)
+    }
+  }
+
+  const callParkingLot = async () => {
+    const url = 'tel:1234567890'
+    try {
+      await Linking.openURL(url)
+    } catch (err) {
+      Alert.alert('Error', 'Algo salió mal al intentar hacer la llamada')
+      console.error(err)
+    }
+  }
+
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+
+  const hideReportModal = () => {
+    setIsReportModalOpen(false)
+  }
+
+  const showReportModal = () => {
+    setIsReportModalOpen(true)
   }
 
   return (
@@ -151,7 +238,7 @@ export const HomeScreen = () => {
           index={-1}
           snapPoints={['50%', '80%']}
         >
-          <BottomSheetView className="px-4">
+          <BottomSheetView className="px-6">
             <Box className="h-96 rounded-2xl overflow-hidden">
               <Carousel
                 autoplay
@@ -190,21 +277,119 @@ export const HomeScreen = () => {
               }
             />
 
-            <HStack className="w-full justify-evenly">
-              <Button size="xl">
-                <Icon as={PhoneIcon} size="md" color="white" />
-              </Button>
+            <HStack className="w-full justify-evenly mt-3">
+              <VStack className="items-center">
+                <Button
+                  onPress={callParkingLot}
+                  size="xl"
+                  className="w-16 h-16 rounded-xl"
+                >
+                  <Icon as={PhoneIcon} size="xl" color="white" />
+                </Button>
+                <Text className="mt-2 text-gray-600">Llamar</Text>
+              </VStack>
 
-              <Button size="xl">
-                <Icon as={MapIcon} size="md" color="white" />
-              </Button>
+              <VStack className="items-center">
+                <Button
+                  onPress={openMapDirection}
+                  size="xl"
+                  className="w-16 h-16 rounded-xl"
+                >
+                  <Icon as={MapIcon} size="xl" color="white" />
+                </Button>
+                <Text className="mt-2 text-gray-600">Trazar ruta</Text>
+              </VStack>
 
-              <Button size="xl">
-                <Icon as={AlertCircleIcon} size="md" color="white" />
-              </Button>
+              <VStack className="items-center">
+                <Button
+                  onPress={showReportModal}
+                  size="xl"
+                  className="w-16 h-16 rounded-xl"
+                >
+                  <Icon as={AlertCircleIcon} size="xl" color="white" />
+                </Button>
+                <Text className="mt-2 text-gray-600">Reportar</Text>
+              </VStack>
             </HStack>
+
+            <Text className="mt-3 text-xl font-bold">
+              Servicios adicionales
+            </Text>
+
+            <Text className="text-gray-600 text-xl">
+              Lavadero, Camaras, Wifi, Llantería, Cambio de aceite
+            </Text>
+
+            <Text className="mt-3 text-xl font-bold">Métodos de pago</Text>
+
+            <Text className="text-gray-600 text-xl">
+              Efectivo, Nequi, Bancolombia a la mano, Datafono
+            </Text>
           </BottomSheetView>
         </BottomSheet>
+
+        <Modal isOpen={isReportModalOpen} onClose={hideReportModal}>
+          <ModalBackdrop />
+
+          <ModalContent>
+            <ModalHeader>
+              <Heading>Reportar parqueadero</Heading>
+              <ModalCloseButton>
+                <Icon
+                  as={CloseIcon}
+                  size="md"
+                  className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
+                />
+              </ModalCloseButton>
+            </ModalHeader>
+
+            <ModalBody>
+              <Select className="w-full">
+                <SelectTrigger variant="outline" size="md">
+                  <SelectInput
+                    placeholder="Razón del reporte"
+                    className="flex-1"
+                  />
+                  <SelectIcon className="mr-3" as={ChevronDownIcon} />
+                </SelectTrigger>
+                <SelectPortal>
+                  <SelectBackdrop />
+                  <SelectContent>
+                    <SelectDragIndicatorWrapper>
+                      <SelectDragIndicator />
+                    </SelectDragIndicatorWrapper>
+                    <SelectItem label="Mala atención" value="ma" />
+                    <SelectItem
+                      label="No era la disponibilidad correcta"
+                      value="nd"
+                    />
+                    <SelectItem
+                      label="Otro"
+                      value="Cross Platform Development Process"
+                    />
+                  </SelectContent>
+                </SelectPortal>
+              </Select>
+
+              <Textarea size="md" className="mt-3">
+                <TextareaInput placeholder="Comentarios" />
+              </Textarea>
+            </ModalBody>
+
+            <ModalFooter>
+              <Button
+                variant="outline"
+                action="secondary"
+                onPress={hideReportModal}
+              >
+                <ButtonText>Cancelar</ButtonText>
+              </Button>
+              <Button onPress={hideReportModal}>
+                <ButtonText>Reportar</ButtonText>
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </ScreenWrapper>
     </GestureHandlerRootView>
   )
