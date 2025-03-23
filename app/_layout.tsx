@@ -5,6 +5,7 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native'
+import Mapbox from '@rnmapbox/maps'
 import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
@@ -30,6 +31,11 @@ export default function RootLayout() {
       SplashScreen.hideAsync()
     }
   }, [loaded])
+
+  useEffect(() => {
+    Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '')
+    Mapbox.setTelemetryEnabled(false)
+  }, [])
 
   if (!loaded) {
     return null
