@@ -4,26 +4,39 @@ import { ArrowRightIcon, Icon } from '@/components/ui/icon'
 import { Input, InputField } from '@/components/ui/input'
 import { Pressable } from 'react-native'
 
+interface SearchResult {
+  value: string
+  label: string
+}
 interface Props {
+  query: string
   disabled?: boolean
   invalid?: boolean
   readonly?: boolean
   className?: string
   pointerEvents?: 'auto' | 'box-none' | 'none' | 'box-only' | undefined
+  placeholder?: string
   onPress?: () => void
+  onQueryChange: (query: string) => void
+  onSearch: (query: string) => void
+  results?: SearchResult[]
 }
 
 export const SearchBar = ({
+  query,
   disabled = false,
   invalid = false,
   readonly = false,
   className = '',
   pointerEvents,
+  placeholder = '',
   onPress = () => {},
+  onQueryChange,
+  onSearch,
 }: Props) => {
   return (
     <Pressable onPress={onPress}>
-      <HStack className={className}>
+      <HStack className={`${className} relative`}>
         <Input
           style={{
             borderEndStartRadius: 0,
@@ -39,9 +52,17 @@ export const SearchBar = ({
           isReadOnly={readonly}
           pointerEvents={pointerEvents}
         >
-          <InputField placeholder="A que dirección quieres ir?" />
+          <InputField
+            type="text"
+            inputMode="search"
+            value={query}
+            onChangeText={onQueryChange}
+            placeholder={placeholder}
+            onSubmitEditing={() => onSearch(query)}
+          />
         </Input>
         <Button
+          onPress={() => onSearch(query)}
           size="xl"
           style={{
             borderStartStartRadius: 0,

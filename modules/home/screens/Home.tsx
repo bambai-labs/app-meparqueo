@@ -179,9 +179,13 @@ export const HomeScreen = () => {
           }}
         >
           <SearchBar
+            query=""
+            onQueryChange={() => {}}
             readonly={true}
             onPress={handleSearchBarPress}
             pointerEvents="none"
+            placeholder="A donde quieres ir?"
+            onSearch={() => {}}
           />
 
           <Box className="w-full items-start mt-6">

@@ -1,0 +1,1 @@
+export { useSearchPlaces } from './useSearchPlaces'

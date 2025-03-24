@@ -23,6 +23,7 @@ import {
   ParkingResultCard,
   SearchBar,
 } from '../components'
+import { useSearchPlaces } from '../hooks'
 import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
 import { formatCurrency } from '../utils'
 import { getPermissions } from '../utils/locationUtils'
@@ -74,6 +75,9 @@ export const SearchScreen = () => {
     null,
   )
   const [firstTimeLoaded, setFirstTimeLoaded] = useState(false)
+
+  const { query, places, searchPlace, clearPlaces, clearQuery, onChangeQuery } =
+    useSearchPlaces()
 
   const openBottomSheet = () => {
     bottomSheetRef.current?.expand()
@@ -206,7 +210,13 @@ export const SearchScreen = () => {
           <Pressable onPress={goBack} className="mb-3">
             <Icon className="p-4" as={ArrowLeft} size="xl" />
           </Pressable>
-          <SearchBar className="mt-3" />
+          <SearchBar
+            query={query}
+            onQueryChange={onChangeQuery}
+            placeholder="A donde quieres ir?"
+            className="mt-3"
+            onSearch={searchPlace}
+          />
 
           <HStack className="mt-3 w-full items-center justify-between">
             <HStack space="md">
