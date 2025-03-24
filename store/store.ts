@@ -1,8 +1,12 @@
-import { configureStore } from "@reduxjs/toolkit"
-import { counterSlice } from "./counter"
+import { configureStore } from '@reduxjs/toolkit'
+import { counterSlice } from './counter'
+import { locationSlice } from './location'
 
 export const store = configureStore({
-    reducer: counterSlice.reducer
+  reducer: {
+    counter: counterSlice.reducer,
+    location: locationSlice.reducer,
+  },
 })
 
 export type AppDispatch = typeof store.dispatch

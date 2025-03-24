@@ -4,14 +4,14 @@ import { HStack } from '@/components/ui/hstack'
 import { AlertCircleIcon, Icon, PhoneIcon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
+import { useAppSelector } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
 import Constants from 'expo-constants'
-import * as Location from 'expo-location'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text, View } from 'react-native'
 import {
   FlatList,
@@ -26,7 +26,6 @@ import {
 import { useSearchPlaces } from '../hooks'
 import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
 import { formatCurrency } from '../utils'
-import { getPermissions } from '../utils/locationUtils'
 
 const carouselImages = [
   'https://eltesoro.com.co/wp-content/uploads/2021/04/0721-servicio-parqueadero-el-tesoro-%E2%80%93-2.jpeg',
@@ -68,16 +67,9 @@ export const SearchScreen = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
-  const [locationSubscription, setLocationSubscription] =
-    useState<Location.LocationSubscription | null>(null)
-
-  const [deviceLocation, setDeviceLocation] = useState<[number, number] | null>(
-    null,
-  )
-  const [firstTimeLoaded, setFirstTimeLoaded] = useState(false)
-
   const { query, places, searchPlace, clearPlaces, clearQuery, onChangeQuery } =
     useSearchPlaces()
+  const { deviceLocation } = useAppSelector((state) => state.location)
 
   const openBottomSheet = () => {
     bottomSheetRef.current?.expand()
@@ -156,42 +148,6 @@ export const SearchScreen = () => {
     })
   }
 
-  const startWatchingLocation = async () => {
-    const hasPermission = await getPermissions()
-    if (!hasPermission) return
-
-    const sub = await Location.watchPositionAsync(
-      {
-        accuracy: Location.Accuracy.High,
-        timeInterval: 1000,
-        distanceInterval: 1,
-      },
-      ({ coords }) => {
-        const { longitude, latitude } = coords
-        setDeviceLocation([longitude, latitude])
-        if (!firstTimeLoaded) {
-          setFirstTimeLoaded(true)
-          setCameraPosition([longitude, latitude])
-        }
-      },
-    )
-
-    setLocationSubscription(sub)
-  }
-
-  const stopWatchingLocation = () => {
-    locationSubscription?.remove()
-    setLocationSubscription(null)
-  }
-
-  useEffect(() => {
-    startWatchingLocation()
-
-    return () => {
-      stopWatchingLocation()
-    }
-  }, [])
-
   return (
     <GestureHandlerRootView>
       <Stack.Screen
@@ -241,6 +197,10 @@ export const SearchScreen = () => {
               width: '100%',
             }}
             logoEnabled={false}
+            onDidFinishLoadingStyle={() => {
+              setCameraPosition(deviceLocation!)
+              console.log('moving')
+            }}
           >
             <Camera ref={cameraRef} />
 

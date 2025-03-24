@@ -1,2 +1,3 @@
-export * from "./store"
-export * from "./counter"
+export * from './counter'
+export * from './location'
+export * from './store'
