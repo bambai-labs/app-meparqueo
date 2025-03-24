@@ -80,9 +80,8 @@ export const SearchScreen = () => {
   }
 
   const openMapDirection = async () => {
-    //Los current se reemplazaran por la ubicación precisa del dispositivo
-    const currentLat = 8.800618
-    const currentLon = -75.7180332
+    const currentLat = deviceLocation?.[1]
+    const currentLon = deviceLocation?.[0]
     const destinationLat = 8.7985081
     const destinationLon = -75.7149219
 
