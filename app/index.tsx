@@ -4,6 +4,7 @@ import * as Location from 'expo-location'
 import { useRootNavigationState, useRouter } from 'expo-router'
 import { useEffect } from 'react'
 import { ActivityIndicator, Alert } from 'react-native'
+import 'react-native-get-random-values'
 
 export default function Index() {
   const router = useRouter()

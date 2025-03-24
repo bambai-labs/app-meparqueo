@@ -32,6 +32,7 @@
     "@gluestack-ui/toast": "^1.0.9",
     "@gorhom/bottom-sheet": "^5",
     "@legendapp/motion": "^2.4.0",
+    "@react-native-async-storage/async-storage": "^2.1.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@reduxjs/toolkit": "^2.6.1",
@@ -62,6 +63,7 @@
     "react-native": "0.76.7",
     "react-native-css-interop": "^0.1.22",
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-get-random-values": "^1.11.0",
     "react-native-reanimated": "^3.16.1",
     "react-native-safe-area-context": "^5.3.0",
     "react-native-screens": "~4.4.0",
@@ -70,6 +72,7 @@
     "react-native-webview": "13.12.5",
     "react-redux": "^9.2.0",
     "tailwindcss": "3.4.17",
+    "uuid": "^11.1.0",
     "yup": "^1.6.1"
   },
   "devDependencies": {

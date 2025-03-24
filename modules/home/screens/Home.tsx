@@ -1,3 +1,5 @@
+import { MeParqueoApi } from '@/api'
+import { LoginResponse } from '@/api/responses/LoginResponse'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { Heading } from '@/components/ui/heading'
@@ -35,11 +37,12 @@ import { Textarea, TextareaInput } from '@/components/ui/textarea'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Alert,
   FlatList,
@@ -50,6 +53,7 @@ import {
   View,
 } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { v4 as uuidv4 } from 'uuid'
 import {
   AvailabilityIndicator,
   RecentParkingCard,
@@ -163,6 +167,32 @@ export const HomeScreen = () => {
   const handleSearchBarPress = () => {
     router.push('/home/search')
   }
+
+  const login = async () => {
+    const userUuid = await AsyncStorage.getItem('userUuid')
+    const result = await MeParqueoApi.post<LoginResponse>(
+      '/api/v1/auth/client',
+      {
+        clientId: userUuid,
+      },
+    )
+
+    await AsyncStorage.setItem('userToken', result.data.data.token)
+  }
+
+  const checkUserUuid = async () => {
+    //Retrieve user uuid
+    const userUuid = await AsyncStorage.getItem('userUuid')
+    if (!userUuid) {
+      await AsyncStorage.setItem('userUuid', uuidv4())
+    }
+
+    login()
+  }
+
+  useEffect(() => {
+    checkUserUuid()
+  }, [])
 
   return (
     <GestureHandlerRootView>
