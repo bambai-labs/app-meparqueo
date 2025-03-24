@@ -8,6 +8,7 @@ interface Props {
   disabled?: boolean
   invalid?: boolean
   readonly?: boolean
+  className?: string
   pointerEvents?: 'auto' | 'box-none' | 'none' | 'box-only' | undefined
   onPress?: () => void
 }
@@ -16,12 +17,13 @@ export const SearchBar = ({
   disabled = false,
   invalid = false,
   readonly = false,
+  className = '',
   pointerEvents,
   onPress = () => {},
 }: Props) => {
   return (
     <Pressable onPress={onPress}>
-      <HStack>
+      <HStack className={className}>
         <Input
           style={{
             borderEndStartRadius: 0,

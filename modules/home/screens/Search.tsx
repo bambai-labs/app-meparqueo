@@ -1,5 +1,5 @@
 import { Box } from '@/components/ui/box'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { AlertCircleIcon, Icon, PhoneIcon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
@@ -7,12 +7,17 @@ import { VStack } from '@/components/ui/vstack'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
 import Constants from 'expo-constants'
-import { Stack } from 'expo-router'
-import { MapIcon } from 'lucide-react-native'
+import * as Location from 'expo-location'
+import { Stack, useRouter } from 'expo-router'
+import { ArrowLeft, ChevronDown, MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Linking, Platform, StyleSheet, Text, View } from 'react-native'
-import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Alert, Linking, Platform, Text, View } from 'react-native'
+import {
+  FlatList,
+  GestureHandlerRootView,
+  Pressable,
+} from 'react-native-gesture-handler'
 import {
   AvailabilityIndicator,
   ParkingResultCard,
@@ -20,6 +25,7 @@ import {
 } from '../components'
 import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
 import { formatCurrency } from '../utils'
+import { getPermissions } from '../utils/locationUtils'
 
 const carouselImages = [
   'https://eltesoro.com.co/wp-content/uploads/2021/04/0721-servicio-parqueadero-el-tesoro-%E2%80%93-2.jpeg',
@@ -55,11 +61,19 @@ const parkingResults: ParkingLot[] = [
 ]
 
 export const SearchScreen = () => {
+  const router = useRouter()
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
+  const [locationSubscription, setLocationSubscription] =
+    useState<Location.LocationSubscription | null>(null)
+
+  const [deviceLocation, setDeviceLocation] = useState<[number, number] | null>(
+    null,
+  )
+  const [firstTimeLoaded, setFirstTimeLoaded] = useState(false)
 
   const openBottomSheet = () => {
     bottomSheetRef.current?.expand()
@@ -99,6 +113,10 @@ export const SearchScreen = () => {
     }
   }
 
+  const goBack = () => {
+    router.back()
+  }
+
   const callParkingLot = async () => {
     const url = 'tel:1234567890'
     try {
@@ -112,7 +130,7 @@ export const SearchScreen = () => {
   const handleParkingCardPress = (parking: ParkingLot) => {
     setCurrentParking(parking)
     setCameraPosition([parking.latitude, parking.longitude])
-    openBottomSheet()
+    setTimeout(openBottomSheet, 1200)
   }
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
@@ -125,10 +143,6 @@ export const SearchScreen = () => {
     setIsReportModalOpen(true)
   }
 
-  useEffect(() => {
-    setCameraPosition([-75.861874, 8.785986])
-  }, [])
-
   const setCameraPosition = (position: [number, number]) => {
     cameraRef.current?.setCamera({
       centerCoordinate: position,
@@ -138,6 +152,42 @@ export const SearchScreen = () => {
       animationDuration: 1000,
     })
   }
+
+  const startWatchingLocation = async () => {
+    const hasPermission = await getPermissions()
+    if (!hasPermission) return
+
+    const sub = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 1000,
+        distanceInterval: 1,
+      },
+      ({ coords }) => {
+        const { longitude, latitude } = coords
+        setDeviceLocation([longitude, latitude])
+        if (!firstTimeLoaded) {
+          setFirstTimeLoaded(true)
+          setCameraPosition([longitude, latitude])
+        }
+      },
+    )
+
+    setLocationSubscription(sub)
+  }
+
+  const stopWatchingLocation = () => {
+    locationSubscription?.remove()
+    setLocationSubscription(null)
+  }
+
+  useEffect(() => {
+    startWatchingLocation()
+
+    return () => {
+      stopWatchingLocation()
+    }
+  }, [])
 
   return (
     <GestureHandlerRootView>
@@ -153,11 +203,29 @@ export const SearchScreen = () => {
         }}
         className="h-screen w-full"
       >
-        <Box className="px-4">
-          <SearchBar />
-        </Box>
+        <VStack className="px-4">
+          <Pressable onPress={goBack} className="mb-3">
+            <Icon className="p-4" as={ArrowLeft} size="xl" />
+          </Pressable>
+          <SearchBar className="mt-3" />
 
-        <Box className="flex-1 mt-4 relative">
+          <HStack className="mt-3 w-full items-center justify-between">
+            <HStack space="md">
+              <Button variant="outline" className="border-gray-400 rounded-lg">
+                <ButtonText>Filtrar</ButtonText>
+                <Icon as={ChevronDown} size="sm" />
+              </Button>
+              <Button variant="outline" className="border-gray-400 rounded-lg">
+                <ButtonText>Ordenar</ButtonText>
+                <Icon as={ChevronDown} size="sm" />
+              </Button>
+            </HStack>
+
+            <Text>3 resultados</Text>
+          </HStack>
+        </VStack>
+
+        <Box className="flex-1 mt-2 relative">
           <MapView
             style={{
               height: '100%',
@@ -172,11 +240,21 @@ export const SearchScreen = () => {
                 key={parkingResult.name}
                 coordinate={[parkingResult.latitude, parkingResult.longitude]}
               >
-                <Box className="p-3 bg-white rounded-full">
-                  <Text>{parkingResult.name}</Text>
-                </Box>
+                <Pressable
+                  onPress={() => handleParkingCardPress(parkingResult)}
+                >
+                  <Box className="p-3 bg-white rounded-full">
+                    <Text>{parkingResult.name}</Text>
+                  </Box>
+                </Pressable>
               </MarkerView>
             ))}
+
+            {deviceLocation && (
+              <MarkerView coordinate={deviceLocation}>
+                <Box className="p-3 bg-blue-500 rounded-full border-3 border-white" />
+              </MarkerView>
+            )}
           </MapView>
 
           <Box className="absolute bottom-5 right-0 w-full pl-2">
@@ -294,20 +372,3 @@ export const SearchScreen = () => {
     </GestureHandlerRootView>
   )
 }
-
-const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  container: {
-    height: 300,
-    width: 300,
-    backgroundColor: 'tomato',
-  },
-  map: {
-    flex: 1,
-  },
-})

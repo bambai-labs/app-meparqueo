@@ -27,6 +27,7 @@ export const ParkingResultCard = ({
             uri: 'https://www.wradio.com.co/resizer/v2/CNVLIH5MPJAM3N7CFHFYZTGUUI.jpg?auth=d95d120b35548dc34d3f611c74f3fc12e2ca1d27d1e5176e0ff1c8c18f0f0a02&width=650&height=488&quality=70&smart=true',
           }}
           className="w-[150px] h-full rounded-xl"
+          alt="Parking image"
         />
         <VStack>
           <Text>{parkingLot.name}</Text>
