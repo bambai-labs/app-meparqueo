@@ -1,0 +1,9 @@
+{
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit", // Usa "explicit" en lugar de true
+      "source.organizeImports": "always"
+    },
+    "editor.formatOnSave": true, // Habilita el formateo automático al guardar
+    "editor.defaultFormatter": "esbenp.prettier-vscode", // Usa Prettier como formateador predeterminado
+    "prettier.requireConfig": true // Asegúrate de que Prettier use la configuración del proyecto
+  }
