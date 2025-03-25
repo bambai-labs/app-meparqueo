@@ -1,3 +1,4 @@
+import { Place } from '@/api'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
@@ -9,7 +10,7 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
 import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
-import { ArrowLeft, ChevronDown, MapIcon } from 'lucide-react-native'
+import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text, View } from 'react-native'
@@ -60,6 +61,17 @@ const parkingResults: ParkingLot[] = [
   },
 ]
 
+const mockPlaceResults = [
+  {
+    value: 'alcaldia',
+    label: 'Alcaldía de Montería',
+  },
+  {
+    value: 'avenida',
+    label: 'Avenida primera',
+  },
+]
+
 export const SearchScreen = () => {
   const router = useRouter()
   const cameraRef = useRef<Camera>(null)
@@ -67,8 +79,20 @@ export const SearchScreen = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
-  const { query, places, searchPlace, clearPlaces, clearQuery, onChangeQuery } =
-    useSearchPlaces()
+  const {
+    query,
+    places,
+    loading,
+    searchPlace,
+    clearPlaces,
+    clearQuery,
+    onChangeQuery,
+  } = useSearchPlaces()
+
+  const [currentDestination, setCurrentDestination] = useState<Place | null>(
+    null,
+  )
+
   const { deviceLocation } = useAppSelector((state) => state.location)
 
   const openBottomSheet = () => {
@@ -172,7 +196,35 @@ export const SearchScreen = () => {
             placeholder="A donde quieres ir?"
             className="mt-3"
             onSearch={searchPlace}
-          />
+            loading={loading}
+          >
+            {places.length > 0 && (
+              <FlatList
+                className="w-full"
+                data={places}
+                keyExtractor={(place) => place.displayName.text}
+                renderItem={({ item }) => (
+                  <Pressable
+                    onPress={() => {
+                      setCurrentDestination(item)
+                      setCameraPosition([
+                        item.location.longitude,
+                        item.location.latitude,
+                      ])
+                    }}
+                  >
+                    <HStack
+                      className="items-center p-3 border-b border-gray-100"
+                      space="md"
+                    >
+                      <Icon as={MapPin} size="md" />
+                      <Text>{item.displayName.text}</Text>
+                    </HStack>
+                  </Pressable>
+                )}
+              />
+            )}
+          </SearchBar>
 
           <HStack className="mt-3 w-full items-center justify-between">
             <HStack space="md">
@@ -222,6 +274,19 @@ export const SearchScreen = () => {
             {deviceLocation && (
               <MarkerView coordinate={deviceLocation}>
                 <Box className="p-3 bg-blue-500 rounded-full border-3 border-white" />
+              </MarkerView>
+            )}
+
+            {currentDestination && (
+              <MarkerView
+                coordinate={[
+                  currentDestination.location.longitude,
+                  currentDestination.location.latitude,
+                ]}
+              >
+                <Box className="p-3 bg-red-500 rounded-full border-3 border-white">
+                  <Icon as={MapPin} size="lg" />
+                </Box>
               </MarkerView>
             )}
           </MapView>
