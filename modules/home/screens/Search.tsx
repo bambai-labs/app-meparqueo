@@ -13,7 +13,7 @@ import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { useRef, useState } from 'react'
-import { Alert, Linking, Platform, Text, View } from 'react-native'
+import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
 import {
   FlatList,
   GestureHandlerRootView,
@@ -24,52 +24,14 @@ import {
   ParkingResultCard,
   SearchBar,
 } from '../components'
-import { useSearchPlaces } from '../hooks'
-import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
+import { useSearchParkingLots, useSearchPlaces } from '../hooks'
+import { ParkingLot, ParkingLotAvailability } from '../types'
 import { formatCurrency } from '../utils'
 
 const carouselImages = [
   'https://eltesoro.com.co/wp-content/uploads/2021/04/0721-servicio-parqueadero-el-tesoro-%E2%80%93-2.jpeg',
   'https://files.lafm.com.co/assets/public/styles/img_node_706x392/public/2024-07/centro_comercial_centro_mayore.jpg.webp?VersionId=uk89CveRHtgxj2HPIofK.qczrJYkEkCT&itok=VYD9KsaQ',
   'https://bogota.gov.co/sites/default/files/2023-01/parqueadero.jpg',
-]
-
-const parkingResults: ParkingLot[] = [
-  {
-    availability: ParkingLotAvailability.MORE_THAN_FIVE,
-    images: [],
-    latitude: -75.861874,
-    longitude: 8.785986,
-    name: 'Parqueadero casa del pino',
-    paymentMethods: [],
-    phoneNumber: '+1234567890',
-    price: 2500,
-    services: [],
-    status: ParkingStatus.OPEN,
-  },
-  {
-    availability: ParkingLotAvailability.LESS_THAN_FIVE,
-    images: [],
-    latitude: -75.862803,
-    longitude: 8.77373,
-    name: 'Parqueadero de la castellana',
-    paymentMethods: [],
-    phoneNumber: '+1234567890',
-    price: 3000,
-    services: [],
-    status: ParkingStatus.OPEN,
-  },
-]
-
-const mockPlaceResults = [
-  {
-    value: 'alcaldia',
-    label: 'Alcaldía de Montería',
-  },
-  {
-    value: 'avenida',
-    label: 'Avenida primera',
-  },
 ]
 
 export const SearchScreen = () => {
@@ -89,6 +51,12 @@ export const SearchScreen = () => {
     onChangeQuery,
   } = useSearchPlaces()
 
+  const {
+    loading: parkingLoading,
+    parkingLots,
+    searchNearParkingLots,
+  } = useSearchParkingLots()
+
   const [currentDestination, setCurrentDestination] = useState<Place | null>(
     null,
   )
@@ -102,8 +70,8 @@ export const SearchScreen = () => {
   const openMapDirection = async () => {
     const currentLat = deviceLocation?.[1]
     const currentLon = deviceLocation?.[0]
-    const destinationLat = 8.7985081
-    const destinationLon = -75.7149219
+    const destinationLat = currentParking?.latitude
+    const destinationLon = currentParking?.longitude
 
     if (Platform.OS === 'ios') {
       const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
@@ -137,7 +105,7 @@ export const SearchScreen = () => {
   }
 
   const callParkingLot = async () => {
-    const url = 'tel:1234567890'
+    const url = `tel:${currentParking?.phoneNumber}`
     try {
       await Linking.openURL(url)
     } catch (err) {
@@ -148,7 +116,7 @@ export const SearchScreen = () => {
 
   const handleParkingCardPress = (parking: ParkingLot) => {
     setCurrentParking(parking)
-    setCameraPosition([parking.latitude, parking.longitude])
+    setCameraPosition([parking.longitude, parking.latitude])
     setTimeout(openBottomSheet, 1200)
   }
 
@@ -160,6 +128,12 @@ export const SearchScreen = () => {
 
   const showReportModal = () => {
     setIsReportModalOpen(true)
+  }
+
+  const handlePlacePress = (place: Place) => {
+    setCurrentDestination(place)
+    setCameraPosition([place.location.longitude, place.location.latitude])
+    searchNearParkingLots(place.location.latitude, place.location.longitude)
   }
 
   const setCameraPosition = (position: [number, number]) => {
@@ -184,7 +158,7 @@ export const SearchScreen = () => {
         style={{
           paddingTop: Constants.statusBarHeight + 20,
         }}
-        className="h-screen w-full"
+        className="h-full w-full"
       >
         <VStack className="px-4">
           <Pressable onPress={goBack} className="mb-3">
@@ -204,15 +178,7 @@ export const SearchScreen = () => {
                 data={places}
                 keyExtractor={(place) => place.displayName.text}
                 renderItem={({ item }) => (
-                  <Pressable
-                    onPress={() => {
-                      setCurrentDestination(item)
-                      setCameraPosition([
-                        item.location.longitude,
-                        item.location.latitude,
-                      ])
-                    }}
-                  >
+                  <Pressable onPress={() => handlePlacePress(item)}>
                     <HStack
                       className="items-center p-3 border-b border-gray-100"
                       space="md"
@@ -256,17 +222,23 @@ export const SearchScreen = () => {
           >
             <Camera ref={cameraRef} />
 
-            {parkingResults.map((parkingResult) => (
+            {parkingLots.map((parkingResult) => (
               <MarkerView
                 key={parkingResult.name}
-                coordinate={[parkingResult.latitude, parkingResult.longitude]}
+                coordinate={[parkingResult.longitude, parkingResult.latitude]}
               >
                 <Pressable
                   onPress={() => handleParkingCardPress(parkingResult)}
                 >
-                  <Box className="p-3 bg-white rounded-full">
-                    <Text>{parkingResult.name}</Text>
-                  </Box>
+                  <VStack className="items-center">
+                    <Image
+                      source={require('@/assets/images/parking_spot.png')}
+                      style={{
+                        width: 40,
+                        height: 40,
+                      }}
+                    />
+                  </VStack>
                 </Pressable>
               </MarkerView>
             ))}
@@ -283,10 +255,17 @@ export const SearchScreen = () => {
                   currentDestination.location.longitude,
                   currentDestination.location.latitude,
                 ]}
+                allowOverlap={true} // Allow overlapping with other markers
               >
-                <Box className="p-3 bg-red-500 rounded-full border-3 border-white">
-                  <Icon as={MapPin} size="lg" />
-                </Box>
+                <VStack className="items-center">
+                  <Image
+                    source={require('@/assets/images/pin_map.png')}
+                    style={{
+                      width: 50,
+                      height: 55,
+                    }}
+                  />
+                </VStack>
               </MarkerView>
             )}
           </MapView>
@@ -295,7 +274,7 @@ export const SearchScreen = () => {
             <FlatList
               horizontal={true}
               ItemSeparatorComponent={() => <View className="w-2" />}
-              data={parkingResults}
+              data={parkingLots}
               renderItem={({ item }) => (
                 <ParkingResultCard
                   parkingLot={item}
@@ -315,23 +294,25 @@ export const SearchScreen = () => {
         >
           <BottomSheetView className="px-6">
             <Box className="h-96 rounded-2xl overflow-hidden">
-              <Carousel
-                autoplay
-                autoplayInterval={5000}
-                loop
-                showsControls={true}
-                showsDots
-              >
-                {carouselImages.map((imageUri, index) => (
-                  <View key={index} className="w-full">
-                    <GluestackImage
-                      size="full"
-                      source={{ uri: imageUri }}
-                      alt={`Slide ${index + 1}`}
-                    />
-                  </View>
-                ))}
-              </Carousel>
+              {currentParking && (
+                <Carousel
+                  autoplay
+                  autoplayInterval={5000}
+                  loop
+                  showsControls={true}
+                  showsDots
+                >
+                  {currentParking.imageUrls.map((imageUri, index) => (
+                    <View key={index} className="w-full">
+                      <GluestackImage
+                        size="full"
+                        source={{ uri: imageUri }}
+                        alt={`Slide ${index + 1}`}
+                      />
+                    </View>
+                  ))}
+                </Carousel>
+              )}
             </Box>
 
             <Text className="mt-4 text-3xl font-bold">
@@ -391,14 +372,18 @@ export const SearchScreen = () => {
               Servicios adicionales
             </Text>
 
-            <Text className="text-gray-600 text-xl">
-              Lavadero, Camaras, Wifi, Llantería, Cambio de aceite
-            </Text>
+            <HStack>
+              {currentParking?.services.map((service) => (
+                <Text className="text-gray-600 text-xl">{service}</Text>
+              ))}
+            </HStack>
 
             <Text className="mt-3 text-xl font-bold">Métodos de pago</Text>
 
             <Text className="text-gray-600 text-xl">
-              Efectivo, Nequi, Bancolombia a la mano, Datafono
+              {currentParking?.paymentMethods.map((payment) => (
+                <Text className="text-gray-600 text-xl">{payment}</Text>
+              ))}
             </Text>
           </BottomSheetView>
         </BottomSheet>

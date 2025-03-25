@@ -24,7 +24,7 @@ export const ParkingResultCard = ({
       <HStack space="md" className={`${className} rounded-lg p-2 bg-white`}>
         <Image
           source={{
-            uri: 'https://www.wradio.com.co/resizer/v2/CNVLIH5MPJAM3N7CFHFYZTGUUI.jpg?auth=d95d120b35548dc34d3f611c74f3fc12e2ca1d27d1e5176e0ff1c8c18f0f0a02&width=650&height=488&quality=70&smart=true',
+            uri: parkingLot.imageUrls[0],
           }}
           className="w-[150px] h-full rounded-xl"
           alt="Parking image"
@@ -39,7 +39,7 @@ export const ParkingResultCard = ({
             <AvailabilityIndicator availability={parkingLot.availability} />
 
             <Icon as={MapPin} size="md" />
-            <Text>1.2 Km</Text>
+            <Text>{parkingLot.distanceKm} km</Text>
           </HStack>
         </VStack>
       </HStack>

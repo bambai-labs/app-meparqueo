@@ -71,7 +71,7 @@ const recentParkings: RecentParkingLot[] = [
   {
     availability: ParkingLotAvailability.MORE_THAN_FIVE,
     status: ParkingStatus.OPEN,
-    images: [],
+    imageUrls: [],
     latitude: -75.7149219,
     longitude: 8.7990835,
     name: 'Parking Splash',
@@ -80,6 +80,7 @@ const recentParkings: RecentParkingLot[] = [
     price: 2500,
     services: [],
     timestamp: new Date().getTime(),
+    distanceKm: 78,
   },
 ]
 

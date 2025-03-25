@@ -5,21 +5,22 @@ export interface ParkingLot {
   latitude: number
   longitude: number
   price: number
-  images: string[]
+  imageUrls: string[]
   paymentMethods: string[]
   services: string[]
   phoneNumber: string
+  distanceKm: number
 }
 
 export enum ParkingLotAvailability {
-  LESS_THAN_FIVE,
-  MORE_THAN_FIVE,
-  NO_AVAILABILITY,
+  LESS_THAN_FIVE = 'LESS_THAN_FIVE',
+  MORE_THAN_FIVE = 'MORE_THAN_FIVE',
+  NO_AVAILABILITY = 'NO_AVAILABILITY',
 }
 
 export enum ParkingStatus {
-  OPEN,
-  CLOSED,
+  OPEN = 'OPEN',
+  CLOSED = 'CLOSED',
 }
 
 export interface RecentParkingLot extends ParkingLot {

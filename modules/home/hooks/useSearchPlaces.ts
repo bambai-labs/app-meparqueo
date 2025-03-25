@@ -12,7 +12,7 @@ export const useSearchPlaces = () => {
       const result = await GooglePlacesApi.post<PlacesResponse>(
         '/places:searchText',
         {
-          textQuery: query,
+          textQuery: `${query} monteria`,
         },
       )
       setPlaces(result.data.places)
