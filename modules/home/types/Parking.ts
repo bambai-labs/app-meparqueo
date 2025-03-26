@@ -27,3 +27,10 @@ export enum ParkingStatus {
 export interface RecentParkingLot extends ParkingLot {
   timestamp: number
 }
+
+export interface ParkingUpdateEstatus {
+  parkingLotId: string
+  status: ParkingStatus
+  availability: ParkingLotAvailability
+  updatedAt: string
+}

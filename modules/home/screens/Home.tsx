@@ -1,4 +1,4 @@
-import { MeParqueoApi, getSocket, initializeSocket } from '@/api'
+import { MeParqueoApi, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
@@ -27,6 +27,7 @@ import {
   ParkingLot,
   ParkingLotAvailability,
   ParkingStatus,
+  ParkingUpdateEstatus,
   RecentParkingLot,
 } from '../types'
 import { formatCurrency } from '../utils'
@@ -144,9 +145,7 @@ export const HomeScreen = () => {
     )
 
     await AsyncStorage.setItem('userToken', result.data.data.token)
-    const socket = getSocket()
-    socket.auth = { token: result.data.data.token }
-    socket.disconnect().connect()
+    await socketManager.updateToken(result.data.data.token)
   }
 
   const checkUserUuid = async () => {
@@ -162,30 +161,18 @@ export const HomeScreen = () => {
   useEffect(() => {
     const initializeApp = async () => {
       await checkUserUuid()
-      const socket = await initializeSocket()
-
-      socket.on('connect', () => {
-        console.log('Conectado al servidor Socket.IO')
-      })
-
-      socket.on('disconnect', (reason) => {
-        console.log('Desconectado del servidor:', reason)
-      })
+      await socketManager.initialize()
+      const socket = socketManager.getSocket()
+      socket.on('parkingUpdateStatus', handleParkingUpdateStatus)
     }
 
     initializeApp()
-
-    return () => {
-      try {
-        const socket = getSocket()
-        socket.disconnect()
-        socket.off('connect')
-        socket.off('disconnect')
-      } catch (error) {
-        console.log('Socket no estaba inicializado')
-      }
-    }
   }, [])
+
+  const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
+    console.log('Parking status update:', data)
+    // TODO: Update your app state or trigger a UI update)
+  }
 
   return (
     <GestureHandlerRootView>

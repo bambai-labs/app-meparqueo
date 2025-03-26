@@ -1,4 +1,4 @@
-import { MeParqueoApi, Place } from '@/api'
+import { MeParqueoApi, Place, socketManager } from '@/api'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
@@ -13,7 +13,7 @@ import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
 import Carousel from 'pinar'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
 import {
   FlatList,
@@ -27,7 +27,11 @@ import {
   SearchBar,
 } from '../components'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
-import { ParkingLot, ParkingLotAvailability } from '../types'
+import {
+  ParkingLot,
+  ParkingLotAvailability,
+  ParkingUpdateEstatus,
+} from '../types'
 import { formatCurrency } from '../utils'
 
 export const SearchScreen = () => {
@@ -203,6 +207,19 @@ export const SearchScreen = () => {
     })
   }
 
+  useEffect(() => {
+    const socket = socketManager.getSocket()
+    socket.on('parkingUpdateStatus', handleParkingUpdateStatus)
+    return () => {
+      socket.off('parkingUpdateStatus', handleParkingUpdateStatus)
+    }
+  }, [])
+
+  const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
+    console.log('Parking status update:', data)
+    // TODO: Update your app state or trigger a UI update
+  }
+
   return (
     <GestureHandlerRootView>
       <Stack.Screen
@@ -313,7 +330,7 @@ export const SearchScreen = () => {
                   currentDestination.location.longitude,
                   currentDestination.location.latitude,
                 ]}
-                allowOverlap={true} // Allow overlapping with other markers
+                allowOverlap={true}
               >
                 <VStack className="items-center">
                   <Image
