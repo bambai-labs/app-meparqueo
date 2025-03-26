@@ -16,7 +16,6 @@ export const useSearchPlaces = () => {
         },
       )
       setPlaces(result.data.places)
-      console.log('fetched places successfully')
     } catch (error) {
       console.log(error)
     } finally {

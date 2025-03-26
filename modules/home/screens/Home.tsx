@@ -33,6 +33,7 @@ import { formatCurrency } from '../utils'
 
 const recentParkings: RecentParkingLot[] = [
   {
+    id: '1',
     availability: ParkingLotAvailability.MORE_THAN_FIVE,
     status: ParkingStatus.OPEN,
     imageUrls: [],

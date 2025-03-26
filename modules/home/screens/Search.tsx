@@ -1,4 +1,4 @@
-import { Place } from '@/api'
+import { MeParqueoApi, Place } from '@/api'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
@@ -104,6 +104,22 @@ export const SearchScreen = () => {
     } else {
       Linking.openURL(fallbackURL)
     }
+
+    try {
+      await MeParqueoApi.post('/api/v1/user/recently-parked', {
+        parkingLotId: currentParking?.id,
+        destinationLocation: {
+          latitude: currentDestination?.location.latitude,
+          longitude: currentDestination?.location.longitude,
+          searchTerm: query,
+        },
+        distanceKm: currentParking?.distanceKm,
+      })
+
+      console.log('Parking destination saved')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const goBack = () => {
@@ -136,7 +152,7 @@ export const SearchScreen = () => {
     setIsReportModalOpen(true)
   }
 
-  const handlePlacePress = (place: Place) => {
+  const handlePlacePress = async (place: Place) => {
     setCurrentDestination(place)
     setCameraPosition([place.location.longitude, place.location.latitude])
     searchNearParkingLots(place.location.latitude, place.location.longitude)
