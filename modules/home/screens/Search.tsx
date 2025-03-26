@@ -8,6 +8,7 @@ import { VStack } from '@/components/ui/vstack'
 import { useAppSelector } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
+import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
@@ -104,7 +105,10 @@ export const SearchScreen = () => {
     } else {
       Linking.openURL(fallbackURL)
     }
+    saveRecentParking()
+  }
 
+  const saveRecentParking = async () => {
     try {
       await MeParqueoApi.post('/api/v1/user/recently-parked', {
         parkingLotId: currentParking?.id,
@@ -118,6 +122,11 @@ export const SearchScreen = () => {
 
       console.log('Parking destination saved')
     } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response)
+        return
+      }
+
       console.log(error)
     }
   }
@@ -156,6 +165,32 @@ export const SearchScreen = () => {
     setCurrentDestination(place)
     setCameraPosition([place.location.longitude, place.location.latitude])
     searchNearParkingLots(place.location.latitude, place.location.longitude)
+    saveDestination()
+  }
+
+  const saveDestination = async () => {
+    try {
+      await MeParqueoApi.post('/api/v1/user/search', {
+        filter: {
+          priceRange: [0, 10],
+          services: ['CAR_WASH'],
+        },
+        destinationLocation: {
+          latitude: currentDestination?.location.latitude,
+          longitude: currentDestination?.location.longitude,
+          searchTerm: query,
+        },
+      })
+
+      console.log('destination saved')
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response)
+        return
+      }
+
+      console.log(error)
+    }
   }
 
   const setCameraPosition = (position: [number, number]) => {
