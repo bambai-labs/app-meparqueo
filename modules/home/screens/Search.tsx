@@ -283,6 +283,7 @@ export const SearchScreen = () => {
               <MarkerView
                 key={parkingResult.name}
                 coordinate={[parkingResult.longitude, parkingResult.latitude]}
+                allowOverlap={true}
               >
                 <Pressable
                   onPress={() => handleParkingCardPress(parkingResult)}
@@ -301,7 +302,7 @@ export const SearchScreen = () => {
             ))}
 
             {deviceLocation && (
-              <MarkerView coordinate={deviceLocation}>
+              <MarkerView allowOverlap={true} coordinate={deviceLocation}>
                 <Box className="p-3 bg-blue-500 rounded-full border-3 border-white" />
               </MarkerView>
             )}
