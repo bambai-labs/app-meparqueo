@@ -233,7 +233,9 @@ export const SearchScreen = () => {
               <FlatList
                 className="w-full"
                 data={places}
-                keyExtractor={(place) => place.displayName.text}
+                keyExtractor={(place) =>
+                  `${place.location.longitude}${place.location.latitude}`
+                }
                 renderItem={({ item }) => (
                   <Pressable onPress={() => handlePlacePress(item)}>
                     <HStack
@@ -339,7 +341,7 @@ export const SearchScreen = () => {
                   onPress={handleParkingCardPress}
                 />
               )}
-              keyExtractor={(item) => item.name}
+              keyExtractor={(item) => item.id}
             />
           </Box>
         </Box>
