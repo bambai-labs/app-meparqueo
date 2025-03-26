@@ -22,17 +22,12 @@ import {
 import {
   AvailabilityIndicator,
   ParkingResultCard,
+  ReportModal,
   SearchBar,
 } from '../components'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
 import { ParkingLot, ParkingLotAvailability } from '../types'
 import { formatCurrency } from '../utils'
-
-const carouselImages = [
-  'https://eltesoro.com.co/wp-content/uploads/2021/04/0721-servicio-parqueadero-el-tesoro-%E2%80%93-2.jpeg',
-  'https://files.lafm.com.co/assets/public/styles/img_node_706x392/public/2024-07/centro_comercial_centro_mayore.jpg.webp?VersionId=uk89CveRHtgxj2HPIofK.qczrJYkEkCT&itok=VYD9KsaQ',
-  'https://bogota.gov.co/sites/default/files/2023-01/parqueadero.jpg',
-]
 
 export const SearchScreen = () => {
   const router = useRouter()
@@ -41,6 +36,17 @@ export const SearchScreen = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
+
+  const [reportModalOpen, setReportModalOpen] = useState(false)
+
+  const openReportModal = () => {
+    setReportModalOpen(true)
+  }
+
+  const closeReportModal = () => {
+    setReportModalOpen(false)
+  }
+
   const {
     query,
     places,
@@ -387,6 +393,12 @@ export const SearchScreen = () => {
             </Text>
           </BottomSheetView>
         </BottomSheet>
+
+        <ReportModal
+          opened={isReportModalOpen}
+          onCancel={hideReportModal}
+          onConfirm={hideReportModal}
+        />
       </VStack>
     </GestureHandlerRootView>
   )

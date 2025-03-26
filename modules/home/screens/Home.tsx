@@ -2,38 +2,9 @@ import { MeParqueoApi } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
-import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
-import {
-  AlertCircleIcon,
-  ChevronDownIcon,
-  CloseIcon,
-  Icon,
-  PhoneIcon,
-} from '@/components/ui/icon'
+import { AlertCircleIcon, Icon, PhoneIcon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
-import {
-  Modal,
-  ModalBackdrop,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from '@/components/ui/modal'
-import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-} from '@/components/ui/select'
-import { Textarea, TextareaInput } from '@/components/ui/textarea'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
@@ -43,20 +14,13 @@ import { Stack, useRouter } from 'expo-router'
 import { MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import { useEffect, useRef, useState } from 'react'
-import {
-  Alert,
-  FlatList,
-  Image,
-  Linking,
-  Platform,
-  Text,
-  View,
-} from 'react-native'
+import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { v4 as uuidv4 } from 'uuid'
 import {
   AvailabilityIndicator,
-  RecentParkingCard,
+  RecentPakingsList,
+  ReportModal,
   SearchBar,
 } from '../components'
 import {
@@ -226,16 +190,9 @@ export const HomeScreen = () => {
           </Box>
 
           {chipSelected ? (
-            <FlatList
-              className="mt-5"
-              data={recentParkings}
-              renderItem={({ item }) => (
-                <RecentParkingCard
-                  recentParking={item}
-                  onPress={handleParkingCardPress}
-                />
-              )}
-              keyExtractor={(item) => item.name}
+            <RecentPakingsList
+              onCardPress={handleParkingCardPress}
+              recentParkings={recentParkings}
             />
           ) : (
             <VStack className="h-[80%] flex-col justify-center items-center">
@@ -345,68 +302,11 @@ export const HomeScreen = () => {
           </BottomSheetView>
         </BottomSheet>
 
-        <Modal isOpen={isReportModalOpen} onClose={hideReportModal}>
-          <ModalBackdrop />
-
-          <ModalContent>
-            <ModalHeader>
-              <Heading>Reportar parqueadero</Heading>
-              <ModalCloseButton>
-                <Icon
-                  as={CloseIcon}
-                  size="md"
-                  className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
-                />
-              </ModalCloseButton>
-            </ModalHeader>
-
-            <ModalBody>
-              <Select className="w-full">
-                <SelectTrigger variant="outline" size="md">
-                  <SelectInput
-                    placeholder="Razón del reporte"
-                    className="flex-1"
-                  />
-                  <SelectIcon className="mr-3" as={ChevronDownIcon} />
-                </SelectTrigger>
-                <SelectPortal>
-                  <SelectBackdrop />
-                  <SelectContent>
-                    <SelectDragIndicatorWrapper>
-                      <SelectDragIndicator />
-                    </SelectDragIndicatorWrapper>
-                    <SelectItem label="Mala atención" value="ma" />
-                    <SelectItem
-                      label="No era la disponibilidad correcta"
-                      value="nd"
-                    />
-                    <SelectItem
-                      label="Otro"
-                      value="Cross Platform Development Process"
-                    />
-                  </SelectContent>
-                </SelectPortal>
-              </Select>
-
-              <Textarea size="md" className="mt-3">
-                <TextareaInput placeholder="Comentarios" />
-              </Textarea>
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                variant="outline"
-                action="secondary"
-                onPress={hideReportModal}
-              >
-                <ButtonText>Cancelar</ButtonText>
-              </Button>
-              <Button onPress={hideReportModal}>
-                <ButtonText>Reportar</ButtonText>
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+        <ReportModal
+          opened={isReportModalOpen}
+          onCancel={hideReportModal}
+          onConfirm={hideReportModal}
+        />
       </ScreenWrapper>
     </GestureHandlerRootView>
   )
