@@ -1,4 +1,4 @@
-import { Place } from '@/api'
+import { MeParqueoApi, Place } from '@/api'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
@@ -8,6 +8,7 @@ import { VStack } from '@/components/ui/vstack'
 import { useAppSelector } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
+import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
@@ -22,17 +23,12 @@ import {
 import {
   AvailabilityIndicator,
   ParkingResultCard,
+  ReportModal,
   SearchBar,
 } from '../components'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
 import { ParkingLot, ParkingLotAvailability } from '../types'
 import { formatCurrency } from '../utils'
-
-const carouselImages = [
-  'https://eltesoro.com.co/wp-content/uploads/2021/04/0721-servicio-parqueadero-el-tesoro-%E2%80%93-2.jpeg',
-  'https://files.lafm.com.co/assets/public/styles/img_node_706x392/public/2024-07/centro_comercial_centro_mayore.jpg.webp?VersionId=uk89CveRHtgxj2HPIofK.qczrJYkEkCT&itok=VYD9KsaQ',
-  'https://bogota.gov.co/sites/default/files/2023-01/parqueadero.jpg',
-]
 
 export const SearchScreen = () => {
   const router = useRouter()
@@ -41,6 +37,17 @@ export const SearchScreen = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
+
+  const [reportModalOpen, setReportModalOpen] = useState(false)
+
+  const openReportModal = () => {
+    setReportModalOpen(true)
+  }
+
+  const closeReportModal = () => {
+    setReportModalOpen(false)
+  }
+
   const {
     query,
     places,
@@ -98,6 +105,30 @@ export const SearchScreen = () => {
     } else {
       Linking.openURL(fallbackURL)
     }
+    saveRecentParking()
+  }
+
+  const saveRecentParking = async () => {
+    try {
+      await MeParqueoApi.post('/api/v1/user/recently-parked', {
+        parkingLotId: currentParking?.id,
+        destinationLocation: {
+          latitude: currentDestination?.location.latitude,
+          longitude: currentDestination?.location.longitude,
+          searchTerm: query,
+        },
+        distanceKm: currentParking?.distanceKm,
+      })
+
+      console.log('Parking destination saved')
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response)
+        return
+      }
+
+      console.log(error)
+    }
   }
 
   const goBack = () => {
@@ -130,10 +161,36 @@ export const SearchScreen = () => {
     setIsReportModalOpen(true)
   }
 
-  const handlePlacePress = (place: Place) => {
+  const handlePlacePress = async (place: Place) => {
     setCurrentDestination(place)
     setCameraPosition([place.location.longitude, place.location.latitude])
     searchNearParkingLots(place.location.latitude, place.location.longitude)
+    saveDestination()
+  }
+
+  const saveDestination = async () => {
+    try {
+      await MeParqueoApi.post('/api/v1/user/search', {
+        filter: {
+          priceRange: [0, 10],
+          services: ['CAR_WASH'],
+        },
+        destinationLocation: {
+          latitude: currentDestination?.location.latitude,
+          longitude: currentDestination?.location.longitude,
+          searchTerm: query,
+        },
+      })
+
+      console.log('destination saved')
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response)
+        return
+      }
+
+      console.log(error)
+    }
   }
 
   const setCameraPosition = (position: [number, number]) => {
@@ -387,6 +444,12 @@ export const SearchScreen = () => {
             </Text>
           </BottomSheetView>
         </BottomSheet>
+
+        <ReportModal
+          opened={isReportModalOpen}
+          onCancel={hideReportModal}
+          onConfirm={hideReportModal}
+        />
       </VStack>
     </GestureHandlerRootView>
   )

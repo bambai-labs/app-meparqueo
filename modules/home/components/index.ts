@@ -1,4 +1,6 @@
 export { AvailabilityIndicator } from './AvailabilityIndicator'
 export { ParkingResultCard } from './ParkingResultCard'
+export { RecentPakingsList } from './RecentPakingsList'
 export { RecentParkingCard } from './RecentParkingCard'
+export { ReportModal } from './ReportModal'
 export { SearchBar } from './SearchBar'
