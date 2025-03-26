@@ -210,9 +210,6 @@ export const SearchScreen = () => {
   useEffect(() => {
     const socket = socketManager.getSocket()
     socket.on('parkingUpdateStatus', handleParkingUpdateStatus)
-    return () => {
-      socket.off('parkingUpdateStatus', handleParkingUpdateStatus)
-    }
   }, [])
 
   const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
