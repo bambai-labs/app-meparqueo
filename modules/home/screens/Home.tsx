@@ -6,7 +6,7 @@ import { HStack } from '@/components/ui/hstack'
 import { AlertCircleIcon, Icon, PhoneIcon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
-import { Chip, ScreenWrapper } from '@/modules/common'
+import { Chip, ScreenWrapper, useAppSelector } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Constants from 'expo-constants'
@@ -56,6 +56,7 @@ const carouselImages = [
 
 export const HomeScreen = () => {
   const router = useRouter()
+  const { deviceLocation } = useAppSelector((state) => state.location)
   const [chipSelected, setChipSelected] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
@@ -76,9 +77,8 @@ export const HomeScreen = () => {
   }
 
   const openMapDirection = async () => {
-    //Los current se reemplazaran por la ubicación precisa del dispositivo
-    const currentLat = 8.800618
-    const currentLon = -75.7180332
+    const currentLat = deviceLocation?.[1]
+    const currentLon = deviceLocation?.[0]
     const destinationLat = 8.7985081
     const destinationLon = -75.7149219
 
