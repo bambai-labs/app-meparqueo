@@ -29,6 +29,7 @@ export interface RecentParkingLot extends ParkingLot {
 }
 
 export interface ParkingUpdateEstatus {
+  id: string
   parkingLotId: string
   status: ParkingStatus
   availability: ParkingLotAvailability
