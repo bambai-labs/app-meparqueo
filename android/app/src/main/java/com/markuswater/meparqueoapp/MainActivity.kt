@@ -1,4 +1,4 @@
-package com.markus_water.meparqueoapp
+package com.markuswater.meparqueoapp
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

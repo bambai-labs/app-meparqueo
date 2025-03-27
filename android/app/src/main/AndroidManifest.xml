@@ -27,7 +27,7 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.markus_water.meparqueoapp"/>
+        <data android:scheme="com.markuswater.meparqueoapp"/>
       </intent-filter>
     </activity>
   </application>

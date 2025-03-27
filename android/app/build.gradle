@@ -86,9 +86,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace 'com.markus_water.meparqueoapp'
+    namespace 'com.markuswater.meparqueoapp'
     defaultConfig {
-        applicationId 'com.markus_water.meparqueoapp'
+        applicationId 'com.markuswater.meparqueoapp'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

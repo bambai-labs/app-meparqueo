@@ -1,4 +1,4 @@
-package com.markus_water.meparqueoapp
+package com.markuswater.meparqueoapp
 
 import android.app.Application
 import android.content.res.Configuration

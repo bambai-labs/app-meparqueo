@@ -28,7 +28,7 @@
         <key>CFBundleURLSchemes</key>
         <array>
           <string>myapp</string>
-          <string>com.markus-water.meparqueoapp</string>
+          <string>com.markuswater.meparqueoapp</string>
         </array>
       </dict>
     </array>
