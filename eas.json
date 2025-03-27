@@ -1,0 +1,39 @@
+{
+  "cli": {
+    "version": ">= 16.1.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY200ZjJzcjMwMDhtdjJqcTJkemd4bDY4MyJ9.dsrTOPOrlWzqEGr8GNFJXw",
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyC4tzwgyAkTPBxTDkUwnew-wmbHQSJpRzA",
+        "EXPO_PUBLIC_MEPARQUEO_API": ""
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "channel": "preview",
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY200ZjJzcjMwMDhtdjJqcTJkemd4bDY4MyJ9.dsrTOPOrlWzqEGr8GNFJXw",
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyC4tzwgyAkTPBxTDkUwnew-wmbHQSJpRzA",
+        "EXPO_PUBLIC_MEPARQUEO_API": ""
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "channel": "production",
+      "env": {
+        "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY200ZjJzcjMwMDhtdjJqcTJkemd4bDY4MyJ9.dsrTOPOrlWzqEGr8GNFJXw",
+        "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyC4tzwgyAkTPBxTDkUwnew-wmbHQSJpRzA",
+        "EXPO_PUBLIC_MEPARQUEO_API": ""
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
