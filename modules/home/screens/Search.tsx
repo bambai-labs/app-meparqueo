@@ -313,7 +313,7 @@ export const SearchScreen = () => {
                   currentDestination.location.longitude,
                   currentDestination.location.latitude,
                 ]}
-                allowOverlap={true} // Allow overlapping with other markers
+                allowOverlap={true}
               >
                 <VStack className="items-center">
                   <Image

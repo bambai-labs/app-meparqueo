@@ -1,4 +1,4 @@
-import { MeParqueoApi } from '@/api'
+import { MeParqueoApi, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
@@ -27,6 +27,7 @@ import {
   ParkingLot,
   ParkingLotAvailability,
   ParkingStatus,
+  ParkingUpdateEstatus,
   RecentParkingLot,
 } from '../types'
 import { formatCurrency } from '../utils'
@@ -144,6 +145,7 @@ export const HomeScreen = () => {
     )
 
     await AsyncStorage.setItem('userToken', result.data.data.token)
+    await socketManager.updateToken(result.data.data.token)
   }
 
   const checkUserUuid = async () => {
@@ -157,8 +159,20 @@ export const HomeScreen = () => {
   }
 
   useEffect(() => {
-    checkUserUuid()
+    const initializeApp = async () => {
+      await checkUserUuid()
+      await socketManager.initialize()
+      const socket = socketManager.getSocket()
+      socket.on('parkingUpdateStatus', handleParkingUpdateStatus)
+    }
+
+    initializeApp()
   }, [])
+
+  const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
+    console.log('Parking status update:', data)
+    // TODO: Update your app state or trigger a UI update)
+  }
 
   return (
     <GestureHandlerRootView>
