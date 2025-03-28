@@ -1,5 +1,5 @@
-import { MeParqueoApi } from '@/api'
-import { getPermissions, useAppDispatch } from '@/modules'
+import { MeParqueoApi, socketManager } from '@/api'
+import { getPermissions, ParkingUpdateEstatus, useAppDispatch } from '@/modules'
 import { setLocation } from '@/store'
 import { isAxiosError } from 'axios'
 import * as Location from 'expo-location'
@@ -54,8 +54,20 @@ export default function Index() {
     }
   }
 
+  const initializeSocket = async () => {
+    await socketManager.initialize()
+    const socket = socketManager.getSocket()
+    socket.on('parkingUpdateStatus', handleParkingUpdateStatus)
+  }
+
+  const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
+    console.log('Parking status update:', data)
+    // TODO: Update your app state or trigger a UI update)
+  }
+
   useEffect(() => {
     startWatchingLocation()
+    initializeSocket()
   }, [])
 
   useEffect(() => {

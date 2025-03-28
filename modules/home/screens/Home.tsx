@@ -1,33 +1,27 @@
-import { MeParqueoApi, socketManager } from '@/api'
-import { LoginResponse } from '@/api/responses/LoginResponse'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { AlertCircleIcon, Icon, PhoneIcon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
-import { Chip, ScreenWrapper, useAppSelector } from '@/modules/common'
+import { Chip, ScreenWrapper } from '@/modules/common'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import Constants from 'expo-constants'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from 'expo-router'
 import { MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
-import { useEffect, useRef, useState } from 'react'
-import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
+import { Image, Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { v4 as uuidv4 } from 'uuid'
 import {
   AvailabilityIndicator,
   RecentPakingsList,
   ReportModal,
   SearchBar,
 } from '../components'
+import { useHome } from '../hooks'
 import {
-  ParkingLot,
   ParkingLotAvailability,
   ParkingStatus,
-  ParkingUpdateEstatus,
   RecentParkingLot,
 } from '../types'
 import { formatCurrency } from '../utils'
@@ -57,122 +51,19 @@ const carouselImages = [
 ]
 
 export const HomeScreen = () => {
-  const router = useRouter()
-  const { deviceLocation } = useAppSelector((state) => state.location)
-  const [chipSelected, setChipSelected] = useState(false)
-  const bottomSheetRef = useRef<BottomSheet>(null)
-  const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
-    undefined,
-  )
-
-  const toggleChip = () => {
-    setChipSelected(!chipSelected)
-  }
-
-  const expandParkingDetailsSheet = () => {
-    bottomSheetRef.current?.expand()
-  }
-
-  const handleParkingCardPress = (parking: ParkingLot) => {
-    setCurrentParking(parking)
-    expandParkingDetailsSheet()
-  }
-
-  const openMapDirection = async () => {
-    const currentLat = deviceLocation?.[1]
-    const currentLon = deviceLocation?.[0]
-    const destinationLat = 8.7985081
-    const destinationLon = -75.7149219
-
-    if (Platform.OS === 'ios') {
-      const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
-      const appleMapsFallback = `http://maps.apple.com/?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
-
-      const canOpenApple = await Linking.canOpenURL(appleMapsScheme)
-
-      if (canOpenApple) {
-        Linking.openURL(appleMapsScheme)
-      } else {
-        Linking.openURL(appleMapsFallback)
-      }
-
-      return
-    }
-
-    const schemeURL = `comgooglemaps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}&directionsmode=driving`
-    const fallbackURL = `https://www.google.com/maps/dir/${currentLat},${currentLon}/${destinationLat},${destinationLon}/`
-
-    const canOpenGoogle = await Linking.canOpenURL(schemeURL)
-
-    if (canOpenGoogle) {
-      Linking.openURL(schemeURL)
-    } else {
-      Linking.openURL(fallbackURL)
-    }
-  }
-
-  const callParkingLot = async () => {
-    const url = 'tel:1234567890'
-    try {
-      await Linking.openURL(url)
-    } catch (err) {
-      Alert.alert('Error', 'Algo salió mal al intentar hacer la llamada')
-      console.error(err)
-    }
-  }
-
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
-
-  const hideReportModal = () => {
-    setIsReportModalOpen(false)
-  }
-
-  const showReportModal = () => {
-    setIsReportModalOpen(true)
-  }
-
-  const handleSearchBarPress = () => {
-    router.push('/home/search')
-  }
-
-  const login = async () => {
-    const userUuid = await AsyncStorage.getItem('userUuid')
-    const result = await MeParqueoApi.post<LoginResponse>(
-      '/api/v1/auth/client',
-      {
-        clientId: userUuid,
-      },
-    )
-
-    await AsyncStorage.setItem('userToken', result.data.data.token)
-    await socketManager.updateToken(result.data.data.token)
-  }
-
-  const checkUserUuid = async () => {
-    //Retrieve user uuid
-    const userUuid = await AsyncStorage.getItem('userUuid')
-    if (!userUuid) {
-      await AsyncStorage.setItem('userUuid', uuidv4())
-    }
-
-    login()
-  }
-
-  useEffect(() => {
-    const initializeApp = async () => {
-      await checkUserUuid()
-      await socketManager.initialize()
-      const socket = socketManager.getSocket()
-      socket.on('parkingUpdateStatus', handleParkingUpdateStatus)
-    }
-
-    initializeApp()
-  }, [])
-
-  const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
-    console.log('Parking status update:', data)
-    // TODO: Update your app state or trigger a UI update)
-  }
+  const {
+    bottomSheetRef,
+    callParkingLot,
+    chipSelected,
+    currentParking,
+    handleParkingCardPress,
+    handleSearchBarPress,
+    hideReportModal,
+    isReportModalOpen,
+    openMapDirection,
+    showReportModal,
+    toggleChip,
+  } = useHome()
 
   return (
     <GestureHandlerRootView>
