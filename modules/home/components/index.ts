@@ -1,5 +1,6 @@
 export { AvailabilityIndicator } from './AvailabilityIndicator'
 export { EmptyRecentsParkingsImage } from './EmptyRecentsParkingsImage'
+export { ParkingDetailsSheet } from './ParkingDetailsSheet'
 export { ParkingResultCard } from './ParkingResultCard'
 export { RecentPakingsList } from './RecentPakingsList'
 export { RecentParkingCard } from './RecentParkingCard'

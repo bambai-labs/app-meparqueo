@@ -2,17 +2,15 @@ import { MeParqueoApi, Place } from '@/api'
 import { Box } from '@/components/ui/box'
 import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { AlertCircleIcon, Icon, PhoneIcon } from '@/components/ui/icon'
-import { Image as GluestackImage } from '@/components/ui/image'
+import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
 import { useAppSelector } from '@/modules/common'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
-import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
-import Carousel from 'pinar'
+import { ArrowLeft, ChevronDown, MapPin } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
 import {
@@ -21,14 +19,13 @@ import {
   Pressable,
 } from 'react-native-gesture-handler'
 import {
-  AvailabilityIndicator,
+  ParkingDetailsSheet,
   ParkingResultCard,
   ReportModal,
   SearchBar,
 } from '../components'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
-import { ParkingLot, ParkingLotAvailability } from '../types'
-import { formatCurrency } from '../utils'
+import { ParkingLot } from '../types'
 
 export const SearchScreen = () => {
   const router = useRouter()
@@ -358,107 +355,15 @@ export const SearchScreen = () => {
           </Box>
         </Box>
 
-        <BottomSheet
-          ref={bottomSheetRef}
-          enablePanDownToClose={true}
-          index={-1}
-          snapPoints={['50%', '80%']}
-        >
-          <BottomSheetView className="px-6">
-            <Box className="h-96 rounded-2xl overflow-hidden">
-              {currentParking && (
-                <Carousel
-                  autoplay
-                  autoplayInterval={5000}
-                  loop
-                  showsControls={true}
-                  showsDots
-                >
-                  {currentParking.imageUrls.map((imageUri, index) => (
-                    <View key={index} className="w-full">
-                      <GluestackImage
-                        size="full"
-                        source={{ uri: imageUri }}
-                        alt={`Slide ${index + 1}`}
-                      />
-                    </View>
-                  ))}
-                </Carousel>
-              )}
-            </Box>
-
-            <Text className="mt-4 text-3xl font-bold">
-              {currentParking?.name}
-            </Text>
-            <HStack className="items-center">
-              <Text className="text-xl">
-                {formatCurrency(currentParking?.price ?? 0)}
-              </Text>
-              <Text className="text-gray-600"> / hora</Text>
-            </HStack>
-
-            <AvailabilityIndicator
-              className="mt-2"
-              availability={
-                currentParking?.availability ??
-                ParkingLotAvailability.NO_AVAILABILITY
-              }
-            />
-
-            <HStack className="w-full justify-evenly mt-3">
-              <VStack className="items-center">
-                <Button
-                  onPress={callParkingLot}
-                  size="xl"
-                  className="w-16 h-16 rounded-xl"
-                >
-                  <Icon as={PhoneIcon} size="xl" color="white" />
-                </Button>
-                <Text className="mt-2 text-gray-600">Llamar</Text>
-              </VStack>
-
-              <VStack className="items-center">
-                <Button
-                  onPress={openMapDirection}
-                  size="xl"
-                  className="w-16 h-16 rounded-xl"
-                >
-                  <Icon as={MapIcon} size="xl" color="white" />
-                </Button>
-                <Text className="mt-2 text-gray-600">Trazar ruta</Text>
-              </VStack>
-
-              <VStack className="items-center">
-                <Button
-                  onPress={showReportModal}
-                  size="xl"
-                  className="w-16 h-16 rounded-xl"
-                >
-                  <Icon as={AlertCircleIcon} size="xl" color="white" />
-                </Button>
-                <Text className="mt-2 text-gray-600">Reportar</Text>
-              </VStack>
-            </HStack>
-
-            <Text className="mt-3 text-xl font-bold">
-              Servicios adicionales
-            </Text>
-
-            <HStack>
-              {currentParking?.services.map((service) => (
-                <Text className="text-gray-600 text-xl">{service}</Text>
-              ))}
-            </HStack>
-
-            <Text className="mt-3 text-xl font-bold">Métodos de pago</Text>
-
-            <Text className="text-gray-600 text-xl">
-              {currentParking?.paymentMethods.map((payment) => (
-                <Text className="text-gray-600 text-xl">{payment}</Text>
-              ))}
-            </Text>
-          </BottomSheetView>
-        </BottomSheet>
+        {currentParking && (
+          <ParkingDetailsSheet
+            ref={bottomSheetRef}
+            parkingLot={currentParking}
+            onCallParkingLot={callParkingLot}
+            onOpenMapDirection={openMapDirection}
+            onShowReportModal={showReportModal}
+          />
+        )}
 
         <ReportModal
           opened={isReportModalOpen}
