@@ -1,4 +1,5 @@
 export { AvailabilityIndicator } from './AvailabilityIndicator'
+export { EmptyRecentsParkingsImage } from './EmptyRecentsParkingsImage'
 export { ParkingResultCard } from './ParkingResultCard'
 export { RecentPakingsList } from './RecentPakingsList'
 export { RecentParkingCard } from './RecentParkingCard'

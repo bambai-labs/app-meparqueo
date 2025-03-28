@@ -10,10 +10,11 @@ import Constants from 'expo-constants'
 import { Stack } from 'expo-router'
 import { MapIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
-import { Image, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   AvailabilityIndicator,
+  EmptyRecentsParkingsImage,
   RecentPakingsList,
   ReportModal,
   SearchBar,
@@ -101,14 +102,7 @@ export const HomeScreen = () => {
               recentParkings={recentParkings}
             />
           ) : (
-            <VStack className="h-[80%] flex-col justify-center items-center">
-              <Image source={require('@/assets/images/parking.png')} />
-              <View>
-                <Text className="font-bold text-2xl text-center">
-                  Comienza tu experiencia con Me Parqueo. Busca tu destino 👆
-                </Text>
-              </View>
-            </VStack>
+            <EmptyRecentsParkingsImage />
           )}
         </VStack>
 
