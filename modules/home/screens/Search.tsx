@@ -13,7 +13,7 @@ import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapIcon, MapPin } from 'lucide-react-native'
 import Carousel from 'pinar'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
 import {
   FlatList,
@@ -202,6 +202,18 @@ export const SearchScreen = () => {
       animationDuration: 1000,
     })
   }
+
+  useEffect(() => {
+    if (places.length === 0) {
+      return
+    }
+
+    const firstPlace = places[0]
+
+    const { location } = firstPlace
+
+    handlePlacePress(firstPlace)
+  }, [places])
 
   return (
     <GestureHandlerRootView>

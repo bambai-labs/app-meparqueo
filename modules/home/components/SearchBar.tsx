@@ -65,13 +65,19 @@ export const SearchBar = ({
                 setIsFocused(text.length > 0)
               }}
               placeholder={placeholder}
-              onSubmitEditing={() => onSearch(query)}
+              onSubmitEditing={() => {
+                onSearch(query)
+                setIsFocused(false)
+              }}
               onFocus={() => setIsFocused(query.length > 0)}
               onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             />
           </Input>
           <Button
-            onPress={() => onSearch(query)}
+            onPress={() => {
+              onSearch(query)
+              setIsFocused(false)
+            }}
             size="xl"
             style={{
               borderStartStartRadius: 0,
