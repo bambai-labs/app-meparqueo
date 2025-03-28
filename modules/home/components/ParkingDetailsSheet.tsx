@@ -7,10 +7,10 @@ import { VStack } from '@/components/ui/vstack'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { AlertCircleIcon, MapIcon, PhoneIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useMemo } from 'react'
 import { Text, View } from 'react-native'
 import { ParkingLot } from '../types'
-import { formatCurrency } from '../utils'
+import { formatCurrency, parsePaymentMethod, parseService } from '../utils'
 import { AvailabilityIndicator } from './AvailabilityIndicator'
 
 interface Props {
@@ -25,6 +25,14 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
     { parkingLot, onCallParkingLot, onOpenMapDirection, onShowReportModal },
     ref,
   ) => {
+    const services = useMemo(() => {
+      return parkingLot.services.map(parseService).join(', ')
+    }, [parkingLot])
+
+    const paymentMethods = useMemo(() => {
+      return parkingLot.paymentMethods.map(parsePaymentMethod).join(', ')
+    }, [parkingLot])
+
     return (
       <BottomSheet
         ref={ref}
@@ -106,18 +114,12 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
           <Text className="mt-3 text-xl font-bold">Servicios adicionales</Text>
 
           <HStack>
-            {parkingLot.services.map((service) => (
-              <Text className="text-gray-600 text-xl">{service}</Text>
-            ))}
+            <Text className="text-gray-600 text-xl">{services}</Text>
           </HStack>
 
           <Text className="mt-3 text-xl font-bold">Métodos de pago</Text>
 
-          <Text className="text-gray-600 text-xl">
-            {parkingLot.paymentMethods.map((payment) => (
-              <Text className="text-gray-600 text-xl">{payment}</Text>
-            ))}
-          </Text>
+          <Text className="text-gray-600 text-xl">{paymentMethods}</Text>
         </BottomSheetView>
       </BottomSheet>
     )

@@ -71,6 +71,9 @@ export const SearchBar = ({
               }}
               onFocus={() => setIsFocused(query.length > 0)}
               onBlur={() => setTimeout(() => setIsFocused(false), 200)}
+              onPress={() => {
+                setIsFocused(true)
+              }}
             />
           </Input>
           <Button

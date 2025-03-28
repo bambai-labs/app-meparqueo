@@ -108,6 +108,18 @@ export const useHome = () => {
     }
 
     login()
+    loadRecentParkingLots()
+  }
+
+  const loadRecentParkingLots = async () => {
+    try {
+      const response = await MeParqueoApi.get(
+        `/api/v1/user/recently/stored/parkings?limit=10&page=1`,
+      )
+      console.log('paginación ', response.data)
+    } catch (error) {
+      console.log('error en la paginacion', error)
+    }
   }
 
   useEffect(() => {

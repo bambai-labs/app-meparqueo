@@ -237,6 +237,7 @@ export const SearchScreen = () => {
             className="mt-3"
             onSearch={searchPlace}
             loading={loading}
+            pointerEvents="box-none"
           >
             {places.length > 0 && (
               <FlatList

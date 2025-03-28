@@ -7,10 +7,22 @@ export interface ParkingLot {
   longitude: number
   price: number
   imageUrls: string[]
-  paymentMethods: string[]
-  services: string[]
+  paymentMethods: PaymentMethod[]
+  services: Service[]
   phoneNumber: string
   distanceKm: number
+}
+
+export enum PaymentMethod {
+  CASH = 'CASH',
+  TRANSFER = 'TRANSFER',
+  CARD = 'CARD',
+}
+
+export enum Service {
+  SECURITY = 'SECURITY',
+  CAR_WASH = 'CAR_WASH',
+  VALET_PARKING = 'VALET_PARKING',
 }
 
 export enum ParkingLotAvailability {

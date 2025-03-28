@@ -16,7 +16,9 @@ import { useHome } from '../hooks'
 import {
   ParkingLotAvailability,
   ParkingStatus,
+  PaymentMethod,
   RecentParkingLot,
+  Service,
 } from '../types'
 
 const recentParkings: RecentParkingLot[] = [
@@ -32,10 +34,10 @@ const recentParkings: RecentParkingLot[] = [
     latitude: -75.7149219,
     longitude: 8.7990835,
     name: 'Parking Splash',
-    paymentMethods: [],
+    paymentMethods: [PaymentMethod.CARD, PaymentMethod.CASH],
     phoneNumber: '+1234567890',
     price: 2500,
-    services: [],
+    services: [Service.CAR_WASH, Service.VALET_PARKING, Service.SECURITY],
     timestamp: new Date().getTime(),
     distanceKm: 78,
   },
