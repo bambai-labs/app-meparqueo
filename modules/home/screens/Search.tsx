@@ -170,7 +170,21 @@ export const SearchScreen = () => {
   }
 
   const handleConfirmFilterModal = (values: FormValues) => {
-    console.log(values)
+    console.log('formValues', values)
+
+    if (currentDestination) {
+      searchNearParkingLots(
+        currentDestination.location.latitude,
+        currentDestination.location.longitude,
+        values.radiusKm.toString(),
+        values.availability,
+        values.paymentMethods,
+        values.priceMax,
+        values.priceMin,
+        values.services,
+      )
+    }
+
     hideFilterModal()
   }
 
@@ -286,7 +300,7 @@ export const SearchScreen = () => {
             </HStack>
 
             <Text>
-              {places.length > 0 ? `${places.length} resultados` : ''}
+              {parkingLots.length > 0 ? `${parkingLots.length} resultados` : ''}
             </Text>
           </HStack>
         </VStack>
@@ -300,7 +314,6 @@ export const SearchScreen = () => {
             logoEnabled={false}
             onDidFinishLoadingStyle={() => {
               setCameraPosition(deviceLocation!)
-              console.log('moving')
             }}
           >
             <Camera ref={cameraRef} />

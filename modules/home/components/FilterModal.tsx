@@ -30,8 +30,14 @@ import {
 } from '@/components/ui/select'
 import { useFormik } from 'formik'
 import { ChevronDownIcon } from 'lucide-react-native'
+import { useEffect } from 'react'
 import { getAvailabilities, getPaymentMethods } from '../types'
-import { getServices } from '../types/Parking'
+import {
+  getServices,
+  ParkingLotAvailability,
+  PaymentMethod,
+  Service,
+} from '../types/Parking'
 import { parsePaymentMethod, parseService } from '../utils'
 import { parseAvailability } from '../utils/parseAvailability'
 
@@ -51,22 +57,26 @@ export interface FormValues {
 }
 
 export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
-  const { values, errors, handleSubmit, handleChange } = useFormik<FormValues>({
-    initialValues: {
-      availability: '',
-      paymentMethods: '',
-      priceMax: '',
-      priceMin: '',
-      services: '',
-      radiusKm: 0,
-    },
-    // validationSchema: Yup.object().shape({
-    //   radiusKm: Yup.number().required('La proximidad es requerida'),
-    // }),
-    onSubmit: (values) => {
-      onConfirm(values)
-    },
-  })
+  const { values, handleSubmit, handleChange, resetForm } =
+    useFormik<FormValues>({
+      initialValues: {
+        availability: '',
+        paymentMethods: '',
+        priceMax: '',
+        priceMin: '',
+        services: '',
+        radiusKm: 5,
+      },
+      onSubmit: (values) => {
+        onConfirm(values)
+      },
+    })
+
+  useEffect(() => {
+    return () => {
+      resetForm()
+    }
+  }, [])
 
   return (
     <Modal isOpen={opened} onClose={onCancel}>
@@ -92,6 +102,9 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
             </FormControlLabel>
             <Select
               className="w-full"
+              selectedValue={parseAvailability(
+                values.availability as ParkingLotAvailability,
+              )}
               onValueChange={handleChange('availability')}
             >
               <SelectTrigger variant="outline" size="md">
@@ -124,6 +137,9 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
             <Select
               className="w-full"
               onValueChange={handleChange('paymentMethods')}
+              selectedValue={parsePaymentMethod(
+                values.paymentMethods as PaymentMethod,
+              )}
             >
               <SelectTrigger variant="outline" size="md">
                 <SelectInput
@@ -152,7 +168,11 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
             <FormControlLabel>
               <FormControlLabelText>Servicio</FormControlLabelText>
             </FormControlLabel>
-            <Select className="w-full" onValueChange={handleChange('services')}>
+            <Select
+              className="w-full"
+              selectedValue={parseService(values.services as Service)}
+              onValueChange={handleChange('services')}
+            >
               <SelectTrigger variant="outline" size="md">
                 <SelectInput
                   placeholder="Seleccione método de pago"
@@ -180,7 +200,11 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
             <FormControlLabel>
               <FormControlLabelText>Proximidad</FormControlLabelText>
             </FormControlLabel>
-            <Select className="w-full" onValueChange={handleChange('radiusKm')}>
+            <Select
+              className="w-full"
+              onValueChange={handleChange('radiusKm')}
+              selectedValue={`${values.radiusKm} km`}
+            >
               <SelectTrigger variant="outline" size="md">
                 <SelectInput placeholder="Proximidad" className="flex-1" />
                 <SelectIcon className="mr-3" as={ChevronDownIcon} />
@@ -207,7 +231,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
               <InputField
                 placeholder="Ingresar precio maximo"
                 keyboardType="numeric"
-                value={values.priceMax.toString()}
+                value={values.priceMax}
                 onChangeText={handleChange('priceMax')}
               />
             </Input>
@@ -219,7 +243,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
               <InputField
                 placeholder="Ingresar precio mínimo"
                 keyboardType="numeric"
-                value={values.priceMin.toString()}
+                value={values.priceMin}
                 onChangeText={handleChange('priceMin')}
               />
             </Input>
@@ -231,7 +255,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
             <ButtonText>Cancelar</ButtonText>
           </Button>
           <Button onPress={() => handleSubmit()}>
-            <ButtonText>Reportar</ButtonText>
+            <ButtonText>Filtrar</ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>
