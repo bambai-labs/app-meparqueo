@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const RecentParkingsList = ({ onCardPress }: Props) => {
-  const { parkings, loading, hasMore, fetchParkings, refreshParkings } =
+  const { recentParkings, loading, hasMore, fetchParkings, refreshParkings } =
     useParkingPagination()
 
   const renderFooter = () => {
@@ -46,14 +46,14 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
   return (
     <FlatList
       className="mt-5"
-      data={parkings}
+      data={recentParkings}
       renderItem={({ item }) => (
         <RecentParkingCard
           recentParking={item}
           onPress={() => onCardPress(item.parkingLot)}
         />
       )}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item.parkingLot.id}
       onEndReached={fetchParkings}
       onEndReachedThreshold={0.1}
       refreshing={loading}

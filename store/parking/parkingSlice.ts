@@ -34,7 +34,7 @@ export const parkingSlice = createSlice({
       )
 
       const recentParkingLotIndex = state.recentParkings.findIndex(
-        (parkingLot) => parkingLot.id === parkingLotId,
+        (parkingLot) => parkingLot.parkingLot.id === parkingLotId,
       )
 
       if (parkingLotIndex !== -1) {
@@ -52,13 +52,21 @@ export const parkingSlice = createSlice({
         state.parkingLots = newParkings
       }
 
+      console.log('recent parkinglot Id', recentParkingLotIndex)
+
       if (recentParkingLotIndex !== -1) {
         const newParkings = state.recentParkings.map((parking) => {
-          if (parking.id === parkingLotId) {
+          const { id, viewedAt } = parking
+
+          if (parking.parkingLot.id === parkingLotId) {
             return {
-              ...parking,
-              availability: availability,
-              status: status,
+              id,
+              viewedAt,
+              parkingLot: {
+                ...parking.parkingLot,
+                availability: availability,
+                status: status,
+              },
             }
           }
           return parking
@@ -71,7 +79,9 @@ export const parkingSlice = createSlice({
       state: ParkingSliceState,
       action: PayloadAction<RecentParkingLotResponse[]>,
     ) => {
-      state.recentParkings.push(...action.payload)
+      console.log('aqui estan los parqueaderos', action.payload)
+
+      state.recentParkings = state.recentParkings.concat(action.payload)
     },
     setRecentParkingLots: (
       state: ParkingSliceState,
