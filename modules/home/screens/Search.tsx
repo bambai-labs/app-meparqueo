@@ -27,7 +27,7 @@ import {
 } from '../components'
 import { FormValues } from '../components/FilterModal'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
-import { ParkingLot } from '../types'
+import { ParkingLot, ParkingLotAvailability } from '../types'
 
 export const SearchScreen = () => {
   const router = useRouter()
@@ -170,8 +170,6 @@ export const SearchScreen = () => {
   }
 
   const handleConfirmFilterModal = (values: FormValues) => {
-    console.log('formValues', values)
-
     if (currentDestination) {
       searchNearParkingLots(
         currentDestination.location.latitude,
@@ -328,13 +326,40 @@ export const SearchScreen = () => {
                   onPress={() => handleParkingCardPress(parkingResult)}
                 >
                   <VStack className="items-center bg-oran">
-                    <Image
-                      source={require('@/assets/images/parking_spot.png')}
-                      style={{
-                        width: 40,
-                        height: 40,
-                      }}
-                    />
+                    {parkingResult.availability ===
+                      ParkingLotAvailability.MORE_THAN_FIVE && (
+                      <Image
+                        source={require(
+                          `@/assets/images/parking_spot_green.png`,
+                        )}
+                        style={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      />
+                    )}
+                    {parkingResult.availability ===
+                      ParkingLotAvailability.LESS_THAN_FIVE && (
+                      <Image
+                        source={require(
+                          `@/assets/images/parking_spot_orange.png`,
+                        )}
+                        style={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      />
+                    )}
+                    {parkingResult.availability ===
+                      ParkingLotAvailability.NO_AVAILABILITY && (
+                      <Image
+                        source={require(`@/assets/images/parking_spot_red.png`)}
+                        style={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      />
+                    )}
                     <Text className="text-xs font-bold">
                       {parkingResult.distanceKm} km
                     </Text>

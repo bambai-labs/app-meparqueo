@@ -53,7 +53,7 @@ export const HomeScreen = () => {
             onSearch={() => {}}
           />
 
-          <Box className="w-full items-start mt-6">
+          <Box className="w-full items-start mt-6 bg-red-">
             <Chip selected={chipSelected} onPress={toggleChip}>
               <ButtonText>Recientes</ButtonText>
             </Chip>
