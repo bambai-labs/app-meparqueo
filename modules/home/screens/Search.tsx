@@ -19,6 +19,7 @@ import {
   Pressable,
 } from 'react-native-gesture-handler'
 import {
+  FilterModal,
   ParkingDetailsSheet,
   ParkingResultCard,
   ReportModal,
@@ -149,6 +150,7 @@ export const SearchScreen = () => {
   }
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
 
   const hideReportModal = () => {
     setIsReportModalOpen(false)
@@ -156,6 +158,14 @@ export const SearchScreen = () => {
 
   const showReportModal = () => {
     setIsReportModalOpen(true)
+  }
+
+  const showFilterModal = () => {
+    setIsFilterModalOpen(true)
+  }
+
+  const hideFilterModal = () => {
+    setIsFilterModalOpen(false)
   }
 
   const handlePlacePress = async (place: Place) => {
@@ -204,11 +214,7 @@ export const SearchScreen = () => {
     if (places.length === 0) {
       return
     }
-
     const firstPlace = places[0]
-
-    const { location } = firstPlace
-
     handlePlacePress(firstPlace)
   }, [places])
 
@@ -263,12 +269,12 @@ export const SearchScreen = () => {
 
           <HStack className="mt-3 w-full items-center justify-between">
             <HStack space="md">
-              <Button variant="outline" className="border-gray-400 rounded-lg">
+              <Button
+                onPress={showFilterModal}
+                variant="outline"
+                className="border-gray-400 rounded-lg"
+              >
                 <ButtonText>Filtrar</ButtonText>
-                <Icon as={ChevronDown} size="sm" />
-              </Button>
-              <Button variant="outline" className="border-gray-400 rounded-lg">
-                <ButtonText>Ordenar</ButtonText>
                 <Icon as={ChevronDown} size="sm" />
               </Button>
             </HStack>
@@ -370,6 +376,12 @@ export const SearchScreen = () => {
           opened={isReportModalOpen}
           onCancel={hideReportModal}
           onConfirm={hideReportModal}
+        />
+
+        <FilterModal
+          opened={isFilterModalOpen}
+          onCancel={hideFilterModal}
+          onConfirm={hideFilterModal}
         />
       </VStack>
     </GestureHandlerRootView>

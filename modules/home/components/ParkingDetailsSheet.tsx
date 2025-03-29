@@ -40,7 +40,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         index={-1}
         snapPoints={['50%', '80%']}
       >
-        <BottomSheetView className="px-6">
+        <BottomSheetView className="px-6 pb-4">
           <Box className="h-96 rounded-2xl overflow-hidden">
             {parkingLot && (
               <Carousel

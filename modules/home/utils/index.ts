@@ -1,6 +1,7 @@
 export { formatCurrency } from './formatCurrency'
 export { formatTimestamp } from './formatTimestamp'
 export { getAvailabilityIndicatorStyles } from './getAvailabilityIndicatorStyles'
+export { getDistanceModeIcon } from './getDistanceModeIcon'
 export { getLocation, getPermissions } from './locationUtils'
 export { parsePaymentMethod } from './parsePaymentMethod'
 export { parseService } from './parseService'

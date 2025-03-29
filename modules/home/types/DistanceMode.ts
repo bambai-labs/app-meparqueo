@@ -4,3 +4,12 @@ export enum DistanceMode {
   BICYCLING = 'BICYCLING',
   TRANSIT = 'TRANSIT',
 }
+
+export const getDistanceModes = (): DistanceMode[] => {
+  return [
+    DistanceMode.WALKING,
+    DistanceMode.DRIVING,
+    DistanceMode.BICYCLING,
+    DistanceMode.TRANSIT,
+  ]
+}

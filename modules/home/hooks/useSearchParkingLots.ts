@@ -19,6 +19,7 @@ export const useSearchParkingLots = () => {
       )
 
       setParkingLots(response.data.data)
+      console.log(response.data.data[0].services)
     } catch (error) {
       console.log(error)
     } finally {
