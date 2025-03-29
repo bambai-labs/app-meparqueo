@@ -36,7 +36,10 @@ export const ParkingResultCard = ({
             <Text className="text-gray-600"> / hora</Text>
           </HStack>
           <HStack className="items-center mt-3" space="sm">
-            <AvailabilityIndicator availability={parkingLot.availability} />
+            <AvailabilityIndicator
+              status={parkingLot.status}
+              availability={parkingLot.availability}
+            />
 
             <Icon as={MapPin} size="md" />
             <Text>{parkingLot.distanceKm} km</Text>

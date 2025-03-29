@@ -1,10 +1,12 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { setParkingLots } from '@/store'
 import { useState } from 'react'
-import { ParkingLot } from '../types'
 
 export const useSearchParkingLots = () => {
   const [loading, setLoading] = useState(false)
-  const [parkingLots, setParkingLots] = useState<ParkingLot[]>([])
+  const { parkingLots } = useAppSelector((state) => state.parking)
+  const dispatch = useAppDispatch()
 
   const searchNearParkingLots = async (
     latitude: number,
@@ -40,7 +42,7 @@ export const useSearchParkingLots = () => {
         `/api/v1/parking-lot/find/nearby?lat=${latitude}&lng=${longitude}&radiusKm=${radiusKm}${availability === '' ? '' : `&availability=${availability}`}${paymentMethods === '' ? '' : `&paymentMethods=${paymentMethods}`}${priceMax === '' ? '' : `&priceMax=${priceMax}`}${priceMin === '' ? '' : `&priceMin=${priceMin}`}${services === '' ? '' : `&services=${services}`}`,
       )
 
-      setParkingLots(response.data.data)
+      dispatch(setParkingLots(response.data.data))
     } catch (error) {
       console.log(error)
     } finally {

@@ -1,6 +1,6 @@
 import { MeParqueoApi, socketManager } from '@/api'
 import { getPermissions, ParkingUpdateEstatus, useAppDispatch } from '@/modules'
-import { setLocation } from '@/store'
+import { setLocation, updateParkingLotAvailability } from '@/store'
 import { isAxiosError } from 'axios'
 import * as Location from 'expo-location'
 import { useRootNavigationState, useRouter } from 'expo-router'
@@ -61,8 +61,7 @@ export default function Index() {
   }
 
   const handleParkingUpdateStatus = (data: ParkingUpdateEstatus) => {
-    console.log('Parking status update:', data)
-    // TODO: Update your app state or trigger a UI update)
+    dispatch(updateParkingLotAvailability(data))
   }
 
   useEffect(() => {

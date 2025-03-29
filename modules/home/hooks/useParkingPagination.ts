@@ -1,16 +1,15 @@
-import {
-  MeParqueoApi,
-  PaginationResponse,
-  RecentParkingLotResponse,
-} from '@/api'
+import { MeParqueoApi, PaginationResponse } from '@/api'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { pushRecentParkingLots, setRecentParkingLots } from '@/store'
 import { useCallback, useEffect, useState } from 'react'
 
 export const useParkingPagination = () => {
-  const [parkings, setParkings] = useState<RecentParkingLotResponse[]>([])
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [totalPages, setTotalPages] = useState(0)
+  const { recentParkings } = useAppSelector((state) => state.parking)
+  const dispatch = useAppDispatch()
 
   const fetchParkings = useCallback(async () => {
     if (loading || (totalPages > 0 && page > totalPages)) return
@@ -30,9 +29,11 @@ export const useParkingPagination = () => {
       if (data.length === 0) {
         setHasMore(false)
       } else {
-        setParkings((prevParkings) =>
-          page === 1 ? data : [...prevParkings, ...data],
-        )
+        // setParkings((prevParkings) =>
+        //   page === 1 ? data : [...prevParkings, ...data],
+        // )
+
+        dispatch(pushRecentParkingLots(data))
 
         setPage((prevPage) => prevPage + 1)
       }
@@ -45,7 +46,7 @@ export const useParkingPagination = () => {
   }, [page, loading, totalPages])
 
   const refreshParkings = () => {
-    setParkings([])
+    dispatch(setRecentParkingLots([]))
     setPage(1)
     setHasMore(true)
     setTotalPages(0)
@@ -57,7 +58,7 @@ export const useParkingPagination = () => {
   }, [])
 
   return {
-    parkings,
+    recentParkings,
     loading,
     hasMore,
     fetchParkings,
