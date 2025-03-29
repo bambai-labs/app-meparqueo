@@ -31,6 +31,7 @@ export const RecentParkingCard = ({
         <HStack className="w-full justify-between mt-2 items-center">
           <AvailabilityIndicator
             availability={recentParking.parkingLot.availability}
+            status={recentParking.parkingLot.status}
           />
 
           <Text className="text-gray-600">

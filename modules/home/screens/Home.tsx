@@ -6,7 +6,6 @@ import Constants from 'expo-constants'
 import { Stack } from 'expo-router'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
-  EmptyRecentsParkingsImage,
   ParkingDetailsSheet,
   RecentParkingsList,
   ReportModal,
@@ -59,11 +58,7 @@ export const HomeScreen = () => {
             </Chip>
           </Box>
 
-          {chipSelected ? (
-            <RecentParkingsList onCardPress={handleParkingCardPress} />
-          ) : (
-            <EmptyRecentsParkingsImage />
-          )}
+          <RecentParkingsList onCardPress={handleParkingCardPress} />
         </VStack>
 
         {currentParking && (

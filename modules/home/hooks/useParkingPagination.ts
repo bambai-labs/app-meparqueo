@@ -54,7 +54,9 @@ export const useParkingPagination = () => {
   }
 
   useEffect(() => {
-    fetchParkings()
+    if (recentParkings.length === 0) {
+      console.log('')
+    }
   }, [])
 
   return {
