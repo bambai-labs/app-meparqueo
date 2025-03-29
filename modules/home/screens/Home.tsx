@@ -8,40 +8,11 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   EmptyRecentsParkingsImage,
   ParkingDetailsSheet,
-  RecentPakingsList,
+  RecentParkingsList,
   ReportModal,
   SearchBar,
 } from '../components'
 import { useHome } from '../hooks'
-import {
-  ParkingLotAvailability,
-  ParkingStatus,
-  PaymentMethod,
-  RecentParkingLot,
-  Service,
-} from '../types'
-
-const recentParkings: RecentParkingLot[] = [
-  {
-    id: '1',
-    availability: ParkingLotAvailability.MORE_THAN_FIVE,
-    status: ParkingStatus.OPEN,
-    imageUrls: [
-      'https://eltesoro.com.co/wp-content/uploads/2021/04/0721-servicio-parqueadero-el-tesoro-%E2%80%93-2.jpeg',
-      'https://files.lafm.com.co/assets/public/styles/img_node_706x392/public/2024-07/centro_comercial_centro_mayore.jpg.webp?VersionId=uk89CveRHtgxj2HPIofK.qczrJYkEkCT&itok=VYD9KsaQ',
-      'https://bogota.gov.co/sites/default/files/2023-01/parqueadero.jpg',
-    ],
-    latitude: -75.7149219,
-    longitude: 8.7990835,
-    name: 'Parking Splash',
-    paymentMethods: [PaymentMethod.CARD, PaymentMethod.CASH],
-    phoneNumber: '+1234567890',
-    price: 2500,
-    services: [Service.CAR_WASH, Service.VALET_PARKING, Service.SECURITY],
-    timestamp: new Date().getTime(),
-    distanceKm: 78,
-  },
-]
 
 export const HomeScreen = () => {
   const {
@@ -89,10 +60,7 @@ export const HomeScreen = () => {
           </Box>
 
           {chipSelected ? (
-            <RecentPakingsList
-              onCardPress={handleParkingCardPress}
-              recentParkings={recentParkings}
-            />
+            <RecentParkingsList onCardPress={handleParkingCardPress} />
           ) : (
             <EmptyRecentsParkingsImage />
           )}

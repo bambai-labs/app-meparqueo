@@ -15,7 +15,7 @@ export const useSearchParkingLots = () => {
       setLoading(true)
 
       const response = await MeParqueoApi.get<NearbyParkingLotsResponse>(
-        `/api/v1/parking-lot/find/nearby?lat=${latitude}&lng=${longitude}&radiusKm=${radius}`,
+        `/api/v1/parking-lot/find/nearby?lat=${latitude}&lng=${longitude}&radiusKm=${radius}&distanceMode=WALKING`,
       )
 
       setParkingLots(response.data.data)

@@ -17,6 +17,7 @@ export const useHome = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
+  const [recentParkingLots, setRecentParkingLots] = useState<ParkingLot[]>([])
 
   const toggleChip = () => {
     setChipSelected(!chipSelected)
@@ -27,6 +28,7 @@ export const useHome = () => {
   }
 
   const handleParkingCardPress = (parking: ParkingLot) => {
+    console.log('parking pressed', parking)
     setCurrentParking(parking)
     expandParkingDetailsSheet()
   }
@@ -108,19 +110,19 @@ export const useHome = () => {
     }
 
     login()
-    loadRecentParkingLots()
+    //loadRecentParkingLots()
   }
 
-  const loadRecentParkingLots = async () => {
-    try {
-      const response = await MeParqueoApi.get(
-        `/api/v1/user/recently/stored/parkings?limit=10&page=1`,
-      )
-      console.log('paginación ', response.data)
-    } catch (error) {
-      console.log('error en la paginacion', error)
-    }
-  }
+  // const loadRecentParkingLots = async () => {
+  //   try {
+  //     const response = await MeParqueoApi.get<PaginationResponse>(
+  //       `/api/v1/user/recently/stored/parkings?limit=10&page=1`,
+  //     )
+  //     console.log('paginación ', response.data.data.data)
+  //   } catch (error) {
+  //     console.log('error en la paginacion', error)
+  //   }
+  // }
 
   useEffect(() => {
     checkUserUuid()

@@ -11,6 +11,7 @@ export interface ParkingLot {
   services: Service[]
   phoneNumber: string
   distanceKm: number
+  address: string
 }
 
 export enum PaymentMethod {
