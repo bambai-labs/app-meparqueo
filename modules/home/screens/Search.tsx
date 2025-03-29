@@ -279,7 +279,9 @@ export const SearchScreen = () => {
               </Button>
             </HStack>
 
-            <Text>3 resultados</Text>
+            <Text>
+              {places.length > 0 ? `${places.length} resultados` : ''}
+            </Text>
           </HStack>
         </VStack>
 
@@ -314,6 +316,9 @@ export const SearchScreen = () => {
                         height: 40,
                       }}
                     />
+                    <Text className="text-xs font-bold">
+                      {parkingResult.distanceKm} km
+                    </Text>
                   </VStack>
                 </Pressable>
               </MarkerView>
