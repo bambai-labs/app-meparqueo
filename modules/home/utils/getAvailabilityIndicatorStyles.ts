@@ -19,7 +19,7 @@ export const getAvailabilityIndicatorStyles = (
     },
 
     [ParkingLotAvailability.LESS_THAN_FIVE]: {
-      indicatorColor: 'bg-orange-700',
+      indicatorColor: 'bg-orange-500',
       indicatorText: 'Pocos espacios',
     },
 

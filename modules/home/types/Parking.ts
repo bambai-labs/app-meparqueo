@@ -40,6 +40,24 @@ export enum PaymentMethod {
   PAY_LATER = 'PAY_LATER',
 }
 
+export const getPaymentMethods = (): PaymentMethod[] => {
+  return [
+    PaymentMethod.CASH,
+    PaymentMethod.TRANSFER,
+    PaymentMethod.CARD,
+    PaymentMethod.CONSIGNMENT,
+    PaymentMethod.PAY_ONLINE,
+    PaymentMethod.BANCOLOMBIA_APP,
+    PaymentMethod.DAVIVIENDA_APP,
+    PaymentMethod.LOYALTY_POINTS,
+    PaymentMethod.POSTDATED_CHECK,
+    PaymentMethod.PAYROLL_DEDUCTION,
+    PaymentMethod.CREDIT,
+    PaymentMethod.CRYPTOCURRENCY,
+    PaymentMethod.PAY_LATER,
+  ]
+}
+
 export enum Service {
   SECURITY = 'SECURITY',
   CAR_WASH = 'CAR_WASH',
@@ -70,10 +88,39 @@ export enum Service {
   VEHICLE_TUNING = 'VEHICLE_TUNING',
 }
 
+export const getServices = (): Service[] => {
+  return [
+    Service.SECURITY,
+    Service.CAR_WASH,
+    Service.VALET_PARKING,
+    Service.COVERED,
+    Service.TWENTY_FOUR_HOURS,
+    Service.TRAILER_PARKING,
+    Service.DISABLED_ACCESS,
+    Service.TIRE_INFLATION,
+    Service.VIDEO_SURVEILLANCE,
+    Service.BATTERY_CHARGE,
+    Service.LOCKER_SERVICE,
+    Service.RESTROOM,
+    Service.WI_FI,
+    Service.TOW_SERVICE,
+    Service.BIKE_PARKING,
+    Service.TIRE_CHANGE,
+  ]
+}
+
 export enum ParkingLotAvailability {
   LESS_THAN_FIVE = 'LESS_THAN_FIVE',
   MORE_THAN_FIVE = 'MORE_THAN_FIVE',
   NO_AVAILABILITY = 'NO_AVAILABILITY',
+}
+
+export const getAvailabilities = (): ParkingLotAvailability[] => {
+  return [
+    ParkingLotAvailability.LESS_THAN_FIVE,
+    ParkingLotAvailability.MORE_THAN_FIVE,
+    ParkingLotAvailability.NO_AVAILABILITY,
+  ]
 }
 
 export enum ParkingStatus {

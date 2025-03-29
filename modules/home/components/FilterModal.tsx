@@ -1,7 +1,12 @@
 import { Button, ButtonText } from '@/components/ui/button'
+import {
+  FormControl,
+  FormControlLabel,
+  FormControlLabelText,
+} from '@/components/ui/form-control'
 import { Heading } from '@/components/ui/heading'
-import { HStack } from '@/components/ui/hstack'
 import { CloseIcon, Icon } from '@/components/ui/icon'
+import { Input, InputField } from '@/components/ui/input'
 import {
   Modal,
   ModalBackdrop,
@@ -11,22 +16,57 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/ui/modal'
-import { Check } from 'lucide-react-native'
-import { useState } from 'react'
-import { Pressable, Text } from 'react-native'
-import { FilterType, getFilterTypes } from '../types'
-import { parseFilterType } from '../utils/parseFilterType'
+import {
+  Select,
+  SelectBackdrop,
+  SelectContent,
+  SelectDragIndicator,
+  SelectDragIndicatorWrapper,
+  SelectIcon,
+  SelectInput,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
+} from '@/components/ui/select'
+import { useFormik } from 'formik'
+import { ChevronDownIcon } from 'lucide-react-native'
+import { getAvailabilities, getPaymentMethods } from '../types'
+import { getServices } from '../types/Parking'
+import { parsePaymentMethod, parseService } from '../utils'
+import { parseAvailability } from '../utils/parseAvailability'
 
 interface Props {
   opened: boolean
   onCancel: () => void
-  onConfirm: () => void
+  onConfirm: (values: FormValues) => void
+}
+
+export interface FormValues {
+  availability: string
+  paymentMethods: string
+  priceMax: string
+  priceMin: string
+  services: string
+  radiusKm: number
 }
 
 export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
-  const [filterType, setFilterType] = useState<FilterType | undefined>(
-    undefined,
-  )
+  const { values, errors, handleSubmit, handleChange } = useFormik<FormValues>({
+    initialValues: {
+      availability: '',
+      paymentMethods: '',
+      priceMax: '',
+      priceMin: '',
+      services: '',
+      radiusKm: 0,
+    },
+    // validationSchema: Yup.object().shape({
+    //   radiusKm: Yup.number().required('La proximidad es requerida'),
+    // }),
+    onSubmit: (values) => {
+      onConfirm(values)
+    },
+  })
 
   return (
     <Modal isOpen={opened} onClose={onCancel}>
@@ -45,22 +85,152 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
         </ModalHeader>
 
         <ModalBody>
-          <Heading>Ordenar por</Heading>
-          {getFilterTypes().map((filter) => (
-            <Pressable onPress={() => setFilterType(filter)}>
-              <HStack className="p-2 justify-between">
-                <Text>{parseFilterType(filter)}</Text>
-                {filterType === filter && <Icon as={Check} size="lg" />}
-              </HStack>
-            </Pressable>
-          ))}
+          <FormControl>
+            <Heading>Ordenar por</Heading>
+            <FormControlLabel>
+              <FormControlLabelText>Disponibilidad</FormControlLabelText>
+            </FormControlLabel>
+            <Select
+              className="w-full"
+              onValueChange={handleChange('availability')}
+            >
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput
+                  placeholder="Seleccione Disponibilidad"
+                  className="flex-1"
+                />
+                <SelectIcon className="mr-3" as={ChevronDownIcon} />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  {getAvailabilities().map((availability) => (
+                    <SelectItem
+                      key={availability}
+                      label={parseAvailability(availability)}
+                      value={availability}
+                    />
+                  ))}
+                </SelectContent>
+              </SelectPortal>
+            </Select>
+
+            <FormControlLabel>
+              <FormControlLabelText>Método de pago</FormControlLabelText>
+            </FormControlLabel>
+            <Select
+              className="w-full"
+              onValueChange={handleChange('paymentMethods')}
+            >
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput
+                  placeholder="Seleccione método de pago"
+                  className="flex-1"
+                />
+                <SelectIcon className="mr-3" as={ChevronDownIcon} />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  {getPaymentMethods().map((paymentMethod) => (
+                    <SelectItem
+                      key={paymentMethod}
+                      label={parsePaymentMethod(paymentMethod)}
+                      value={paymentMethod}
+                    />
+                  ))}
+                </SelectContent>
+              </SelectPortal>
+            </Select>
+
+            <FormControlLabel>
+              <FormControlLabelText>Servicio</FormControlLabelText>
+            </FormControlLabel>
+            <Select className="w-full" onValueChange={handleChange('services')}>
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput
+                  placeholder="Seleccione método de pago"
+                  className="flex-1"
+                />
+                <SelectIcon className="mr-3" as={ChevronDownIcon} />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  {getServices().map((service) => (
+                    <SelectItem
+                      key={service}
+                      label={parseService(service)}
+                      value={service}
+                    />
+                  ))}
+                </SelectContent>
+              </SelectPortal>
+            </Select>
+
+            <FormControlLabel>
+              <FormControlLabelText>Proximidad</FormControlLabelText>
+            </FormControlLabel>
+            <Select className="w-full" onValueChange={handleChange('radiusKm')}>
+              <SelectTrigger variant="outline" size="md">
+                <SelectInput placeholder="Proximidad" className="flex-1" />
+                <SelectIcon className="mr-3" as={ChevronDownIcon} />
+              </SelectTrigger>
+              <SelectPortal>
+                <SelectBackdrop />
+                <SelectContent>
+                  <SelectDragIndicatorWrapper>
+                    <SelectDragIndicator />
+                  </SelectDragIndicatorWrapper>
+                  <SelectItem label="5 km" value="5" />
+
+                  <SelectItem label="10 km" value="10" />
+
+                  <SelectItem label="15 km" value="15" />
+                </SelectContent>
+              </SelectPortal>
+            </Select>
+
+            <FormControlLabel>
+              <FormControlLabelText>Precio máximo</FormControlLabelText>
+            </FormControlLabel>
+            <Input variant="outline" size="md">
+              <InputField
+                placeholder="Ingresar precio maximo"
+                keyboardType="numeric"
+                value={values.priceMax.toString()}
+                onChangeText={handleChange('priceMax')}
+              />
+            </Input>
+
+            <FormControlLabel>
+              <FormControlLabelText>Precio mínimo</FormControlLabelText>
+            </FormControlLabel>
+            <Input variant="outline" size="md">
+              <InputField
+                placeholder="Ingresar precio mínimo"
+                keyboardType="numeric"
+                value={values.priceMin.toString()}
+                onChangeText={handleChange('priceMin')}
+              />
+            </Input>
+          </FormControl>
         </ModalBody>
 
         <ModalFooter>
           <Button variant="outline" action="secondary" onPress={onCancel}>
             <ButtonText>Cancelar</ButtonText>
           </Button>
-          <Button onPress={onConfirm}>
+          <Button onPress={() => handleSubmit()}>
             <ButtonText>Reportar</ButtonText>
           </Button>
         </ModalFooter>

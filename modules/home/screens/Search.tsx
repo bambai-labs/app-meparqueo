@@ -25,6 +25,7 @@ import {
   ReportModal,
   SearchBar,
 } from '../components'
+import { FormValues } from '../components/FilterModal'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
 import { ParkingLot } from '../types'
 
@@ -168,6 +169,11 @@ export const SearchScreen = () => {
     setIsFilterModalOpen(false)
   }
 
+  const handleConfirmFilterModal = (values: FormValues) => {
+    console.log(values)
+    hideFilterModal()
+  }
+
   const handlePlacePress = async (place: Place) => {
     setCurrentDestination(place)
     setCameraPosition([place.location.longitude, place.location.latitude])
@@ -308,7 +314,7 @@ export const SearchScreen = () => {
                 <Pressable
                   onPress={() => handleParkingCardPress(parkingResult)}
                 >
-                  <VStack className="items-center">
+                  <VStack className="items-center bg-oran">
                     <Image
                       source={require('@/assets/images/parking_spot.png')}
                       style={{
@@ -386,7 +392,7 @@ export const SearchScreen = () => {
         <FilterModal
           opened={isFilterModalOpen}
           onCancel={hideFilterModal}
-          onConfirm={hideFilterModal}
+          onConfirm={handleConfirmFilterModal}
         />
       </VStack>
     </GestureHandlerRootView>
