@@ -74,6 +74,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
           <AvailabilityIndicator
             className="mt-2"
             availability={parkingLot.availability}
+            status={parkingLot.status}
           />
 
           <HStack className="w-full justify-evenly mt-3">

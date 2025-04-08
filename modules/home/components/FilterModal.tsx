@@ -96,7 +96,6 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
 
         <ModalBody>
           <FormControl>
-            <Heading>Ordenar por</Heading>
             <FormControlLabel>
               <FormControlLabelText>Disponibilidad</FormControlLabelText>
             </FormControlLabel>
