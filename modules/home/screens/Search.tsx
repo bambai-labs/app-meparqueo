@@ -218,13 +218,15 @@ export const SearchScreen = () => {
     }
   }
 
-  const setCameraPosition = (position: [number, number]) => {
+  const setCameraPosition = (
+    position: [number, number],
+    animated: boolean = true,
+  ) => {
     cameraRef.current?.setCamera({
       centerCoordinate: position,
       zoomLevel: 14,
-      pitch: 45,
       heading: 0,
-      animationDuration: 1000,
+      animationDuration: animated ? 1000 : 0,
     })
   }
 
@@ -311,7 +313,7 @@ export const SearchScreen = () => {
             }}
             logoEnabled={false}
             onDidFinishLoadingStyle={() => {
-              setCameraPosition(deviceLocation!)
+              setCameraPosition(deviceLocation!, false)
             }}
           >
             <Camera ref={cameraRef} />
