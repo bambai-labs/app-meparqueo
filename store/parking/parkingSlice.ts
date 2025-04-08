@@ -1,4 +1,5 @@
 import { RecentParkingLotResponse } from '@/api'
+import { mockParkingResults } from '@/data'
 import { ParkingLot, ParkingUpdateEstatus } from '@/modules'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
@@ -9,7 +10,7 @@ interface ParkingSliceState {
 
 const initialState: ParkingSliceState = {
   recentParkings: [],
-  parkingLots: [],
+  parkingLots: mockParkingResults,
 }
 
 export const parkingSlice = createSlice({

@@ -12,7 +12,7 @@ import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapPin } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Image, Linking, Platform, Text, View } from 'react-native'
+import { Alert, Image, Linking, Platform, Text } from 'react-native'
 import {
   FlatList,
   GestureHandlerRootView,
@@ -147,7 +147,7 @@ export const SearchScreen = () => {
   const handleParkingCardPress = (parking: ParkingLot) => {
     setCurrentParking(parking)
     setCameraPosition([parking.longitude, parking.latitude])
-    setTimeout(openBottomSheet, 1200)
+    openBottomSheet()
   }
 
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
@@ -228,6 +228,11 @@ export const SearchScreen = () => {
       heading: 0,
       animationDuration: animated ? 1000 : 0,
     })
+  }
+
+  const handleParkingMarkerPress = (parkingLot: ParkingLot) => {
+    setCurrentParking(parkingLot)
+    setCameraPosition([parkingLot.longitude, parkingLot.latitude])
   }
 
   useEffect(() => {
@@ -325,7 +330,7 @@ export const SearchScreen = () => {
                 allowOverlap={true}
               >
                 <Pressable
-                  onPress={() => handleParkingCardPress(parkingResult)}
+                  onPress={() => handleParkingMarkerPress(parkingResult)}
                 >
                   <VStack className="items-center bg-oran">
                     {parkingResult.availability ===
@@ -397,19 +402,23 @@ export const SearchScreen = () => {
             )}
           </MapView>
 
-          <Box className="absolute bottom-5 right-0 w-full pl-2">
-            <FlatList
+          <Box className="absolute bottom-5 right-0 w-full px-2">
+            {/* <FlatList
               horizontal={true}
               ItemSeparatorComponent={() => <View className="w-2" />}
               data={parkingLots}
               renderItem={({ item }) => (
-                <ParkingResultCard
-                  parkingLot={item}
-                  onPress={handleParkingCardPress}
-                />
+                
               )}
               keyExtractor={(item) => item.id}
-            />
+            /> */}
+
+            {currentParking && (
+              <ParkingResultCard
+                parkingLot={currentParking}
+                onPress={handleParkingCardPress}
+              />
+            )}
           </Box>
         </Box>
 

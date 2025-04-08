@@ -1,0 +1,1 @@
+export { mockParkingResults } from './mock'
