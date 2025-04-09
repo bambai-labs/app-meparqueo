@@ -321,6 +321,7 @@ export const SearchScreen = () => {
             onDidFinishLoadingStyle={() => {
               setCameraPosition(deviceLocation!, false)
             }}
+            scaleBarEnabled={false}
           >
             <Camera ref={cameraRef} />
 
