@@ -28,6 +28,7 @@ import {
 import { FormValues } from '../components/FilterModal'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
 import { ParkingLot, ParkingLotAvailability } from '../types'
+import { formatCurrency } from '../utils'
 
 export const SearchScreen = () => {
   const router = useRouter()
@@ -367,8 +368,11 @@ export const SearchScreen = () => {
                         }}
                       />
                     )}
-                    <Text className="text-xs font-bold">
+                    <Text className="text-md font-bold">
                       {parkingResult.distanceKm} km
+                    </Text>
+                    <Text className="font-bold">
+                      {formatCurrency(parkingResult.price)}
                     </Text>
                   </VStack>
                 </Pressable>
