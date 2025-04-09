@@ -1,5 +1,4 @@
 import { RecentParkingLotResponse } from '@/api'
-import { mockParkingResults } from '@/data'
 import { ParkingLot, ParkingUpdateEstatus } from '@/modules'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
@@ -10,7 +9,7 @@ interface ParkingSliceState {
 
 const initialState: ParkingSliceState = {
   recentParkings: [],
-  parkingLots: mockParkingResults,
+  parkingLots: [],
 }
 
 export const parkingSlice = createSlice({
@@ -53,8 +52,6 @@ export const parkingSlice = createSlice({
         state.parkingLots = newParkings
       }
 
-      console.log('recent parkinglot Id', recentParkingLotIndex)
-
       if (recentParkingLotIndex !== -1) {
         const newParkings = state.recentParkings.map((parking) => {
           const { id, viewedAt } = parking
@@ -80,8 +77,6 @@ export const parkingSlice = createSlice({
       state: ParkingSliceState,
       action: PayloadAction<RecentParkingLotResponse[]>,
     ) => {
-      console.log('aqui estan los parqueaderos', action.payload)
-
       state.recentParkings = state.recentParkings.concat(action.payload)
     },
     setRecentParkingLots: (
