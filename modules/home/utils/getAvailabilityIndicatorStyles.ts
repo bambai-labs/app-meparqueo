@@ -14,12 +14,12 @@ export const getAvailabilityIndicatorStyles = (
   }
   const styles: Record<ParkingLotAvailability, AvailabilityIndicatorStyle> = {
     [ParkingLotAvailability.MORE_THAN_FIVE]: {
-      indicatorColor: 'bg-green-950',
+      indicatorColor: 'bg-green-500',
       indicatorText: 'Disponible',
     },
 
     [ParkingLotAvailability.LESS_THAN_FIVE]: {
-      indicatorColor: 'bg-orange-500',
+      indicatorColor: 'bg-yellow-400',
       indicatorText: 'Pocos espacios',
     },
 

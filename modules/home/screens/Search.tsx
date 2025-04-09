@@ -27,7 +27,7 @@ import {
 } from '../components'
 import { FormValues } from '../components/FilterModal'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
-import { ParkingLot, ParkingLotAvailability } from '../types'
+import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
 import { formatCurrency } from '../utils'
 
 export const SearchScreen = () => {
@@ -334,9 +334,19 @@ export const SearchScreen = () => {
                 <Pressable
                   onPress={() => handleParkingMarkerPress(parkingResult)}
                 >
-                  <VStack className="items-center bg-oran">
-                    {parkingResult.availability ===
-                      ParkingLotAvailability.MORE_THAN_FIVE && (
+                  <VStack className="items-center">
+                    {parkingResult.status === ParkingStatus.CLOSED ? (
+                      <Image
+                        source={require(
+                          `@/assets/images/parking_spot_gray.png`,
+                        )}
+                        style={{
+                          width: 40,
+                          height: 40,
+                        }}
+                      />
+                    ) : parkingResult.availability ===
+                      ParkingLotAvailability.MORE_THAN_FIVE ? (
                       <Image
                         source={require(
                           `@/assets/images/parking_spot_green.png`,
@@ -346,21 +356,18 @@ export const SearchScreen = () => {
                           height: 40,
                         }}
                       />
-                    )}
-                    {parkingResult.availability ===
-                      ParkingLotAvailability.LESS_THAN_FIVE && (
+                    ) : parkingResult.availability ===
+                      ParkingLotAvailability.LESS_THAN_FIVE ? (
                       <Image
                         source={require(
-                          `@/assets/images/parking_spot_orange.png`,
+                          `@/assets/images/parking_spot_yellow.png`,
                         )}
                         style={{
                           width: 40,
                           height: 40,
                         }}
                       />
-                    )}
-                    {parkingResult.availability ===
-                      ParkingLotAvailability.NO_AVAILABILITY && (
+                    ) : (
                       <Image
                         source={require(`@/assets/images/parking_spot_red.png`)}
                         style={{
@@ -369,12 +376,15 @@ export const SearchScreen = () => {
                         }}
                       />
                     )}
-                    <Text className="text-md font-bold">
-                      {parkingResult.distanceKm} km
-                    </Text>
-                    <Text className="font-bold">
-                      {formatCurrency(parkingResult.price)}
-                    </Text>
+
+                    <VStack className="bg-white p-1 rounded-xl items-center">
+                      <Text className="text-md">
+                        {parkingResult.distanceKm} km
+                      </Text>
+                      <Text className="text-sm">
+                        {formatCurrency(parkingResult.price)} /hr
+                      </Text>
+                    </VStack>
                   </VStack>
                 </Pressable>
               </MarkerView>
@@ -396,7 +406,7 @@ export const SearchScreen = () => {
               >
                 <VStack className="items-center">
                   <Image
-                    source={require('@/assets/images/pin_map.png')}
+                    source={require('@/assets/images/pin_destination.png')}
                     style={{
                       width: 50,
                       height: 55,
@@ -408,16 +418,6 @@ export const SearchScreen = () => {
           </MapView>
 
           <Box className="absolute bottom-5 right-0 w-full px-2">
-            {/* <FlatList
-              horizontal={true}
-              ItemSeparatorComponent={() => <View className="w-2" />}
-              data={parkingLots}
-              renderItem={({ item }) => (
-                
-              )}
-              keyExtractor={(item) => item.id}
-            /> */}
-
             {currentParking && (
               <ParkingResultCard
                 parkingLot={currentParking}
