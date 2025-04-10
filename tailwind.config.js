@@ -1,9 +1,13 @@
-import gluestackPlugin from '@gluestack-ui/nativewind-utils/tailwind-plugin';
+import gluestackPlugin from '@gluestack-ui/nativewind-utils/tailwind-plugin'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "media",
-  content: ["app/**/*.{tsx,jsx,ts,js}", "components/**/*.{tsx,jsx,ts,js}", "modules/**/*.{tsx,jsx,ts,js}"],
+  darkMode: 'media',
+  content: [
+    'app/**/*.{tsx,jsx,ts,js}',
+    'components/**/*.{tsx,jsx,ts,js}',
+    'modules/**/*.{tsx,jsx,ts,js}',
+  ],
   presets: [require('nativewind/preset')],
   safelist: [
     {
@@ -173,7 +177,7 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
-        roboto: ['Roboto', 'sans-serif'],
+        roboto: ['Neuwelt', 'sans-serif'],
       },
       fontWeight: {
         extrablack: '950',
@@ -195,4 +199,4 @@ module.exports = {
     },
   },
   plugins: [gluestackPlugin],
-};
+}
