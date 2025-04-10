@@ -8,11 +8,19 @@ export const useParkingPagination = () => {
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [totalPages, setTotalPages] = useState(0)
+  const [initialLoadDone, setInitialLoadDone] = useState(false)
   const { recentParkings } = useAppSelector((state) => state.parking)
   const dispatch = useAppDispatch()
 
   const fetchParkings = useCallback(async () => {
-    if (loading || (totalPages > 0 && page > totalPages)) return
+    // No cargar más si estamos cargando actualmente o si sabemos que no hay más datos
+    if (loading || !hasMore) return
+
+    // No seguir paginando si ya sabemos que hemos alcanzado el total de páginas
+    if (initialLoadDone && totalPages > 0 && page > totalPages) {
+      setHasMore(false)
+      return
+    }
 
     try {
       setLoading(true)
@@ -22,19 +30,15 @@ export const useParkingPagination = () => {
 
       const { data, pagination } = response.data.data
 
-      console.log('respuesta de la paginacion xixi', data)
+      console.log('respuesta de la paginacion:', data)
 
       setTotalPages(pagination.totalPages)
+      setInitialLoadDone(true)
 
       if (data.length === 0) {
         setHasMore(false)
       } else {
-        // setParkings((prevParkings) =>
-        //   page === 1 ? data : [...prevParkings, ...data],
-        // )
-
         dispatch(pushRecentParkingLots(data))
-
         setPage((prevPage) => prevPage + 1)
       }
     } catch (error) {
@@ -43,21 +47,24 @@ export const useParkingPagination = () => {
     } finally {
       setLoading(false)
     }
-  }, [page, loading, totalPages])
+  }, [page, loading, totalPages, hasMore, initialLoadDone])
 
   const refreshParkings = () => {
     dispatch(setRecentParkingLots([]))
     setPage(1)
     setHasMore(true)
     setTotalPages(0)
-    fetchParkings()
+    setInitialLoadDone(false)
+    // Pequeña pausa para asegurar que el estado se actualiza antes de la nueva petición
+    setTimeout(fetchParkings, 0)
   }
 
+  // Cargar datos iniciales cuando el componente se monta
   useEffect(() => {
-    if (recentParkings.length === 0) {
-      console.log('')
+    if (!initialLoadDone) {
+      fetchParkings()
     }
-  }, [])
+  }, [initialLoadDone, fetchParkings])
 
   return {
     recentParkings,
