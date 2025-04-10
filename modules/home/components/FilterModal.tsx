@@ -5,8 +5,8 @@ import {
   FormControlLabelText,
 } from '@/components/ui/form-control'
 import { Heading } from '@/components/ui/heading'
+import { HStack } from '@/components/ui/hstack'
 import { CloseIcon, Icon } from '@/components/ui/icon'
-import { Input, InputField } from '@/components/ui/input'
 import {
   Modal,
   ModalBackdrop,
@@ -16,30 +16,10 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@/components/ui/modal'
-import {
-  Select,
-  SelectBackdrop,
-  SelectContent,
-  SelectDragIndicator,
-  SelectDragIndicatorWrapper,
-  SelectIcon,
-  SelectInput,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import { VStack } from '@/components/ui/vstack'
 import { useFormik } from 'formik'
-import { ChevronDownIcon } from 'lucide-react-native'
 import { useEffect } from 'react'
-import { getAvailabilities, getPaymentMethods } from '../types'
-import {
-  getServices,
-  ParkingLotAvailability,
-  PaymentMethod,
-  Service,
-} from '../types/Parking'
-import { parsePaymentMethod, parseService } from '../utils'
-import { parseAvailability } from '../utils/parseAvailability'
 
 interface Props {
   opened: boolean
@@ -54,6 +34,10 @@ export interface FormValues {
   priceMin: string
   services: string
   radiusKm: number
+  onlyAvailable: boolean
+  paymentTransfer: boolean
+  valetParking: boolean
+  twentyFourSeven: boolean
 }
 
 export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
@@ -66,9 +50,14 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
         priceMin: '',
         services: '',
         radiusKm: 5,
+        onlyAvailable: false,
+        paymentTransfer: false,
+        valetParking: false,
+        twentyFourSeven: false,
       },
       onSubmit: (values) => {
-        onConfirm(values)
+        console.log(values)
+        //onConfirm(values)
       },
     })
 
@@ -84,7 +73,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
 
       <ModalContent>
         <ModalHeader>
-          <Heading>Filtros</Heading>
+          <Heading style={{ fontFamily: 'Neuwelt-Light' }}>Filtros</Heading>
           <ModalCloseButton>
             <Icon
               as={CloseIcon}
@@ -96,165 +85,96 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
 
         <ModalBody>
           <FormControl>
-            <FormControlLabel>
-              <FormControlLabelText>Disponibilidad</FormControlLabelText>
-            </FormControlLabel>
-            <Select
-              className="w-full"
-              selectedValue={parseAvailability(
-                values.availability as ParkingLotAvailability,
-              )}
-              onValueChange={handleChange('availability')}
-            >
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput
-                  placeholder="Seleccione Disponibilidad"
-                  className="flex-1"
+            <VStack className="w-full">
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Solo parqueaderos disponibles
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={values.onlyAvailable}
+                  onValueChange={(value) => {
+                    handleChange({
+                      target: {
+                        name: 'onlyAvailable',
+                        value: value,
+                      },
+                    })
+                  }}
                 />
-                <SelectIcon className="mr-3" as={ChevronDownIcon} />
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  {getAvailabilities().map((availability) => (
-                    <SelectItem
-                      key={availability}
-                      label={parseAvailability(availability)}
-                      value={availability}
-                    />
-                  ))}
-                </SelectContent>
-              </SelectPortal>
-            </Select>
+              </HStack>
 
-            <FormControlLabel>
-              <FormControlLabelText>Método de pago</FormControlLabelText>
-            </FormControlLabel>
-            <Select
-              className="w-full"
-              onValueChange={handleChange('paymentMethods')}
-              selectedValue={parsePaymentMethod(
-                values.paymentMethods as PaymentMethod,
-              )}
-            >
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput
-                  placeholder="Seleccione método de pago"
-                  className="flex-1"
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Acepta pagos por transferencia
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={values.paymentTransfer}
+                  onValueChange={(value) => {
+                    handleChange({
+                      target: {
+                        name: 'paymentTransfer',
+                        value,
+                      },
+                    })
+                  }}
                 />
-                <SelectIcon className="mr-3" as={ChevronDownIcon} />
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  {getPaymentMethods().map((paymentMethod) => (
-                    <SelectItem
-                      key={paymentMethod}
-                      label={parsePaymentMethod(paymentMethod)}
-                      value={paymentMethod}
-                    />
-                  ))}
-                </SelectContent>
-              </SelectPortal>
-            </Select>
+              </HStack>
 
-            <FormControlLabel>
-              <FormControlLabelText>Servicio</FormControlLabelText>
-            </FormControlLabel>
-            <Select
-              className="w-full"
-              selectedValue={parseService(values.services as Service)}
-              onValueChange={handleChange('services')}
-            >
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput
-                  placeholder="Seleccione método de pago"
-                  className="flex-1"
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Valet parking
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={values.valetParking}
+                  onValueChange={(value) => {
+                    handleChange({
+                      target: {
+                        name: 'valetParking',
+                        value,
+                      },
+                    })
+                  }}
                 />
-                <SelectIcon className="mr-3" as={ChevronDownIcon} />
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  {getServices().map((service) => (
-                    <SelectItem
-                      key={service}
-                      label={parseService(service)}
-                      value={service}
-                    />
-                  ))}
-                </SelectContent>
-              </SelectPortal>
-            </Select>
+              </HStack>
 
-            <FormControlLabel>
-              <FormControlLabelText>Proximidad</FormControlLabelText>
-            </FormControlLabel>
-            <Select
-              className="w-full"
-              onValueChange={handleChange('radiusKm')}
-              selectedValue={`${values.radiusKm} km`}
-            >
-              <SelectTrigger variant="outline" size="md">
-                <SelectInput placeholder="Proximidad" className="flex-1" />
-                <SelectIcon className="mr-3" as={ChevronDownIcon} />
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  <SelectItem label="5 km" value="5" />
-
-                  <SelectItem label="10 km" value="10" />
-
-                  <SelectItem label="15 km" value="15" />
-                </SelectContent>
-              </SelectPortal>
-            </Select>
-
-            <FormControlLabel>
-              <FormControlLabelText>Precio máximo</FormControlLabelText>
-            </FormControlLabel>
-            <Input variant="outline" size="md">
-              <InputField
-                placeholder="Ingresar precio maximo"
-                keyboardType="numeric"
-                value={values.priceMax}
-                onChangeText={handleChange('priceMax')}
-              />
-            </Input>
-
-            <FormControlLabel>
-              <FormControlLabelText>Precio mínimo</FormControlLabelText>
-            </FormControlLabel>
-            <Input variant="outline" size="md">
-              <InputField
-                placeholder="Ingresar precio mínimo"
-                keyboardType="numeric"
-                value={values.priceMin}
-                onChangeText={handleChange('priceMin')}
-              />
-            </Input>
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Servicio 24/7
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={values.twentyFourSeven}
+                  onValueChange={(value) => {
+                    handleChange({
+                      target: {
+                        name: 'twentyFourSeven',
+                        value,
+                      },
+                    })
+                  }}
+                />
+              </HStack>
+            </VStack>
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
           <Button variant="outline" action="secondary" onPress={onCancel}>
-            <ButtonText>Cancelar</ButtonText>
+            <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
+              Cancelar
+            </ButtonText>
           </Button>
           <Button onPress={() => handleSubmit()}>
-            <ButtonText>Filtrar</ButtonText>
+            <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
+              Filtrar
+            </ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>

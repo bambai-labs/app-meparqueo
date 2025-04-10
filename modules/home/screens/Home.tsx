@@ -1,11 +1,10 @@
-import { Box } from '@/components/ui/box'
 import { ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { Image } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import Constants from 'expo-constants'
-import { Stack } from 'expo-router'
+import { Stack, useRouter } from 'expo-router'
 import { Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
@@ -20,7 +19,6 @@ export const HomeScreen = () => {
   const {
     bottomSheetRef,
     callParkingLot,
-    chipSelected,
     currentParking,
     handleParkingCardPress,
     handleSearchBarPress,
@@ -28,8 +26,9 @@ export const HomeScreen = () => {
     isReportModalOpen,
     openMapDirection,
     showReportModal,
-    toggleChip,
   } = useHome()
+
+  const router = useRouter()
 
   return (
     <GestureHandlerRootView>
@@ -42,7 +41,7 @@ export const HomeScreen = () => {
 
         <VStack
           style={{
-            paddingTop: Constants.statusBarHeight + 20,
+            paddingTop: Constants.statusBarHeight,
           }}
         >
           <HStack className="items-center mb-2" space="sm">
@@ -66,13 +65,16 @@ export const HomeScreen = () => {
             onSearch={() => {}}
           />
 
-          <Box className="w-full items-start mt-6 bg-red-">
-            <Chip selected={chipSelected} onPress={toggleChip}>
+          <HStack space="md" className="w-full items-start mt-4">
+            <Chip
+              selected={false}
+              onPress={() => router.push('/home/allparkinglots')}
+            >
               <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
-                Recientes
+                Ver todos los parqueaderos
               </ButtonText>
             </Chip>
-          </Box>
+          </HStack>
 
           <RecentParkingsList onCardPress={handleParkingCardPress} />
         </VStack>

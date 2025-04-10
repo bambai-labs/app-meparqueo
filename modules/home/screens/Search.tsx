@@ -254,7 +254,7 @@ export const SearchScreen = () => {
 
       <VStack
         style={{
-          paddingTop: Constants.statusBarHeight + 20,
+          paddingTop: Constants.statusBarHeight,
         }}
         className="h-full w-full"
       >
@@ -285,7 +285,9 @@ export const SearchScreen = () => {
                       space="md"
                     >
                       <Icon as={MapPin} size="md" />
-                      <Text>{item.displayName.text}</Text>
+                      <Text style={{ fontFamily: 'Neuwelt-Light' }}>
+                        {item.displayName.text}
+                      </Text>
                     </HStack>
                   </Pressable>
                 )}
@@ -300,7 +302,9 @@ export const SearchScreen = () => {
                 variant="outline"
                 className="border-gray-400 rounded-lg"
               >
-                <ButtonText>Filtrar</ButtonText>
+                <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
+                  Filtrar
+                </ButtonText>
                 <Icon as={ChevronDown} size="sm" />
               </Button>
             </HStack>
