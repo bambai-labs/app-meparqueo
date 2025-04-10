@@ -1412,6 +1412,11 @@
     "@gluestack-ui/utils" "^0.1.14"
     "@react-native-aria/focus" "^0.2.9"
 
+"@gluestack-ui/spinner@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@gluestack-ui/spinner/-/spinner-0.1.15.tgz#712276227568476f55672b7bbe0082478c0c0a65"
+  integrity sha512-jkXOGhna05HM2tcPKbA+t+vqcVRgRowwC6ES0A9kY5fcuURH1V41UFx/YWyHdSsHwmWlIoCCdWycF78UbNVdPg==
+
 "@gluestack-ui/switch@^0.1.29":
   version "0.1.29"
   resolved "https://registry.yarnpkg.com/@gluestack-ui/switch/-/switch-0.1.29.tgz#d2a26f66cfc3065f27ea4af0206f4cb0ef34f5ca"

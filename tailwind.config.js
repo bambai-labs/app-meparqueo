@@ -177,7 +177,7 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
-        roboto: ['Neuwelt', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
       },
       fontWeight: {
         extrablack: '950',

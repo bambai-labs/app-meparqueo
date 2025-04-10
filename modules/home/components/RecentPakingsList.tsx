@@ -30,7 +30,12 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
     if (recentParkings.length > 0 && !hasMore) {
       return (
         <View className="py-5 items-center justify-center">
-          <Text className="text-gray-500 text-base">
+          <Text
+            className="text-gray-500 text-base"
+            style={{
+              fontFamily: 'Neuwelt-Light',
+            }}
+          >
             No hay más parqueaderos
           </Text>
         </View>
@@ -52,7 +57,12 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
 
     return (
       <View className="flex-1 items-center justify-center mt-12">
-        <Text className="text-lg text-gray-500">
+        <Text
+          className="text-lg text-gray-500"
+          style={{
+            fontFamily: 'Neuwelt-Light',
+          }}
+        >
           No se encontraron parqueaderos
         </Text>
       </View>

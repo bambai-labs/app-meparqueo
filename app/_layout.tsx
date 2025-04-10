@@ -24,6 +24,8 @@ export default function RootLayout() {
   const colorScheme = useColorScheme()
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    'Neuwelt-Bold': require('@/assets/fonts/Neuwelt-Bold.ttf'),
+    'Neuwelt-Light': require('@/assets/fonts/Neuwelt-Light.ttf'),
   })
 
   useEffect(() => {

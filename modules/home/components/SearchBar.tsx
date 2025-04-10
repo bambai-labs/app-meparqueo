@@ -57,6 +57,9 @@ export const SearchBar = ({
             isFocused={isFocused}
           >
             <InputField
+              style={{
+                fontFamily: 'Neuwelt-Light',
+              }}
               type="text"
               inputMode="search"
               value={query}
