@@ -10,8 +10,9 @@ export interface ParkingLot {
   paymentMethods: PaymentMethod[]
   services: Service[]
   phoneNumber: string
-  distanceKm: number
+  distanceKm: number | null
   address: string
+  reportsCount: number
 }
 
 export enum PaymentMethod {

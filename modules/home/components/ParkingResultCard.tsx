@@ -41,8 +41,12 @@ export const ParkingResultCard = ({
               availability={parkingLot.availability}
             />
 
-            <Icon as={MapPin} size="md" />
-            <Text>{parkingLot.distanceKm} km</Text>
+            {parkingLot.distanceKm && (
+              <>
+                <Icon as={MapPin} size="md" />
+                <Text>{parkingLot.distanceKm} km</Text>
+              </>
+            )}
           </HStack>
         </VStack>
       </HStack>

@@ -11,7 +11,7 @@ import {
 import Mapbox from '@rnmapbox/maps'
 import Constants from 'expo-constants'
 import { useFonts } from 'expo-font'
-import { Stack, usePathname } from 'expo-router'
+import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
@@ -41,15 +41,9 @@ export default function RootLayout() {
     Mapbox.setTelemetryEnabled(false)
   }, [])
 
-  const pathName = usePathname()
-
   if (!loaded) {
     return null
   }
-
-  useEffect(() => {
-    console.log('pathName', pathName)
-  }, [pathName])
 
   return (
     <GluestackUIProvider mode="light">

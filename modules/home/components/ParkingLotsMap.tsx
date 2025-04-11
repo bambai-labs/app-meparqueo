@@ -55,6 +55,7 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
                       width: 40,
                       height: 40,
                     }}
+                    alt="Parking spot closed"
                   />
                 ) : parkingResult.availability ===
                   ParkingLotAvailability.MORE_THAN_FIVE ? (
@@ -64,6 +65,7 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
                       width: 40,
                       height: 40,
                     }}
+                    alt="Parking spot available"
                   />
                 ) : parkingResult.availability ===
                   ParkingLotAvailability.LESS_THAN_FIVE ? (
@@ -73,6 +75,7 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
                       width: 40,
                       height: 40,
                     }}
+                    alt="Parking spot available"
                   />
                 ) : (
                   <Image
@@ -81,11 +84,16 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
                       width: 40,
                       height: 40,
                     }}
+                    alt="Parking spot available"
                   />
                 )}
 
                 <VStack className="bg-white p-1 rounded-xl items-center">
-                  <Text className="text-md">{parkingResult.distanceKm} km</Text>
+                  {parkingResult.distanceKm && (
+                    <Text className="text-md">
+                      {parkingResult.distanceKm} km
+                    </Text>
+                  )}
                   <Text className="text-sm">
                     {formatCurrency(parkingResult.price)} /hr
                   </Text>
