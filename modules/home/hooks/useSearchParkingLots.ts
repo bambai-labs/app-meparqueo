@@ -2,10 +2,18 @@ import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
 import { setParkingLots } from '@/store'
 import { useState } from 'react'
+import { FormValues } from '../components'
 import { ParkingLotAvailability, PaymentMethod } from '../types'
 
 export const useSearchParkingLots = () => {
   const [loading, setLoading] = useState(false)
+  const [currentFilters, setCurrentFilters] = useState<FormValues>({
+    onlyAvailable: false,
+    paymentTransfer: false,
+    valetParking: false,
+    twentyFourSeven: false,
+    radiusKm: 5,
+  })
   const { parkingLots } = useAppSelector((state) => state.parking)
   const dispatch = useAppDispatch()
 
@@ -60,8 +68,10 @@ export const useSearchParkingLots = () => {
   }
 
   return {
+    currentFilters,
     loading,
     parkingLots,
     searchNearParkingLots,
+    setCurrentFilters,
   }
 }

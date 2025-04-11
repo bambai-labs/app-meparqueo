@@ -27,11 +27,6 @@ interface Props {
 }
 
 export interface FormValues {
-  availability: string
-  paymentMethods: string
-  priceMax: string
-  priceMin: string
-  services: string
   radiusKm: number
   onlyAvailable: boolean
   paymentTransfer: boolean
@@ -40,24 +35,18 @@ export interface FormValues {
 }
 
 export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
-  const { values, handleSubmit, handleChange, resetForm } =
-    useFormik<FormValues>({
-      initialValues: {
-        availability: '',
-        paymentMethods: '',
-        priceMax: '',
-        priceMin: '',
-        services: '',
-        radiusKm: 5,
-        onlyAvailable: false,
-        paymentTransfer: false,
-        valetParking: false,
-        twentyFourSeven: false,
-      },
-      onSubmit: (values) => {
-        onConfirm(values)
-      },
-    })
+  const { values, handleSubmit, handleChange } = useFormik<FormValues>({
+    initialValues: {
+      radiusKm: 5,
+      onlyAvailable: false,
+      paymentTransfer: false,
+      valetParking: false,
+      twentyFourSeven: false,
+    },
+    onSubmit: (values) => {
+      onConfirm(values)
+    },
+  })
 
   return (
     <Modal isOpen={opened} onClose={onCancel}>
@@ -105,7 +94,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                 </FormControlLabel>
                 <Switch
                   value={values.paymentTransfer}
-                  onValueChange={(value) => {
+                  onToggle={(value) => {
                     handleChange({
                       target: {
                         name: 'paymentTransfer',

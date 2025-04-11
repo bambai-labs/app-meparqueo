@@ -8,7 +8,7 @@ import { useAppSelector } from '@/modules/common'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from 'expo-router'
 import { ChevronDown, MapPin } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
@@ -30,7 +30,6 @@ import { useSearchParkingLots, useSearchPlaces } from '../hooks'
 import { ParkingLot } from '../types'
 
 export const SearchScreen = () => {
-  const router = useRouter()
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
@@ -59,7 +58,9 @@ export const SearchScreen = () => {
 
   const {
     loading: parkingLoading,
+    currentFilters,
     parkingLots,
+    setCurrentFilters,
     searchNearParkingLots,
   } = useSearchParkingLots()
 
@@ -130,10 +131,6 @@ export const SearchScreen = () => {
     }
   }
 
-  const goBack = () => {
-    router.back()
-  }
-
   const callParkingLot = async () => {
     const url = `tel:${currentParking?.phoneNumber}`
     try {
@@ -171,6 +168,7 @@ export const SearchScreen = () => {
 
   const handleConfirmFilterModal = (values: FormValues) => {
     if (currentDestination) {
+      setCurrentFilters(values)
       searchNearParkingLots(
         currentDestination.location.latitude,
         currentDestination.location.longitude,
@@ -188,7 +186,15 @@ export const SearchScreen = () => {
   const handlePlacePress = async (place: Place) => {
     setCurrentDestination(place)
     setCameraPosition([place.location.longitude, place.location.latitude])
-    searchNearParkingLots(place.location.latitude, place.location.longitude)
+    searchNearParkingLots(
+      place.location.latitude,
+      place.location.longitude,
+      currentFilters.radiusKm.toString(),
+      currentFilters.onlyAvailable,
+      currentFilters.paymentTransfer,
+      currentFilters.valetParking,
+      currentFilters.twentyFourSeven,
+    )
     saveDestination()
   }
 
@@ -196,8 +202,9 @@ export const SearchScreen = () => {
     try {
       await MeParqueoApi.post('/api/v1/user/search', {
         filter: {
-          priceRange: [0, 10],
-          services: ['CAR_WASH'],
+          availability: [],
+          services: [],
+          paymentMethods: [],
         },
         destinationLocation: {
           latitude: currentDestination?.location.latitude,
