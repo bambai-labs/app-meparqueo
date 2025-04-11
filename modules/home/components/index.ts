@@ -1,6 +1,7 @@
 export { AvailabilityIndicator } from './AvailabilityIndicator'
 export { EmptyRecentsParkingsImage } from './EmptyRecentsParkingsImage'
 export { FilterModal } from './FilterModal'
+export { HeaderLogo } from './HeaderLogo'
 export { ParkingDetailsSheet } from './ParkingDetailsSheet'
 export { ParkingLotsMap } from './ParkingLotsMap'
 export { ParkingResultCard } from './ParkingResultCard'

@@ -8,9 +8,8 @@ import { useAppSelector } from '@/modules/common'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
-import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
-import { ArrowLeft, ChevronDown, MapPin } from 'lucide-react-native'
+import { ChevronDown, MapPin } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
 import {
@@ -252,16 +251,8 @@ export const SearchScreen = () => {
         }}
       />
 
-      <VStack
-        style={{
-          paddingTop: Constants.statusBarHeight,
-        }}
-        className="h-full w-full"
-      >
+      <VStack className="h-full w-full bg-white">
         <VStack className="px-4">
-          <Pressable onPress={goBack} className="mb-3">
-            <Icon className="p-4" as={ArrowLeft} size="xl" />
-          </Pressable>
           <SearchBar
             query={query}
             onQueryChange={onChangeQuery}

@@ -1,11 +1,8 @@
 import { ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { Image } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
-import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
-import { Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   ParkingDetailsSheet,
@@ -39,22 +36,7 @@ export const HomeScreen = () => {
           }}
         />
 
-        <VStack
-          style={{
-            paddingTop: Constants.statusBarHeight,
-          }}
-        >
-          <HStack className="items-center mb-2" space="sm">
-            <Image
-              source={require('@/assets/images/hero.png')}
-              alt="Hero icon"
-              className="w-[50px] h-[50px] rounded-full"
-            />
-            <Text style={{ fontFamily: 'Neuwelt-Bold' }} className="text-2xl">
-              MeParqueo
-            </Text>
-          </HStack>
-
+        <VStack>
           <SearchBar
             query=""
             onQueryChange={() => {}}
