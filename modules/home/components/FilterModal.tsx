@@ -35,7 +35,7 @@ export interface FormValues {
 }
 
 export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
-  const { values, handleSubmit, handleChange } = useFormik<FormValues>({
+  const formik = useFormik<FormValues>({
     initialValues: {
       radiusKm: 5,
       onlyAvailable: false,
@@ -47,6 +47,11 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
       onConfirm(values)
     },
   })
+
+  // Función simplificada para manejar cambios de switch
+  const handleSwitchChange = (name: string) => (value: boolean) => {
+    formik.setFieldValue(name, value)
+  }
 
   return (
     <Modal isOpen={opened} onClose={onCancel}>
@@ -66,7 +71,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
 
         <ModalBody>
           <FormControl>
-            <VStack className="w-full">
+            <VStack className="w-full space-y-4">
               <HStack className="w-full justify-between">
                 <FormControlLabel>
                   <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
@@ -74,15 +79,8 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.onlyAvailable}
-                  onValueChange={(value) => {
-                    handleChange({
-                      target: {
-                        name: 'onlyAvailable',
-                        value: value,
-                      },
-                    })
-                  }}
+                  isChecked={formik.values.onlyAvailable}
+                  onValueChange={handleSwitchChange('onlyAvailable')}
                 />
               </HStack>
 
@@ -93,15 +91,8 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.paymentTransfer}
-                  onToggle={(value) => {
-                    handleChange({
-                      target: {
-                        name: 'paymentTransfer',
-                        value,
-                      },
-                    })
-                  }}
+                  isChecked={formik.values.paymentTransfer}
+                  onValueChange={handleSwitchChange('paymentTransfer')}
                 />
               </HStack>
 
@@ -112,15 +103,8 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.valetParking}
-                  onValueChange={(value) => {
-                    handleChange({
-                      target: {
-                        name: 'valetParking',
-                        value,
-                      },
-                    })
-                  }}
+                  isChecked={formik.values.valetParking}
+                  onValueChange={handleSwitchChange('valetParking')}
                 />
               </HStack>
 
@@ -131,15 +115,8 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.twentyFourSeven}
-                  onValueChange={(value) => {
-                    handleChange({
-                      target: {
-                        name: 'twentyFourSeven',
-                        value,
-                      },
-                    })
-                  }}
+                  isChecked={formik.values.twentyFourSeven}
+                  onValueChange={handleSwitchChange('twentyFourSeven')}
                 />
               </HStack>
             </VStack>
@@ -152,7 +129,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
               Cancelar
             </ButtonText>
           </Button>
-          <Button onPress={() => handleSubmit()}>
+          <Button onPress={() => formik.handleSubmit()}>
             <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
               Filtrar
             </ButtonText>
