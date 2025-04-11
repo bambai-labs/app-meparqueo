@@ -6,13 +6,13 @@ import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
 import { useAppSelector } from '@/modules/common'
 import BottomSheet from '@gorhom/bottom-sheet'
-import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
+import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import { Stack, useRouter } from 'expo-router'
 import { ArrowLeft, ChevronDown, MapPin } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Image, Linking, Platform, Text } from 'react-native'
+import { Alert, Linking, Platform, Text } from 'react-native'
 import {
   FlatList,
   GestureHandlerRootView,
@@ -21,14 +21,14 @@ import {
 import {
   FilterModal,
   ParkingDetailsSheet,
+  ParkingLotsMap,
   ParkingResultCard,
   ReportModal,
   SearchBar,
 } from '../components'
 import { FormValues } from '../components/FilterModal'
 import { useSearchParkingLots, useSearchPlaces } from '../hooks'
-import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
-import { formatCurrency } from '../utils'
+import { ParkingLot } from '../types'
 
 export const SearchScreen = () => {
   const router = useRouter()
@@ -316,110 +316,15 @@ export const SearchScreen = () => {
         </VStack>
 
         <Box className="flex-1 mt-2 relative">
-          <MapView
-            style={{
-              height: '100%',
-              width: '100%',
-            }}
-            logoEnabled={false}
-            onDidFinishLoadingStyle={() => {
+          <ParkingLotsMap
+            currentDestination={currentDestination}
+            parkingLots={parkingLots}
+            onFinishLoading={() => {
               setCameraPosition(deviceLocation!, false)
             }}
-            scaleBarEnabled={false}
-          >
-            <Camera ref={cameraRef} />
-
-            {parkingLots.map((parkingResult) => (
-              <MarkerView
-                key={parkingResult.name}
-                coordinate={[parkingResult.longitude, parkingResult.latitude]}
-                allowOverlap={true}
-              >
-                <Pressable
-                  onPress={() => handleParkingMarkerPress(parkingResult)}
-                >
-                  <VStack className="items-center">
-                    {parkingResult.status === ParkingStatus.CLOSED ? (
-                      <Image
-                        source={require(
-                          `@/assets/images/parking_spot_gray.png`,
-                        )}
-                        style={{
-                          width: 40,
-                          height: 40,
-                        }}
-                      />
-                    ) : parkingResult.availability ===
-                      ParkingLotAvailability.MORE_THAN_FIVE ? (
-                      <Image
-                        source={require(
-                          `@/assets/images/parking_spot_green.png`,
-                        )}
-                        style={{
-                          width: 40,
-                          height: 40,
-                        }}
-                      />
-                    ) : parkingResult.availability ===
-                      ParkingLotAvailability.LESS_THAN_FIVE ? (
-                      <Image
-                        source={require(
-                          `@/assets/images/parking_spot_yellow.png`,
-                        )}
-                        style={{
-                          width: 40,
-                          height: 40,
-                        }}
-                      />
-                    ) : (
-                      <Image
-                        source={require(`@/assets/images/parking_spot_red.png`)}
-                        style={{
-                          width: 40,
-                          height: 40,
-                        }}
-                      />
-                    )}
-
-                    <VStack className="bg-white p-1 rounded-xl items-center">
-                      <Text className="text-md">
-                        {parkingResult.distanceKm} km
-                      </Text>
-                      <Text className="text-sm">
-                        {formatCurrency(parkingResult.price)} /hr
-                      </Text>
-                    </VStack>
-                  </VStack>
-                </Pressable>
-              </MarkerView>
-            ))}
-
-            {deviceLocation && (
-              <MarkerView allowOverlap={true} coordinate={deviceLocation}>
-                <Box className="p-3 bg-blue-500 rounded-full border-3 border-white" />
-              </MarkerView>
-            )}
-
-            {currentDestination && (
-              <MarkerView
-                coordinate={[
-                  currentDestination.location.longitude,
-                  currentDestination.location.latitude,
-                ]}
-                allowOverlap={true}
-              >
-                <VStack className="items-center">
-                  <Image
-                    source={require('@/assets/images/pin_destination.png')}
-                    style={{
-                      width: 50,
-                      height: 55,
-                    }}
-                  />
-                </VStack>
-              </MarkerView>
-            )}
-          </MapView>
+            onParkingMarkerPress={handleParkingMarkerPress}
+            ref={cameraRef}
+          />
 
           <Box className="absolute bottom-5 right-0 w-full px-2">
             {currentParking && (
