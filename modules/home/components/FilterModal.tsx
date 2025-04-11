@@ -19,7 +19,6 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { VStack } from '@/components/ui/vstack'
 import { useFormik } from 'formik'
-import { useEffect } from 'react'
 
 interface Props {
   opened: boolean
@@ -56,16 +55,9 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
         twentyFourSeven: false,
       },
       onSubmit: (values) => {
-        console.log(values)
-        //onConfirm(values)
+        onConfirm(values)
       },
     })
-
-  useEffect(() => {
-    return () => {
-      resetForm()
-    }
-  }, [])
 
   return (
     <Modal isOpen={opened} onClose={onCancel}>

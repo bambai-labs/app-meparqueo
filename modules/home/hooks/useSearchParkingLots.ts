@@ -2,6 +2,7 @@ import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
 import { setParkingLots } from '@/store'
 import { useState } from 'react'
+import { ParkingLotAvailability, PaymentMethod } from '../types'
 
 export const useSearchParkingLots = () => {
   const [loading, setLoading] = useState(false)
@@ -12,34 +13,42 @@ export const useSearchParkingLots = () => {
     latitude: number,
     longitude: number,
     radiusKm: string = '5',
-    availability: string = '',
-    paymentMethods: string = '',
-    priceMax: string = '',
-    priceMin: string = '',
-    services: string = '',
+    onlyAvailableParkingLots: boolean = false,
+    onlyTransferPayment: boolean = false,
+    onlyValetParking: boolean = false,
+    onlyTwentyFourSeven: boolean = false,
   ) => {
     try {
       setLoading(true)
 
-      console.log(
-        'endpoint',
-        `/api/v1/parking-lot/find/nearby?lat=${latitude}&lng=${longitude}&radiusKm=${radiusKm}${availability === '' ? '' : `&availability=${availability}`}${paymentMethods === '' ? '' : `&paymentMethods=${paymentMethods}`}${priceMax === '' ? '' : `&priceMax=${priceMax}`}${priceMin === '' ? '' : `&priceMin=${priceMin}`}${services === '' ? '' : `&services=${services}`}`,
-      )
-
-      console.log(
-        'receiving values',
-        latitude,
-        longitude,
+      const params: Record<string, any> = {
+        lat: latitude,
+        lng: longitude,
         radiusKm,
-        availability,
-        paymentMethods,
-        priceMax,
-        priceMin,
-        services,
-      )
+      }
+
+      if (onlyAvailableParkingLots) {
+        params.availability = ParkingLotAvailability.MORE_THAN_FIVE
+      }
+
+      if (onlyTransferPayment) {
+        params.paymentMethods = PaymentMethod.TRANSFER
+      }
+
+      const services: string[] = []
+      if (onlyTwentyFourSeven) {
+        services.push('24_HOURS')
+      }
+      if (onlyValetParking) {
+        services.push('VALET')
+      }
+      if (services.length > 0) {
+        params.services = services.join(',')
+      }
 
       const response = await MeParqueoApi.get<NearbyParkingLotsResponse>(
-        `/api/v1/parking-lot/find/nearby?lat=${latitude}&lng=${longitude}&radiusKm=${radiusKm}${availability === '' ? '' : `&availability=${availability}`}${paymentMethods === '' ? '' : `&paymentMethods=${paymentMethods}`}${priceMax === '' ? '' : `&priceMax=${priceMax}`}${priceMin === '' ? '' : `&priceMin=${priceMin}`}${services === '' ? '' : `&services=${services}`}`,
+        '/api/v1/parking-lot/find/nearby',
+        { params },
       )
 
       dispatch(setParkingLots(response.data.data))

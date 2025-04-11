@@ -175,11 +175,10 @@ export const SearchScreen = () => {
         currentDestination.location.latitude,
         currentDestination.location.longitude,
         values.radiusKm.toString(),
-        values.availability,
-        values.paymentMethods,
-        values.priceMax,
-        values.priceMin,
-        values.services,
+        values.onlyAvailable,
+        values.paymentTransfer,
+        values.valetParking,
+        values.twentyFourSeven,
       )
     }
 
