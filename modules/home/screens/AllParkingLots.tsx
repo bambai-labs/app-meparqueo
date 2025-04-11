@@ -1,25 +1,32 @@
 import { VStack } from '@/components/ui/vstack'
-import { ScreenWrapper } from '@/modules/common'
 import Constants from 'expo-constants'
 import { Stack } from 'expo-router'
-import { Text } from 'react-native'
+import { ParkingLotsMap } from '../components'
+import { useAllParkingLots } from '../hooks'
 
 export const AllParkingLotsScreen = () => {
+  const { cameraRef, handleMapFinishLoading } = useAllParkingLots()
+
   return (
-    <ScreenWrapper>
+    <VStack
+      style={{
+        paddingTop: Constants.statusBarHeight,
+      }}
+      className="h-full w-full"
+    >
       <Stack.Screen
         options={{
           headerShown: false,
         }}
       />
-      <VStack
-        style={{
-          paddingTop: Constants.statusBarHeight,
-        }}
-        className="h-full w-full"
-      >
-        <Text>Hello world</Text>
-      </VStack>
-    </ScreenWrapper>
+
+      <ParkingLotsMap
+        currentDestination={null}
+        parkingLots={[]}
+        ref={cameraRef}
+        onFinishLoading={handleMapFinishLoading}
+        onParkingMarkerPress={() => {}}
+      />
+    </VStack>
   )
 }
