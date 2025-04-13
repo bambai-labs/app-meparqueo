@@ -1,13 +1,10 @@
 import { MeParqueoApi, Place } from '@/api'
 import { ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import { isAxiosError } from 'axios'
 import { Stack, useRouter } from 'expo-router'
-import { MapPin } from 'lucide-react-native'
-import { FlatList, Text, TouchableOpacity } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   ParkingDetailsSheet,
@@ -87,30 +84,9 @@ export const HomeScreen = () => {
             className="mt-3"
             onSearch={searchPlace}
             loading={loading}
-          >
-            {places.length > 0 && (
-              <FlatList
-                className="w-full"
-                data={places}
-                keyExtractor={(place) =>
-                  `${place.location.longitude}${place.location.latitude}`
-                }
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handlePlacePress(item)}>
-                    <HStack
-                      className="items-center p-3 border-b border-gray-100"
-                      space="md"
-                    >
-                      <Icon as={MapPin} size="md" />
-                      <Text style={{ fontFamily: 'Neuwelt-Light' }}>
-                        {item.displayName.text}
-                      </Text>
-                    </HStack>
-                  </TouchableOpacity>
-                )}
-              />
-            )}
-          </SearchBar>
+            places={places}
+            onPlacePress={handlePlacePress}
+          />
 
           <HStack space="md" className="w-full items-start mt-4">
             <Chip

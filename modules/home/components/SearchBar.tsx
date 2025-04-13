@@ -1,9 +1,11 @@
+import { Place } from '@/api'
 import { Button } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { ArrowRightIcon, Icon } from '@/components/ui/icon'
 import { Input, InputField } from '@/components/ui/input'
-import React, { ReactNode, useState } from 'react'
+import React, { useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
+import { PlacesResultList } from './PlacesResultList'
 
 interface Props {
   query: string
@@ -15,7 +17,8 @@ interface Props {
   loading?: boolean
   onQueryChange: (query: string) => void
   onSearch: (query: string) => void
-  children?: ReactNode
+  places: Place[]
+  onPlacePress: (place: Place) => void
 }
 
 export const SearchBar = ({
@@ -26,9 +29,10 @@ export const SearchBar = ({
   className = '',
   placeholder = '',
   loading = false,
-  children,
+  places,
   onQueryChange,
   onSearch,
+  onPlacePress,
 }: Props) => {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -94,7 +98,9 @@ export const SearchBar = ({
       </HStack>
 
       <View className="absolute z-10 w-full top-full bg-white shadow-md rounded-b-lg">
-        {isFocused && children}
+        {isFocused && (
+          <PlacesResultList places={places} handlePlacePress={onPlacePress} />
+        )}
       </View>
     </View>
   )

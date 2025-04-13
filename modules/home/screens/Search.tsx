@@ -9,10 +9,10 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import { Stack, useLocalSearchParams } from 'expo-router'
-import { ChevronDown, MapPin } from 'lucide-react-native'
+import { ChevronDown } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Linking, Platform, Text, TouchableOpacity } from 'react-native'
-import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Alert, Linking, Platform, Text } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   FilterModal,
   ParkingDetailsSheet,
@@ -274,36 +274,15 @@ export const SearchScreen = () => {
       <VStack className="h-full w-full bg-white">
         <VStack className="px-4">
           <SearchBar
+            places={places}
             query={query}
             onQueryChange={onChangeQuery}
             placeholder="A donde quieres ir?"
             className="mt-3"
             onSearch={searchPlace}
             loading={loading}
-          >
-            {places.length > 0 && (
-              <FlatList
-                className="w-full"
-                data={places}
-                keyExtractor={(place) =>
-                  `${place.location.longitude}${place.location.latitude}`
-                }
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handlePlacePress(item)}>
-                    <HStack
-                      className="items-center p-3 border-b border-gray-100"
-                      space="md"
-                    >
-                      <Icon as={MapPin} size="md" />
-                      <Text style={{ fontFamily: 'Neuwelt-Light' }}>
-                        {item.displayName.text}
-                      </Text>
-                    </HStack>
-                  </TouchableOpacity>
-                )}
-              />
-            )}
-          </SearchBar>
+            onPlacePress={handlePlacePress}
+          />
 
           <HStack className="mt-3 w-full items-center justify-between">
             <HStack space="md">
