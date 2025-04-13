@@ -8,15 +8,11 @@ import { useAppSelector } from '@/modules/common'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
-import { Stack } from 'expo-router'
+import { Stack, useLocalSearchParams } from 'expo-router'
 import { ChevronDown, MapPin } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import { Alert, Linking, Platform, Text } from 'react-native'
-import {
-  FlatList,
-  GestureHandlerRootView,
-  Pressable,
-} from 'react-native-gesture-handler'
+import { Alert, Linking, Platform, Text, TouchableOpacity } from 'react-native'
+import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   FilterModal,
   ParkingDetailsSheet,
@@ -30,11 +26,13 @@ import { useSearchParkingLots, useSearchPlaces } from '../hooks'
 import { ParkingLot } from '../types'
 
 export const SearchScreen = () => {
+  const { place } = useLocalSearchParams()
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
+  const [mapLoaded, setMapLoaded] = useState(false)
 
   const [reportModalOpen, setReportModalOpen] = useState(false)
 
@@ -242,6 +240,22 @@ export const SearchScreen = () => {
   }
 
   useEffect(() => {
+    if (place && mapLoaded) {
+      const placeFromParams = JSON.parse(place as string) as Place
+      handlePlacePress(placeFromParams)
+      searchNearParkingLots(
+        placeFromParams.location.latitude,
+        placeFromParams.location.longitude,
+        currentFilters.radiusKm.toString(),
+        currentFilters.onlyAvailable,
+        currentFilters.paymentTransfer,
+        currentFilters.valetParking,
+        currentFilters.twentyFourSeven,
+      )
+    }
+  }, [mapLoaded])
+
+  useEffect(() => {
     if (places.length === 0) {
       return
     }
@@ -266,7 +280,6 @@ export const SearchScreen = () => {
             className="mt-3"
             onSearch={searchPlace}
             loading={loading}
-            pointerEvents="box-none"
           >
             {places.length > 0 && (
               <FlatList
@@ -276,7 +289,7 @@ export const SearchScreen = () => {
                   `${place.location.longitude}${place.location.latitude}`
                 }
                 renderItem={({ item }) => (
-                  <Pressable onPress={() => handlePlacePress(item)}>
+                  <TouchableOpacity onPress={() => handlePlacePress(item)}>
                     <HStack
                       className="items-center p-3 border-b border-gray-100"
                       space="md"
@@ -286,7 +299,7 @@ export const SearchScreen = () => {
                         {item.displayName.text}
                       </Text>
                     </HStack>
-                  </Pressable>
+                  </TouchableOpacity>
                 )}
               />
             )}
@@ -318,6 +331,7 @@ export const SearchScreen = () => {
             parkingLots={parkingLots}
             onFinishLoading={() => {
               setCameraPosition(deviceLocation!, false)
+              setMapLoaded(true)
             }}
             onParkingMarkerPress={handleParkingMarkerPress}
             ref={cameraRef}
