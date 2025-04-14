@@ -26,6 +26,7 @@ interface Props {
   onClear?: () => void
 }
 
+// TODO: Mejorar codigo de manejo de los estados que se pasan como props setIsFocused y isFocused
 export const SearchBar = ({
   query,
   disabled = false,
