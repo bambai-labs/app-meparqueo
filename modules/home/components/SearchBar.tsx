@@ -2,7 +2,9 @@ import { Place } from '@/api'
 import { Button } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { ArrowRightIcon, Icon } from '@/components/ui/icon'
-import { Input, InputField } from '@/components/ui/input'
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input'
+import { usePathname } from 'expo-router'
+import { ArrowLeft, X } from 'lucide-react-native'
 import React, { useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { PlacesResultList } from './PlacesResultList'
@@ -19,6 +21,7 @@ interface Props {
   onSearch: (query: string) => void
   places: Place[]
   onPlacePress: (place: Place) => void
+  onClear?: () => void
 }
 
 export const SearchBar = ({
@@ -33,8 +36,11 @@ export const SearchBar = ({
   onQueryChange,
   onSearch,
   onPlacePress,
+  onClear = () => {},
 }: Props) => {
   const [isFocused, setIsFocused] = useState(false)
+
+  const pathName = usePathname()
 
   return (
     <View className="relative">
@@ -54,6 +60,17 @@ export const SearchBar = ({
           isReadOnly={readonly}
           isFocused={isFocused}
         >
+          {places.length > 0 && isFocused && (
+            <InputSlot
+              className="pl-1"
+              onPress={() => {
+                setIsFocused(false)
+              }}
+            >
+              <InputIcon as={ArrowLeft} size="md" />
+            </InputSlot>
+          )}
+
           <InputField
             style={{
               fontFamily: 'Neuwelt-Light',
@@ -68,13 +85,35 @@ export const SearchBar = ({
             placeholder={placeholder}
             onSubmitEditing={() => {
               onSearch(query)
-              setIsFocused(false)
+
+              const isInHomeScreen = !(
+                pathName.startsWith('/home/') && pathName !== '/home'
+              )
+
+              console.log('isInHomeScreen', isInHomeScreen)
+
+              if (!isInHomeScreen) {
+                setIsFocused(false)
+                return
+              }
+
+              setIsFocused(query.length > 0)
             }}
             onFocus={() => setIsFocused(query.length > 0)}
             onPress={() => {
               setIsFocused(true)
             }}
           />
+
+          <InputSlot
+            className="pr-2"
+            onPress={() => {
+              onClear()
+              setIsFocused(false)
+            }}
+          >
+            <InputIcon as={X} size="md" />
+          </InputSlot>
         </Input>
         <Button
           onPress={() => {
@@ -99,7 +138,13 @@ export const SearchBar = ({
 
       <View className="absolute z-10 w-full top-full bg-white shadow-md rounded-b-lg">
         {isFocused && (
-          <PlacesResultList places={places} handlePlacePress={onPlacePress} />
+          <PlacesResultList
+            places={places}
+            handlePlacePress={(place) => {
+              setIsFocused(false)
+              onPlacePress(place)
+            }}
+          />
         )}
       </View>
     </View>

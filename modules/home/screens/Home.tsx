@@ -2,7 +2,13 @@ import { MeParqueoApi, Place } from '@/api'
 import { ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { VStack } from '@/components/ui/vstack'
-import { Chip, ScreenWrapper } from '@/modules/common'
+import {
+  Chip,
+  ScreenWrapper,
+  useAppDispatch,
+  useAppSelector,
+} from '@/modules/common'
+import { onChangeQuery, searchPlace } from '@/store'
 import { isAxiosError } from 'axios'
 import { Stack, useRouter } from 'expo-router'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -12,7 +18,7 @@ import {
   ReportModal,
   SearchBar,
 } from '../components'
-import { useHome, useSearchPlaces } from '../hooks'
+import { useHome } from '../hooks'
 
 export const HomeScreen = () => {
   const {
@@ -26,8 +32,8 @@ export const HomeScreen = () => {
     showReportModal,
   } = useHome()
 
-  const { query, places, loading, searchPlace, onChangeQuery } =
-    useSearchPlaces()
+  const { loading, query, places } = useAppSelector((state) => state.search)
+  const dispatch = useAppDispatch()
 
   const handlePlacePress = async (place: Place) => {
     saveDestination(place)
@@ -65,6 +71,18 @@ export const HomeScreen = () => {
     }
   }
 
+  const handleQueryChange = (query: string) => {
+    dispatch(onChangeQuery(query))
+  }
+
+  const handleClearQuery = () => {
+    dispatch(onChangeQuery(''))
+  }
+
+  const handleSearch = (placeName: string) => {
+    dispatch(searchPlace(placeName))
+  }
+
   const router = useRouter()
 
   return (
@@ -79,13 +97,14 @@ export const HomeScreen = () => {
         <VStack>
           <SearchBar
             query={query}
-            onQueryChange={onChangeQuery}
+            onQueryChange={handleQueryChange}
             placeholder="A donde quieres ir?"
             className="mt-3"
-            onSearch={searchPlace}
+            onSearch={handleSearch}
             loading={loading}
             places={places}
             onPlacePress={handlePlacePress}
+            onClear={handleClearQuery}
           />
 
           <HStack space="md" className="w-full items-start mt-4">

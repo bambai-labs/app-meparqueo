@@ -4,7 +4,8 @@ import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
-import { useAppSelector } from '@/modules/common'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { onChangeQuery, searchPlace } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
@@ -22,7 +23,7 @@ import {
   SearchBar,
 } from '../components'
 import { FormValues } from '../components/FilterModal'
-import { useSearchParkingLots, useSearchPlaces } from '../hooks'
+import { useSearchParkingLots } from '../hooks'
 import { ParkingLot } from '../types'
 
 export const SearchScreen = () => {
@@ -45,16 +46,6 @@ export const SearchScreen = () => {
   }
 
   const {
-    query,
-    places,
-    loading,
-    searchPlace,
-    clearPlaces,
-    clearQuery,
-    onChangeQuery,
-  } = useSearchPlaces()
-
-  const {
     loading: parkingLoading,
     currentFilters,
     parkingLots,
@@ -67,6 +58,20 @@ export const SearchScreen = () => {
   )
 
   const { deviceLocation } = useAppSelector((state) => state.location)
+  const { places, query, loading } = useAppSelector((state) => state.search)
+  const dispatch = useAppDispatch()
+
+  const handleQueryChange = (query: string) => {
+    dispatch(onChangeQuery(query))
+  }
+
+  const handleClearQuery = () => {
+    dispatch(onChangeQuery(''))
+  }
+
+  const handleSearch = (placeName: string) => {
+    dispatch(searchPlace(placeName))
+  }
 
   const openBottomSheet = () => {
     bottomSheetRef.current?.expand()
@@ -276,10 +281,11 @@ export const SearchScreen = () => {
           <SearchBar
             places={places}
             query={query}
-            onQueryChange={onChangeQuery}
+            onQueryChange={handleQueryChange}
+            onClear={handleClearQuery}
             placeholder="A donde quieres ir?"
             className="mt-3"
-            onSearch={searchPlace}
+            onSearch={handleSearch}
             loading={loading}
             onPlacePress={handlePlacePress}
           />
