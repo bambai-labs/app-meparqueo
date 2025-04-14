@@ -4,8 +4,8 @@ import { Image } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
 import { useAppSelector } from '@/modules'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
-import { ForwardedRef, forwardRef } from 'react'
-import { Pressable, Text } from 'react-native'
+import { ForwardedRef, forwardRef, useRef } from 'react'
+import { Animated, Pressable, Text, View } from 'react-native'
 import { ParkingLot, ParkingLotAvailability, ParkingStatus } from '../types'
 import { formatCurrency } from '../utils'
 
@@ -14,6 +14,78 @@ interface Props {
   parkingLots: ParkingLot[]
   onFinishLoading: () => void
   onParkingMarkerPress: (parkingLot: ParkingLot) => void
+}
+
+const ParkingMarker = ({
+  parkingResult,
+  onPress,
+}: {
+  parkingResult: ParkingLot
+  onPress: () => void
+}) => {
+  const bounceAnimation = useRef(new Animated.Value(0)).current
+
+  const handlePress = () => {
+    bounceAnimation.setValue(0)
+
+    Animated.sequence([
+      Animated.timing(bounceAnimation, {
+        toValue: -15,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+      Animated.timing(bounceAnimation, {
+        toValue: 0,
+        duration: 150,
+        useNativeDriver: true,
+      }),
+    ]).start()
+
+    onPress()
+  }
+
+  const getImageSource = () => {
+    if (parkingResult.status === ParkingStatus.CLOSED) {
+      return require(`@/assets/images/parking_spot_gray.png`)
+    } else if (
+      parkingResult.availability === ParkingLotAvailability.MORE_THAN_FIVE
+    ) {
+      return require(`@/assets/images/parking_spot_green.png`)
+    } else if (
+      parkingResult.availability === ParkingLotAvailability.LESS_THAN_FIVE
+    ) {
+      return require(`@/assets/images/parking_spot_yellow.png`)
+    } else {
+      return require(`@/assets/images/parking_spot_red.png`)
+    }
+  }
+
+  return (
+    <View style={{ paddingVertical: 15 }}>
+      <Pressable onPress={handlePress}>
+        <Animated.View style={{ transform: [{ translateY: bounceAnimation }] }}>
+          <VStack className="items-center">
+            <Image
+              source={getImageSource()}
+              alt="Parking spot"
+              className="w-[40px] h-[40px]"
+            />
+
+            <VStack className="bg-white p-1 rounded-xl items-center">
+              {parkingResult.distanceKm && (
+                <Text className="text-[12px]">
+                  {parkingResult.distanceKm} km
+                </Text>
+              )}
+              <Text className="text-[12px]">
+                {formatCurrency(parkingResult.price)} /hr
+              </Text>
+            </VStack>
+          </VStack>
+        </Animated.View>
+      </Pressable>
+    </View>
+  )
 }
 
 export const ParkingLotsMap = forwardRef<Camera, Props>(
@@ -46,52 +118,10 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
             coordinate={[parkingResult.longitude, parkingResult.latitude]}
             allowOverlap={true}
           >
-            <Pressable onPress={() => onParkingMarkerPress(parkingResult)}>
-              <VStack className="items-center">
-                {parkingResult.status === ParkingStatus.CLOSED ? (
-                  <Image
-                    source={require(`@/assets/images/parking_spot_gray.png`)}
-                    style={{
-                      width: 25,
-                      height: 25,
-                    }}
-                    alt="Parking spot closed"
-                    className="w-[40px] h-[40px]"
-                  />
-                ) : parkingResult.availability ===
-                  ParkingLotAvailability.MORE_THAN_FIVE ? (
-                  <Image
-                    source={require(`@/assets/images/parking_spot_green.png`)}
-                    className="w-[40px] h-[40px]"
-                    alt="Parking spot available"
-                  />
-                ) : parkingResult.availability ===
-                  ParkingLotAvailability.LESS_THAN_FIVE ? (
-                  <Image
-                    source={require(`@/assets/images/parking_spot_yellow.png`)}
-                    alt="Parking spot available"
-                    className="w-[40px] h-[40px]"
-                  />
-                ) : (
-                  <Image
-                    source={require(`@/assets/images/parking_spot_red.png`)}
-                    alt="Parking spot available"
-                    className="w-[40px] h-[40px]"
-                  />
-                )}
-
-                <VStack className="bg-white p-1 rounded-xl items-center">
-                  {parkingResult.distanceKm && (
-                    <Text className="text-[12px]">
-                      {parkingResult.distanceKm} km
-                    </Text>
-                  )}
-                  <Text className="text-[12px]">
-                    {formatCurrency(parkingResult.price)} /hr
-                  </Text>
-                </VStack>
-              </VStack>
-            </Pressable>
+            <ParkingMarker
+              parkingResult={parkingResult}
+              onPress={() => onParkingMarkerPress(parkingResult)}
+            />
           </MarkerView>
         ))}
 
