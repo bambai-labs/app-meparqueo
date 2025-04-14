@@ -51,7 +51,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
                 showsDots
               >
                 {parkingLot.imageUrls.map((imageUri, index) => (
-                  <View key={index} className="w-full">
+                  <View key={imageUri} className="w-full">
                     <GluestackImage
                       size="full"
                       source={{ uri: imageUri }}

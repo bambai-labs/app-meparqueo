@@ -1,10 +1,10 @@
 import { Place } from '@/api'
 import { Button } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { ArrowRightIcon, Icon } from '@/components/ui/icon'
+import { Icon } from '@/components/ui/icon'
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input'
 import { usePathname } from 'expo-router'
-import { ArrowLeft, X } from 'lucide-react-native'
+import { ArrowLeft, Search, X } from 'lucide-react-native'
 import React, { useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { PlacesResultList } from './PlacesResultList'
@@ -116,7 +116,16 @@ export const SearchBar = ({
         <Button
           onPress={() => {
             onSearch(query)
-            setIsFocused(false)
+            const isInHomeScreen = !(
+              pathName.startsWith('/home/') && pathName !== '/home'
+            )
+
+            if (!isInHomeScreen) {
+              setIsFocused(false)
+              return
+            }
+
+            setIsFocused(query.length > 0)
           }}
           size="xl"
           style={{
@@ -129,7 +138,7 @@ export const SearchBar = ({
           {loading ? (
             <ActivityIndicator />
           ) : (
-            <Icon as={ArrowRightIcon} size="md" color="white" />
+            <Icon as={Search} size="md" color="white" />
           )}
         </Button>
       </HStack>
