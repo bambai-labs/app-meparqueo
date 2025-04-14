@@ -37,6 +37,8 @@ export const SearchScreen = () => {
 
   const [reportModalOpen, setReportModalOpen] = useState(false)
 
+  const [isFocused, setIsFocused] = useState(false)
+
   const openReportModal = () => {
     setReportModalOpen(true)
   }
@@ -303,6 +305,8 @@ export const SearchScreen = () => {
             onSearch={handleSearch}
             loading={loading}
             onPlacePress={handlePlacePress}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
           />
 
           <HStack className="mt-3 w-full items-center justify-between">
