@@ -44,6 +44,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
           <Box className="h-96 rounded-2xl overflow-hidden">
             {parkingLot && (
               <Carousel
+                key={parkingLot.id}
                 autoplay
                 autoplayInterval={5000}
                 loop
