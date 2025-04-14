@@ -64,11 +64,18 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
           </Box>
 
           <Text className="mt-4 text-3xl font-bold">{parkingLot?.name}</Text>
-          <HStack className="items-center">
-            <Text className="text-xl">
-              {formatCurrency(parkingLot.price ?? 0)}
-            </Text>
-            <Text className="text-gray-600"> / hora</Text>
+          <HStack className="w-full justify-between items-center">
+            <HStack className="items-center">
+              <Text className="text-xl">
+                {formatCurrency(parkingLot.price ?? 0)}
+              </Text>
+              <Text className="text-gray-600"> / hora</Text>
+            </HStack>
+
+            <HStack space="sm">
+              <Text className="font-bold">{parkingLot.reportsCount}</Text>
+              <Text>Reportes negativos</Text>
+            </HStack>
           </HStack>
 
           <AvailabilityIndicator
