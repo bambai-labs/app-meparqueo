@@ -85,12 +85,9 @@ export const SearchBar = ({
             placeholder={placeholder}
             onSubmitEditing={() => {
               onSearch(query)
-
               const isInHomeScreen = !(
                 pathName.startsWith('/home/') && pathName !== '/home'
               )
-
-              console.log('isInHomeScreen', isInHomeScreen)
 
               if (!isInHomeScreen) {
                 setIsFocused(false)
@@ -104,16 +101,17 @@ export const SearchBar = ({
               setIsFocused(true)
             }}
           />
-
-          <InputSlot
-            className="pr-2"
-            onPress={() => {
-              onClear()
-              setIsFocused(false)
-            }}
-          >
-            <InputIcon as={X} size="md" />
-          </InputSlot>
+          {query !== '' && (
+            <InputSlot
+              className="pr-2"
+              onPress={() => {
+                onClear()
+                setIsFocused(false)
+              }}
+            >
+              <InputIcon as={X} size="md" />
+            </InputSlot>
+          )}
         </Input>
         <Button
           onPress={() => {
