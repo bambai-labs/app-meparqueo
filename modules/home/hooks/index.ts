@@ -1,5 +1,6 @@
 export { useAllParkingLots } from './useAllParkingLots'
 export { useHome } from './useHome'
 export { useParkingPagination } from './useParkingPagination'
+export { useReportParkingLot } from './useReportParkingLot'
 export { useSearchParkingLots } from './useSearchParkingLots'
 export { useSearchPlaces } from './useSearchPlaces'

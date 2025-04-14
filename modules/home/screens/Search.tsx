@@ -357,11 +357,14 @@ export const SearchScreen = () => {
           />
         )}
 
-        <ReportModal
-          opened={isReportModalOpen}
-          onCancel={hideReportModal}
-          onConfirm={hideReportModal}
-        />
+        {currentParking && (
+          <ReportModal
+            parkingLot={currentParking}
+            opened={isReportModalOpen}
+            onCancel={hideReportModal}
+            onConfirm={hideReportModal}
+          />
+        )}
 
         <FilterModal
           values={values}

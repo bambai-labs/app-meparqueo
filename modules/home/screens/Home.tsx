@@ -131,11 +131,14 @@ export const HomeScreen = () => {
           />
         )}
 
-        <ReportModal
-          opened={isReportModalOpen}
-          onCancel={hideReportModal}
-          onConfirm={hideReportModal}
-        />
+        {currentParking && (
+          <ReportModal
+            parkingLot={currentParking}
+            opened={isReportModalOpen}
+            onCancel={hideReportModal}
+            onConfirm={hideReportModal}
+          />
+        )}
       </ScreenWrapper>
     </GestureHandlerRootView>
   )

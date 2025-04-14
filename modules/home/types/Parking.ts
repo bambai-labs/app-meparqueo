@@ -140,3 +140,10 @@ export interface ParkingUpdateEstatus {
   availability: ParkingLotAvailability
   updatedAt: string
 }
+
+export enum ParkingReport {
+  INCORRECT_INFO = 'INCORRECT_INFO',
+  SAFETY_ISSUE = 'SAFETY_ISSUE',
+  BAD_SERVICE = 'BAD_SERVICE',
+  OTHER = 'OTHER',
+}

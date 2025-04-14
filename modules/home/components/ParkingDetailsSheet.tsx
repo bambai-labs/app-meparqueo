@@ -74,7 +74,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
 
             <HStack space="sm">
               <Text className="font-bold">{parkingLot.reportsCount}</Text>
-              <Text>Reportes negativos</Text>
+              <Text>Reportes este mes</Text>
             </HStack>
           </HStack>
 
