@@ -62,8 +62,15 @@ const ParkingMarker = ({
 
   return (
     <View style={{ paddingVertical: 15 }}>
-      <Pressable onPress={handlePress}>
-        <Animated.View style={{ transform: [{ translateY: bounceAnimation }] }}>
+      <Pressable
+        onPressIn={(e) => {
+          e.stopPropagation()
+          handlePress()
+        }}
+      >
+        <Animated.View
+          style={{ transform: [{ translateY: bounceAnimation }], zIndex: 999 }}
+        >
           <VStack className="items-center">
             <Image
               source={getImageSource()}
@@ -142,10 +149,7 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
             <VStack className="items-center">
               <Image
                 source={require('@/assets/images/pin_destination.png')}
-                style={{
-                  width: 50,
-                  height: 55,
-                }}
+                className="w-[45px] h-[50px]"
               />
             </VStack>
           </MarkerView>
