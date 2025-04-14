@@ -10,6 +10,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import { Stack, useLocalSearchParams } from 'expo-router'
+import { useFormik } from 'formik'
 import { ChevronDown } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
@@ -22,9 +23,8 @@ import {
   ReportModal,
   SearchBar,
 } from '../components'
-import { FormValues } from '../components/FilterModal'
 import { useSearchParkingLots } from '../hooks'
-import { ParkingLot } from '../types'
+import { FilterModalValues, ParkingLot } from '../types'
 
 export const SearchScreen = () => {
   const { place } = useLocalSearchParams()
@@ -47,9 +47,7 @@ export const SearchScreen = () => {
 
   const {
     loading: parkingLoading,
-    currentFilters,
     parkingLots,
-    setCurrentFilters,
     searchNearParkingLots,
   } = useSearchParkingLots()
 
@@ -169,9 +167,26 @@ export const SearchScreen = () => {
     setIsFilterModalOpen(false)
   }
 
-  const handleConfirmFilterModal = (values: FormValues) => {
+  const { values, handleSubmit, setFieldValue } = useFormik<FilterModalValues>({
+    initialValues: {
+      radiusKm: 5,
+      onlyAvailable: false,
+      paymentTransfer: false,
+      valetParking: false,
+      twentyFourSeven: false,
+    },
+    onSubmit: (values) => {
+      console.log('values', values)
+      handleConfirmFilterModal(values)
+    },
+  })
+
+  const handleSwitchChange = (name: string) => (value: boolean) => {
+    setFieldValue(name, value)
+  }
+
+  const handleConfirmFilterModal = (values: FilterModalValues) => {
     if (currentDestination) {
-      setCurrentFilters(values)
       searchNearParkingLots(
         currentDestination.location.latitude,
         currentDestination.location.longitude,
@@ -192,11 +207,11 @@ export const SearchScreen = () => {
     searchNearParkingLots(
       place.location.latitude,
       place.location.longitude,
-      currentFilters.radiusKm.toString(),
-      currentFilters.onlyAvailable,
-      currentFilters.paymentTransfer,
-      currentFilters.valetParking,
-      currentFilters.twentyFourSeven,
+      values.radiusKm.toString(),
+      values.onlyAvailable,
+      values.paymentTransfer,
+      values.valetParking,
+      values.twentyFourSeven,
     )
     saveDestination()
   }
@@ -251,11 +266,11 @@ export const SearchScreen = () => {
       searchNearParkingLots(
         placeFromParams.location.latitude,
         placeFromParams.location.longitude,
-        currentFilters.radiusKm.toString(),
-        currentFilters.onlyAvailable,
-        currentFilters.paymentTransfer,
-        currentFilters.valetParking,
-        currentFilters.twentyFourSeven,
+        values.radiusKm.toString(),
+        values.onlyAvailable,
+        values.paymentTransfer,
+        values.valetParking,
+        values.twentyFourSeven,
       )
     }
   }, [mapLoaded])
@@ -349,9 +364,11 @@ export const SearchScreen = () => {
         />
 
         <FilterModal
+          values={values}
+          handleSwitchChange={handleSwitchChange}
+          handleSubmit={handleSubmit}
           opened={isFilterModalOpen}
           onCancel={hideFilterModal}
-          onConfirm={handleConfirmFilterModal}
         />
       </VStack>
     </GestureHandlerRootView>

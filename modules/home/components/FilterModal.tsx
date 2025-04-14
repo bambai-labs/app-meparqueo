@@ -18,40 +18,27 @@ import {
 } from '@/components/ui/modal'
 import { Switch } from '@/components/ui/switch'
 import { VStack } from '@/components/ui/vstack'
-import { useFormik } from 'formik'
+import { useEffect } from 'react'
+import { FilterModalValues } from '../types'
 
 interface Props {
+  values: FilterModalValues
   opened: boolean
   onCancel: () => void
-  onConfirm: (values: FormValues) => void
+  handleSwitchChange: (name: string) => (value: boolean) => void
+  handleSubmit: (e?: React.FormEvent<HTMLFormElement>) => void
 }
 
-export interface FormValues {
-  radiusKm: number
-  onlyAvailable: boolean
-  paymentTransfer: boolean
-  valetParking: boolean
-  twentyFourSeven: boolean
-}
-
-export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
-  const formik = useFormik<FormValues>({
-    initialValues: {
-      radiusKm: 5,
-      onlyAvailable: false,
-      paymentTransfer: false,
-      valetParking: false,
-      twentyFourSeven: false,
-    },
-    onSubmit: (values) => {
-      onConfirm(values)
-    },
+export const FilterModal = ({
+  values,
+  opened,
+  onCancel,
+  handleSwitchChange,
+  handleSubmit,
+}: Props) => {
+  useEffect(() => {
+    console.log('modal values', values)
   })
-
-  // Función simplificada para manejar cambios de switch
-  const handleSwitchChange = (name: string) => (value: boolean) => {
-    formik.setFieldValue(name, value)
-  }
 
   return (
     <Modal isOpen={opened} onClose={onCancel}>
@@ -79,7 +66,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  isChecked={formik.values.onlyAvailable}
+                  value={values.onlyAvailable}
                   onValueChange={handleSwitchChange('onlyAvailable')}
                 />
               </HStack>
@@ -91,7 +78,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  isChecked={formik.values.paymentTransfer}
+                  value={values.paymentTransfer}
                   onValueChange={handleSwitchChange('paymentTransfer')}
                 />
               </HStack>
@@ -103,7 +90,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  isChecked={formik.values.valetParking}
+                  value={values.valetParking}
                   onValueChange={handleSwitchChange('valetParking')}
                 />
               </HStack>
@@ -115,7 +102,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  isChecked={formik.values.twentyFourSeven}
+                  value={values.twentyFourSeven}
                   onValueChange={handleSwitchChange('twentyFourSeven')}
                 />
               </HStack>
@@ -129,7 +116,7 @@ export const FilterModal = ({ opened, onCancel, onConfirm }: Props) => {
               Cancelar
             </ButtonText>
           </Button>
-          <Button onPress={() => formik.handleSubmit()}>
+          <Button onPress={() => handleSubmit()}>
             <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
               Filtrar
             </ButtonText>
