@@ -13,10 +13,8 @@ export const useParkingPagination = () => {
   const dispatch = useAppDispatch()
 
   const fetchParkings = useCallback(async () => {
-    // No cargar más si estamos cargando actualmente o si sabemos que no hay más datos
     if (loading || !hasMore) return
 
-    // No seguir paginando si ya sabemos que hemos alcanzado el total de páginas
     if (initialLoadDone && totalPages > 0 && page > totalPages) {
       setHasMore(false)
       return
@@ -49,17 +47,42 @@ export const useParkingPagination = () => {
     }
   }, [page, loading, totalPages, hasMore, initialLoadDone])
 
-  const refreshParkings = () => {
-    dispatch(setRecentParkingLots([]))
+  const refreshParkings = async () => {
+    // Primero actualizamos el estado local
     setPage(1)
     setHasMore(true)
     setTotalPages(0)
     setInitialLoadDone(false)
-    // Pequeña pausa para asegurar que el estado se actualiza antes de la nueva petición
-    setTimeout(fetchParkings, 0)
+    setLoading(true)
+
+    // Limpiamos los datos en redux
+    dispatch(setRecentParkingLots([]))
+
+    // Hacemos la petición directamente aquí en lugar de llamar a fetchParkings
+    try {
+      const response = await MeParqueoApi.get<PaginationResponse>(
+        `/api/v1/user/recently/stored/parkings?limit=10&page=1`,
+      )
+
+      const { data, pagination } = response.data.data
+
+      setTotalPages(pagination.totalPages)
+      setInitialLoadDone(true)
+
+      if (data.length === 0) {
+        setHasMore(false)
+      } else {
+        dispatch(setRecentParkingLots(data))
+        setPage(2)
+      }
+    } catch (error) {
+      console.error('Error refreshing parkings:', error)
+      setHasMore(false)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  // Cargar datos iniciales cuando el componente se monta
   useEffect(() => {
     if (!initialLoadDone) {
       fetchParkings()

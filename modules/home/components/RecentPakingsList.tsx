@@ -45,7 +45,6 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
     return null
   }
 
-  // Renderizar mensaje si no hay parkings
   const renderEmptyList = () => {
     if (loading && recentParkings.length === 0) {
       return (
