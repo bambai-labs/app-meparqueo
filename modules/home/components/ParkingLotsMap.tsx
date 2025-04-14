@@ -52,49 +52,41 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
                   <Image
                     source={require(`@/assets/images/parking_spot_gray.png`)}
                     style={{
-                      width: 40,
-                      height: 40,
+                      width: 25,
+                      height: 25,
                     }}
                     alt="Parking spot closed"
+                    className="w-[40px] h-[40px]"
                   />
                 ) : parkingResult.availability ===
                   ParkingLotAvailability.MORE_THAN_FIVE ? (
                   <Image
                     source={require(`@/assets/images/parking_spot_green.png`)}
-                    style={{
-                      width: 40,
-                      height: 40,
-                    }}
+                    className="w-[40px] h-[40px]"
                     alt="Parking spot available"
                   />
                 ) : parkingResult.availability ===
                   ParkingLotAvailability.LESS_THAN_FIVE ? (
                   <Image
                     source={require(`@/assets/images/parking_spot_yellow.png`)}
-                    style={{
-                      width: 40,
-                      height: 40,
-                    }}
                     alt="Parking spot available"
+                    className="w-[40px] h-[40px]"
                   />
                 ) : (
                   <Image
                     source={require(`@/assets/images/parking_spot_red.png`)}
-                    style={{
-                      width: 40,
-                      height: 40,
-                    }}
                     alt="Parking spot available"
+                    className="w-[40px] h-[40px]"
                   />
                 )}
 
                 <VStack className="bg-white p-1 rounded-xl items-center">
                   {parkingResult.distanceKm && (
-                    <Text className="text-md">
+                    <Text className="text-[12px]">
                       {parkingResult.distanceKm} km
                     </Text>
                   )}
-                  <Text className="text-sm">
+                  <Text className="text-[12px]">
                     {formatCurrency(parkingResult.price)} /hr
                   </Text>
                 </VStack>
