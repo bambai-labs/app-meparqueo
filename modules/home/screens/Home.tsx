@@ -11,6 +11,7 @@ import {
 import { onChangeQuery, searchPlace } from '@/store'
 import { isAxiosError } from 'axios'
 import { Stack, useRouter } from 'expo-router'
+import { useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   ParkingDetailsSheet,
@@ -34,9 +35,11 @@ export const HomeScreen = () => {
 
   const { loading, query, places } = useAppSelector((state) => state.search)
   const dispatch = useAppDispatch()
+  const [isFocused, setIsFocused] = useState(false)
 
   const handlePlacePress = async (place: Place) => {
     saveDestination(place)
+    setIsFocused(false)
     router.push({
       pathname: '/home/search',
       params: {
@@ -83,30 +86,41 @@ export const HomeScreen = () => {
     dispatch(searchPlace(placeName))
   }
 
+  useEffect(() => {
+    if (places.length === 0) {
+      return
+    }
+    const firstPlace = places[0]
+    handlePlacePress(firstPlace)
+  }, [places])
+
   const router = useRouter()
 
   return (
     <GestureHandlerRootView>
-      <ScreenWrapper>
+      <ScreenWrapper className="bg-white">
         <Stack.Screen
           options={{
             headerShown: false,
           }}
         />
 
-        <VStack>
-          <SearchBar
-            query={query}
-            onQueryChange={handleQueryChange}
-            placeholder="A donde quieres ir?"
-            className="mt-3"
-            onSearch={handleSearch}
-            loading={loading}
-            places={places}
-            onPlacePress={handlePlacePress}
-            onClear={handleClearQuery}
-          />
-
+        <VStack className="w-full">
+          <VStack className="w-full">
+            <SearchBar
+              query={query}
+              onQueryChange={handleQueryChange}
+              placeholder="A donde quieres ir?"
+              className="mt-3 bg-white rounded-lg"
+              onSearch={handleSearch}
+              loading={loading}
+              places={places}
+              onPlacePress={handlePlacePress}
+              onClear={handleClearQuery}
+              isFocused={isFocused}
+              setIsFocused={setIsFocused}
+            />
+          </VStack>
           <HStack space="md" className="w-full items-start mt-4">
             <Chip
               selected={false}

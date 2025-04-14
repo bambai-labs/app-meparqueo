@@ -18,7 +18,7 @@ export const RecentParkingCard = ({
 }: Props) => {
   return (
     <Pressable onPress={() => onPress(recentParking.parkingLot)}>
-      <VStack className="w-full py-3 px-4 bg-white rounded-xl border border-gray-600 shadow-xl">
+      <VStack className="w-full py-3 px-4 bg-gray-100 rounded-xl border border-gray-600 shadow-xl">
         <HStack className="w-full justify-between">
           <Text>
             {formatTimestamp(new Date(recentParking.viewedAt).getTime())}

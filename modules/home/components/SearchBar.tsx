@@ -5,7 +5,7 @@ import { Icon } from '@/components/ui/icon'
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input'
 import { usePathname } from 'expo-router'
 import { ArrowLeft, Search, X } from 'lucide-react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { PlacesResultList } from './PlacesResultList'
 
@@ -17,6 +17,8 @@ interface Props {
   className?: string
   placeholder?: string
   loading?: boolean
+  isFocused: boolean
+  setIsFocused: (isFocused: boolean) => void
   onQueryChange: (query: string) => void
   onSearch: (query: string) => void
   places: Place[]
@@ -24,6 +26,7 @@ interface Props {
   onClear?: () => void
 }
 
+// TODO: Mejorar codigo de manejo de los estados que se pasan como props setIsFocused y isFocused
 export const SearchBar = ({
   query,
   disabled = false,
@@ -33,13 +36,13 @@ export const SearchBar = ({
   placeholder = '',
   loading = false,
   places,
+  isFocused,
+  setIsFocused,
   onQueryChange,
   onSearch,
   onPlacePress,
   onClear = () => {},
 }: Props) => {
-  const [isFocused, setIsFocused] = useState(false)
-
   const pathName = usePathname()
 
   return (
@@ -142,9 +145,8 @@ export const SearchBar = ({
           )}
         </Button>
       </HStack>
-
-      <View className="absolute z-10 w-full top-full bg-white shadow-md rounded-b-lg">
-        {isFocused && (
+      {isFocused && (
+        <View className="absolute z-10 w-full top-full bg-white shadow-md rounded-b-lg">
           <PlacesResultList
             places={places}
             handlePlacePress={(place) => {
@@ -152,8 +154,8 @@ export const SearchBar = ({
               onPlacePress(place)
             }}
           />
-        )}
-      </View>
+        </View>
+      )}
     </View>
   )
 }
