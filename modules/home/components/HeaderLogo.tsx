@@ -19,7 +19,7 @@ export const HeaderLogo = () => {
   }
 
   return (
-    <HStack className="w-full items-center justify-between px-3">
+    <HStack className="w-full items-center justify-between px-3 bg-white">
       <View className="w-[20px]">
         {shouldShowBackArrow && (
           <Pressable onPress={goBack} className="mb-3">

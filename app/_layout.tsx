@@ -58,7 +58,7 @@ export default function RootLayout() {
           />
           <HeaderLogo />
           <Stack />
-          <StatusBar style="auto" />
+          <StatusBar style="light" />
         </ThemeProvider>
       </Provider>
     </GluestackUIProvider>
