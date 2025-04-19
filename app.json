@@ -10,7 +10,10 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.markuswater.meparqueoapp"
+      "bundleIdentifier": "com.markuswater.meparqueoapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,8 +22,6 @@
       },
       "package": "com.markuswater.meparqueoapp",
       "permissions": [
-        "android.permission.ACCESS_COARSE_LOCATION",
-        "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ]
@@ -50,7 +51,7 @@
       [
         "@rnmapbox/maps",
         {
-          "RNMapboxMapsVersion": "11.0.0"
+          "RNMapboxMapsVersion": "11.8.0"
         }
       ]
     ],
