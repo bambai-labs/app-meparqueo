@@ -54,11 +54,16 @@ export default function RootLayout() {
           <View
             style={{
               paddingTop: Constants.statusBarHeight,
+              backgroundColor: '#ffffff',
             }}
           />
           <HeaderLogo />
           <Stack />
-          <StatusBar style="light" />
+          <StatusBar
+            style="dark"
+            backgroundColor="#ffffff"
+            translucent={false}
+          />
         </ThemeProvider>
       </Provider>
     </GluestackUIProvider>
