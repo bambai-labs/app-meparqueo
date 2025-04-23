@@ -80,11 +80,17 @@ const ParkingMarker = ({
 
             <VStack className="bg-white p-1 rounded-xl items-center">
               {parkingResult.distanceKm && (
-                <Text className="text-[12px]">
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Light' }}
+                  className="text-[12px]"
+                >
                   {parkingResult.distanceKm} km
                 </Text>
               )}
-              <Text className="text-[12px]">
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="text-[12px]"
+              >
                 {formatCurrency(parkingResult.price)} /hr
               </Text>
             </VStack>

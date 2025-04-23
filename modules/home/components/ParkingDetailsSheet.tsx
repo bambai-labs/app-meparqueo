@@ -64,18 +64,36 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
             )}
           </Box>
 
-          <Text className="mt-4 text-3xl font-bold">{parkingLot?.name}</Text>
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="mt-4 text-3xl font-bold"
+          >
+            {parkingLot?.name}
+          </Text>
           <HStack className="w-full justify-between items-center">
             <HStack className="items-center">
-              <Text className="text-xl">
+              <Text style={{ fontFamily: 'Neuwelt-Bold' }} className="text-xl">
                 {formatCurrency(parkingLot.price ?? 0)}
               </Text>
-              <Text className="text-gray-600"> / hora</Text>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="text-gray-600"
+              >
+                {' '}
+                / hora
+              </Text>
             </HStack>
 
             <HStack space="sm">
-              <Text className="font-bold">{parkingLot.reportsCount}</Text>
-              <Text>Reportes este mes</Text>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="font-bold"
+              >
+                {parkingLot.reportsCount}
+              </Text>
+              <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
+                Reportes este mes
+              </Text>
             </HStack>
           </HStack>
 
@@ -94,7 +112,12 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
               >
                 <Icon as={PhoneIcon} size="xl" color="white" />
               </Button>
-              <Text className="mt-2 text-gray-600">Llamar</Text>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="mt-2 text-gray-600"
+              >
+                Llamar
+              </Text>
             </VStack>
 
             <VStack className="items-center">
@@ -105,7 +128,12 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
               >
                 <Icon as={MapIcon} size="xl" color="white" />
               </Button>
-              <Text className="mt-2 text-gray-600">Trazar ruta</Text>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="mt-2 text-gray-600"
+              >
+                Trazar ruta
+              </Text>
             </VStack>
 
             <VStack className="items-center">
@@ -116,19 +144,44 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
               >
                 <Icon as={AlertCircleIcon} size="xl" color="white" />
               </Button>
-              <Text className="mt-2 text-gray-600">Reportar</Text>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="mt-2 text-gray-600"
+              >
+                Reportar
+              </Text>
             </VStack>
           </HStack>
 
-          <Text className="mt-3 text-xl font-bold">Servicios adicionales</Text>
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="mt-3 text-xl font-bold"
+          >
+            Servicios adicionales
+          </Text>
 
           <HStack>
-            <Text className="text-gray-600 text-xl">{services}</Text>
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="text-gray-600 text-xl"
+            >
+              {services}
+            </Text>
           </HStack>
 
-          <Text className="mt-3 text-xl font-bold">Métodos de pago</Text>
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="mt-3 text-xl font-bold"
+          >
+            Métodos de pago
+          </Text>
 
-          <Text className="text-gray-600 text-xl">{paymentMethods}</Text>
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="text-gray-600 text-xl"
+          >
+            {paymentMethods}
+          </Text>
         </BottomSheetView>
       </BottomSheet>
     )

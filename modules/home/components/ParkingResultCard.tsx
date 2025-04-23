@@ -30,10 +30,18 @@ export const ParkingResultCard = ({
           alt="Parking image"
         />
         <VStack>
-          <Text>{parkingLot.name}</Text>
+          <Text style={{ fontFamily: 'Neuwelt-Bold' }}>{parkingLot.name}</Text>
           <HStack className="items-center">
-            <Text className="text-xl">{formatCurrency(parkingLot.price)}</Text>
-            <Text className="text-gray-600"> / hora</Text>
+            <Text style={{ fontFamily: 'Neuwelt-Bold' }} className="text-xl">
+              {formatCurrency(parkingLot.price)}
+            </Text>
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="text-gray-600"
+            >
+              {' '}
+              / hora
+            </Text>
           </HStack>
           <HStack className="items-center mt-3" space="sm">
             <AvailabilityIndicator
@@ -44,7 +52,9 @@ export const ParkingResultCard = ({
             {parkingLot.distanceKm && (
               <>
                 <Icon as={MapPin} size="md" />
-                <Text>{parkingLot.distanceKm} km</Text>
+                <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
+                  {parkingLot.distanceKm} km
+                </Text>
               </>
             )}
           </HStack>

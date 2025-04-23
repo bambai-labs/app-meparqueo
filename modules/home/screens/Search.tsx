@@ -323,7 +323,7 @@ export const SearchScreen = () => {
               </Button>
             </HStack>
 
-            <Text>
+            <Text style={{ fontFamily: 'Neuwelt-Light' }}>
               {parkingLots.length > 0 ? `${parkingLots.length} resultados` : ''}
             </Text>
           </HStack>
