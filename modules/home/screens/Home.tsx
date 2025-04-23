@@ -23,12 +23,12 @@ import { useHome } from '../hooks'
 
 export const HomeScreen = () => {
   const {
+    isReportModalOpen,
     bottomSheetRef,
-    callParkingLot,
     currentParking,
+    callParkingLot,
     handleParkingCardPress,
     hideReportModal,
-    isReportModalOpen,
     openMapDirection,
     showReportModal,
   } = useHome()
