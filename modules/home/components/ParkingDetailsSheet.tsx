@@ -8,7 +8,7 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import { AlertCircleIcon, MapIcon, PhoneIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { forwardRef, useMemo } from 'react'
-import { Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import { ParkingLot } from '../types'
 import { formatCurrency, parsePaymentMethod, parseService } from '../utils'
 import { AvailabilityIndicator } from './AvailabilityIndicator'
@@ -41,147 +41,152 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         snapPoints={['50%', '80%']}
       >
         <BottomSheetView className="px-6 pb-4">
-          <Box className="h-96 rounded-2xl overflow-hidden">
-            {parkingLot && (
-              <Carousel
-                key={parkingLot.id}
-                autoplay
-                autoplayInterval={5000}
-                loop
-                showsControls={true}
-                showsDots
-              >
-                {parkingLot.imageUrls.map((imageUri, index) => (
-                  <View key={imageUri} className="w-full">
-                    <GluestackImage
-                      size="full"
-                      source={{ uri: imageUri }}
-                      alt={`Slide ${index + 1}`}
-                    />
-                  </View>
-                ))}
-              </Carousel>
-            )}
-          </Box>
+          <ScrollView>
+            <Box className="h-96 rounded-2xl overflow-hidden">
+              {parkingLot && (
+                <Carousel
+                  key={parkingLot.id}
+                  autoplay
+                  autoplayInterval={5000}
+                  loop
+                  showsControls={true}
+                  showsDots
+                >
+                  {parkingLot.imageUrls.map((imageUri, index) => (
+                    <View key={imageUri} className="w-full">
+                      <GluestackImage
+                        size="full"
+                        source={{ uri: imageUri }}
+                        alt={`Slide ${index + 1}`}
+                      />
+                    </View>
+                  ))}
+                </Carousel>
+              )}
+            </Box>
 
-          <Text
-            style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="mt-4 text-3xl font-bold"
-          >
-            {parkingLot?.name}
-          </Text>
-          <HStack className="w-full justify-between items-center">
-            <HStack className="items-center">
-              <Text style={{ fontFamily: 'Neuwelt-Bold' }} className="text-xl">
-                {formatCurrency(parkingLot.price ?? 0)}
-              </Text>
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="mt-4 text-3xl font-bold"
+            >
+              {parkingLot?.name}
+            </Text>
+            <HStack className="w-full justify-between items-center">
+              <HStack className="items-center">
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Bold' }}
+                  className="text-xl"
+                >
+                  {formatCurrency(parkingLot.price ?? 0)}
+                </Text>
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Bold' }}
+                  className="text-gray-600"
+                >
+                  {' '}
+                  / hora
+                </Text>
+              </HStack>
+
+              <HStack space="sm">
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Bold' }}
+                  className="font-bold"
+                >
+                  {parkingLot.reportsCount}
+                </Text>
+                <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
+                  Reportes este mes
+                </Text>
+              </HStack>
+            </HStack>
+
+            <AvailabilityIndicator
+              className="mt-2"
+              availability={parkingLot.availability}
+              status={parkingLot.status}
+            />
+
+            <HStack className="w-full justify-evenly mt-3">
+              <VStack className="items-center">
+                <Button
+                  onPress={onCallParkingLot}
+                  size="xl"
+                  className="w-16 h-16 rounded-xl"
+                >
+                  <Icon as={PhoneIcon} size="xl" color="white" />
+                </Button>
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Bold' }}
+                  className="mt-2 text-gray-600"
+                >
+                  Llamar
+                </Text>
+              </VStack>
+
+              <VStack className="items-center">
+                <Button
+                  onPress={onOpenMapDirection}
+                  size="xl"
+                  className="w-16 h-16 rounded-xl"
+                >
+                  <Icon as={MapIcon} size="xl" color="white" />
+                </Button>
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Bold' }}
+                  className="mt-2 text-gray-600"
+                >
+                  Trazar ruta
+                </Text>
+              </VStack>
+
+              <VStack className="items-center">
+                <Button
+                  onPress={onShowReportModal}
+                  size="xl"
+                  className="w-16 h-16 rounded-xl"
+                >
+                  <Icon as={AlertCircleIcon} size="xl" color="white" />
+                </Button>
+                <Text
+                  style={{ fontFamily: 'Neuwelt-Bold' }}
+                  className="mt-2 text-gray-600"
+                >
+                  Reportar
+                </Text>
+              </VStack>
+            </HStack>
+
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="mt-3 text-xl font-bold"
+            >
+              Servicios adicionales
+            </Text>
+
+            <HStack>
               <Text
                 style={{ fontFamily: 'Neuwelt-Bold' }}
-                className="text-gray-600"
+                className="text-gray-600 text-xl"
               >
-                {' '}
-                / hora
+                {services}
               </Text>
             </HStack>
 
-            <HStack space="sm">
-              <Text
-                style={{ fontFamily: 'Neuwelt-Bold' }}
-                className="font-bold"
-              >
-                {parkingLot.reportsCount}
-              </Text>
-              <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
-                Reportes este mes
-              </Text>
-            </HStack>
-          </HStack>
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="mt-3 text-xl font-bold"
+            >
+              Métodos de pago
+            </Text>
 
-          <AvailabilityIndicator
-            className="mt-2"
-            availability={parkingLot.availability}
-            status={parkingLot.status}
-          />
-
-          <HStack className="w-full justify-evenly mt-3">
-            <VStack className="items-center">
-              <Button
-                onPress={onCallParkingLot}
-                size="xl"
-                className="w-16 h-16 rounded-xl"
-              >
-                <Icon as={PhoneIcon} size="xl" color="white" />
-              </Button>
-              <Text
-                style={{ fontFamily: 'Neuwelt-Bold' }}
-                className="mt-2 text-gray-600"
-              >
-                Llamar
-              </Text>
-            </VStack>
-
-            <VStack className="items-center">
-              <Button
-                onPress={onOpenMapDirection}
-                size="xl"
-                className="w-16 h-16 rounded-xl"
-              >
-                <Icon as={MapIcon} size="xl" color="white" />
-              </Button>
-              <Text
-                style={{ fontFamily: 'Neuwelt-Bold' }}
-                className="mt-2 text-gray-600"
-              >
-                Trazar ruta
-              </Text>
-            </VStack>
-
-            <VStack className="items-center">
-              <Button
-                onPress={onShowReportModal}
-                size="xl"
-                className="w-16 h-16 rounded-xl"
-              >
-                <Icon as={AlertCircleIcon} size="xl" color="white" />
-              </Button>
-              <Text
-                style={{ fontFamily: 'Neuwelt-Bold' }}
-                className="mt-2 text-gray-600"
-              >
-                Reportar
-              </Text>
-            </VStack>
-          </HStack>
-
-          <Text
-            style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="mt-3 text-xl font-bold"
-          >
-            Servicios adicionales
-          </Text>
-
-          <HStack>
             <Text
               style={{ fontFamily: 'Neuwelt-Bold' }}
               className="text-gray-600 text-xl"
             >
-              {services}
+              {paymentMethods}
             </Text>
-          </HStack>
-
-          <Text
-            style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="mt-3 text-xl font-bold"
-          >
-            Métodos de pago
-          </Text>
-
-          <Text
-            style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="text-gray-600 text-xl"
-          >
-            {paymentMethods}
-          </Text>
+          </ScrollView>
         </BottomSheetView>
       </BottomSheet>
     )
