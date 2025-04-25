@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from '@/components/ui/form-control'
+import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
 import { Switch } from '@/components/ui/switch'
 import { VStack } from '@/components/ui/vstack'
@@ -36,7 +37,8 @@ export const FilterModal = ({
     >
       <VStack className="bg-white p-5 rounded-xl">
         <FormControl>
-          <VStack className="w-full space-y-4">
+          <Heading>Filtros</Heading>
+          <VStack className="w-full space-y-4" space="md">
             <HStack className="w-full justify-between">
               <FormControlLabel>
                 <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
