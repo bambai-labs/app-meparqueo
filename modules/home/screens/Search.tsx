@@ -83,6 +83,8 @@ export const SearchScreen = () => {
     const destinationLat = currentParking?.latitude
     const destinationLon = currentParking?.longitude
 
+    saveRecentParking()
+
     if (Platform.OS === 'ios') {
       const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
       const appleMapsFallback = `http://maps.apple.com/?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
@@ -108,7 +110,6 @@ export const SearchScreen = () => {
     } else {
       Linking.openURL(fallbackURL)
     }
-    saveRecentParking()
   }
 
   const saveRecentParking = async () => {
@@ -286,7 +287,7 @@ export const SearchScreen = () => {
   }, [places])
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <Stack.Screen
         options={{
           headerShown: false,
@@ -350,17 +351,6 @@ export const SearchScreen = () => {
             )}
           </Box>
         </Box>
-
-        {currentParking && (
-          <ParkingDetailsSheet
-            ref={bottomSheetRef}
-            parkingLot={currentParking}
-            onCallParkingLot={callParkingLot}
-            onOpenMapDirection={openMapDirection}
-            onShowReportModal={showReportModal}
-          />
-        )}
-
         {currentParking && (
           <ReportModal
             parkingLot={currentParking}
@@ -369,15 +359,25 @@ export const SearchScreen = () => {
             onConfirm={hideReportModal}
           />
         )}
-
-        <FilterModal
-          values={values}
-          handleSwitchChange={handleSwitchChange}
-          handleSubmit={handleSubmit}
-          opened={isFilterModalOpen}
-          onCancel={hideFilterModal}
-        />
       </VStack>
+
+      {currentParking && (
+        <ParkingDetailsSheet
+          ref={bottomSheetRef}
+          parkingLot={currentParking}
+          onCallParkingLot={callParkingLot}
+          onOpenMapDirection={openMapDirection}
+          onShowReportModal={showReportModal}
+        />
+      )}
+
+      <FilterModal
+        values={values}
+        handleSwitchChange={handleSwitchChange}
+        handleSubmit={handleSubmit}
+        opened={isFilterModalOpen}
+        onCancel={hideFilterModal}
+      />
     </GestureHandlerRootView>
   )
 }

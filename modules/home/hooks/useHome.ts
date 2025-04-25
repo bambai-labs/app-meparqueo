@@ -36,8 +36,8 @@ export const useHome = () => {
   const openMapDirection = async () => {
     const currentLat = deviceLocation?.[1]
     const currentLon = deviceLocation?.[0]
-    const destinationLat = 8.7985081
-    const destinationLon = -75.7149219
+    const destinationLat = currentParking?.latitude
+    const destinationLon = currentParking?.longitude
 
     if (Platform.OS === 'ios') {
       const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
@@ -67,7 +67,7 @@ export const useHome = () => {
   }
 
   const callParkingLot = async () => {
-    const url = 'tel:1234567890'
+    const url = `tel:${currentParking?.phoneNumber}`
     try {
       await Linking.openURL(url)
     } catch (err) {
@@ -110,19 +110,7 @@ export const useHome = () => {
     }
 
     login()
-    //loadRecentParkingLots()
   }
-
-  // const loadRecentParkingLots = async () => {
-  //   try {
-  //     const response = await MeParqueoApi.get<PaginationResponse>(
-  //       `/api/v1/user/recently/stored/parkings?limit=10&page=1`,
-  //     )
-  //     console.log('paginación ', response.data.data.data)
-  //   } catch (error) {
-  //     console.log('error en la paginacion', error)
-  //   }
-  // }
 
   useEffect(() => {
     checkUserUuid()

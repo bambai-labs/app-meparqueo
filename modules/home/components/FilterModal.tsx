@@ -7,7 +7,6 @@ import {
 import { HStack } from '@/components/ui/hstack'
 import { Switch } from '@/components/ui/switch'
 import { VStack } from '@/components/ui/vstack'
-import { useEffect } from 'react'
 import Modal from 'react-native-modal'
 import { FilterModalValues } from '../types'
 
@@ -26,15 +25,14 @@ export const FilterModal = ({
   handleSwitchChange,
   handleSubmit,
 }: Props) => {
-  useEffect(() => {
-    console.log('modal values', values)
-  })
-
   return (
     <Modal
       isVisible={opened}
       onBackdropPress={onCancel}
       onBackButtonPress={onCancel}
+      useNativeDriver={true}
+      avoidKeyboard={true}
+      propagateSwipe={true}
     >
       <VStack className="bg-white p-5 rounded-xl">
         <FormControl>
