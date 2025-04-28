@@ -83,6 +83,8 @@ export const SearchScreen = () => {
     const destinationLat = currentParking?.latitude
     const destinationLon = currentParking?.longitude
 
+    saveRecentParking()
+
     if (Platform.OS === 'ios') {
       const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
       const appleMapsFallback = `http://maps.apple.com/?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
@@ -108,7 +110,6 @@ export const SearchScreen = () => {
     } else {
       Linking.openURL(fallbackURL)
     }
-    saveRecentParking()
   }
 
   const saveRecentParking = async () => {
