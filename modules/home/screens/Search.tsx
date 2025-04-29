@@ -19,7 +19,7 @@ import {
   FilterModal,
   ParkingDetailsSheet,
   ParkingLotsMap,
-  ParkingResultCard,
+  ParkingResultsList,
   ReportModal,
   SearchBar,
 } from '../components'
@@ -333,12 +333,16 @@ export const SearchScreen = () => {
           />
 
           <Box className="absolute bottom-5 right-0 w-full px-2">
-            {currentParking && (
+            {/* {currentParking && (
               <ParkingResultCard
                 parkingLot={currentParking}
                 onPress={handleParkingCardPress}
               />
-            )}
+            )} */}
+            <ParkingResultsList
+              parkingLots={parkingLots}
+              onParkingLotPress={handleParkingCardPress}
+            />
           </Box>
         </Box>
       </VStack>

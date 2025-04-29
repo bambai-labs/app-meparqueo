@@ -1,3 +1,4 @@
+import { Box } from '@/components/ui/box'
 import React from 'react'
 import { FlatList } from 'react-native'
 import { ParkingLot } from '../types'
@@ -21,6 +22,7 @@ export const ParkingResultsList = ({
       keyExtractor={(item) => item.id}
       horizontal={true}
       showsHorizontalScrollIndicator={true}
+      ItemSeparatorComponent={() => <Box className="w-3" />}
     />
   )
 }
