@@ -18,11 +18,18 @@ interface Props {
   onCallParkingLot: () => void
   onOpenMapDirection: () => void
   onShowReportModal: () => void
+  onChange?: (index: number) => void
 }
 
 export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
   (
-    { parkingLot, onCallParkingLot, onOpenMapDirection, onShowReportModal },
+    {
+      parkingLot,
+      onCallParkingLot,
+      onOpenMapDirection,
+      onShowReportModal,
+      onChange,
+    },
     ref,
   ) => {
     const services = useMemo(() => {
@@ -39,6 +46,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         enablePanDownToClose={true}
         index={-1}
         snapPoints={['50%', '80%']}
+        onChange={onChange}
       >
         <BottomSheetView className="px-6 pb-4">
           <ScrollView>

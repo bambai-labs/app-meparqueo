@@ -1,5 +1,6 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
-import { CITY_CENTER, useAppSelector } from '@/modules/common'
+import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
+import { setIsSheetExpanded } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { useEffect, useRef, useState } from 'react'
@@ -7,6 +8,7 @@ import { Alert, Linking, Platform } from 'react-native'
 import { ParkingLot } from '../types'
 
 export const useAllParkingLots = () => {
+  const dispatch = useAppDispatch()
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const { deviceLocation } = useAppSelector((state) => state.location)
@@ -115,6 +117,10 @@ export const useAllParkingLots = () => {
     setIsReportModalOpen(true)
   }
 
+  const handleSheetChange = (index: number) => {
+    dispatch(setIsSheetExpanded(index > -1))
+  }
+
   useEffect(() => {
     fetchAllParkingLots()
   })
@@ -133,5 +139,6 @@ export const useAllParkingLots = () => {
     hideReportModal,
     openMapDirection,
     callParkingLot,
+    handleSheetChange,
   }
 }

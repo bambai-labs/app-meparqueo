@@ -5,7 +5,7 @@ import { HStack } from '@/components/ui/hstack'
 import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
 import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
-import { onChangeQuery, searchPlace } from '@/store'
+import { onChangeQuery, searchPlace, setIsSheetExpanded } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
@@ -34,7 +34,6 @@ export const SearchScreen = () => {
     undefined,
   )
   const [mapLoaded, setMapLoaded] = useState(false)
-
   const [isFocused, setIsFocused] = useState(false)
 
   const { parkingLots, searchNearParkingLots } = useSearchParkingLots()
@@ -61,6 +60,10 @@ export const SearchScreen = () => {
 
   const openBottomSheet = () => {
     bottomSheetRef.current?.expand()
+  }
+
+  const handleSheetChange = (index: number) => {
+    dispatch(setIsSheetExpanded(index > -1))
   }
 
   const openMapDirection = async () => {
@@ -338,34 +341,35 @@ export const SearchScreen = () => {
             )}
           </Box>
         </Box>
-
-        {currentParking && (
-          <ParkingDetailsSheet
-            ref={bottomSheetRef}
-            parkingLot={currentParking}
-            onCallParkingLot={callParkingLot}
-            onOpenMapDirection={openMapDirection}
-            onShowReportModal={showReportModal}
-          />
-        )}
-
-        {currentParking && (
-          <ReportModal
-            parkingLot={currentParking}
-            opened={isReportModalOpen}
-            onCancel={hideReportModal}
-            onConfirm={hideReportModal}
-          />
-        )}
-
-        <FilterModal
-          values={values}
-          handleSwitchChange={handleSwitchChange}
-          handleSubmit={handleSubmit}
-          opened={isFilterModalOpen}
-          onCancel={hideFilterModal}
-        />
       </VStack>
+
+      {currentParking && (
+        <ParkingDetailsSheet
+          ref={bottomSheetRef}
+          parkingLot={currentParking}
+          onCallParkingLot={callParkingLot}
+          onOpenMapDirection={openMapDirection}
+          onShowReportModal={showReportModal}
+          onChange={handleSheetChange}
+        />
+      )}
+
+      <FilterModal
+        values={values}
+        handleSwitchChange={handleSwitchChange}
+        handleSubmit={handleSubmit}
+        opened={isFilterModalOpen}
+        onCancel={hideFilterModal}
+      />
+
+      {currentParking && (
+        <ReportModal
+          parkingLot={currentParking}
+          opened={isReportModalOpen}
+          onCancel={hideReportModal}
+          onConfirm={hideReportModal}
+        />
+      )}
     </GestureHandlerRootView>
   )
 }

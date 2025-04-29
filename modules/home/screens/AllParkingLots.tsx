@@ -24,6 +24,7 @@ export const AllParkingLotsScreen = () => {
     showReportModal,
     callParkingLot,
     openMapDirection,
+    handleSheetChange,
   } = useAllParkingLots()
 
   return (
@@ -59,6 +60,7 @@ export const AllParkingLotsScreen = () => {
             onCallParkingLot={callParkingLot}
             onOpenMapDirection={openMapDirection}
             onShowReportModal={showReportModal}
+            onChange={handleSheetChange}
           />
         )}
 
