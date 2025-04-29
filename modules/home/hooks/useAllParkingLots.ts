@@ -43,7 +43,7 @@ export const useAllParkingLots = () => {
   ) => {
     cameraRef.current?.setCamera({
       centerCoordinate: position,
-      zoomLevel: 14,
+      zoomLevel: 17,
       heading: 0,
       animationDuration: animated ? 1000 : 0,
     })

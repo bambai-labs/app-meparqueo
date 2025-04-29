@@ -248,10 +248,11 @@ export const SearchScreen = () => {
   const setCameraPosition = (
     position: [number, number],
     animated: boolean = true,
+    zoomLevel: number = 17,
   ) => {
     cameraRef.current?.setCamera({
       centerCoordinate: position,
-      zoomLevel: 14,
+      zoomLevel,
       heading: 0,
       animationDuration: animated ? 1000 : 0,
     })
@@ -335,7 +336,7 @@ export const SearchScreen = () => {
             currentDestination={currentDestination}
             parkingLots={parkingLots}
             onFinishLoading={() => {
-              setCameraPosition(CITY_CENTER, false)
+              setCameraPosition(CITY_CENTER, false, 14)
               setMapLoaded(true)
             }}
             onParkingMarkerPress={handleParkingMarkerPress}
