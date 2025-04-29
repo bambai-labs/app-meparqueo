@@ -35,23 +35,9 @@ export const SearchScreen = () => {
   )
   const [mapLoaded, setMapLoaded] = useState(false)
 
-  const [reportModalOpen, setReportModalOpen] = useState(false)
-
   const [isFocused, setIsFocused] = useState(false)
 
-  const openReportModal = () => {
-    setReportModalOpen(true)
-  }
-
-  const closeReportModal = () => {
-    setReportModalOpen(false)
-  }
-
-  const {
-    loading: parkingLoading,
-    parkingLots,
-    searchNearParkingLots,
-  } = useSearchParkingLots()
+  const { parkingLots, searchNearParkingLots } = useSearchParkingLots()
 
   const [currentDestination, setCurrentDestination] = useState<Place | null>(
     null,
