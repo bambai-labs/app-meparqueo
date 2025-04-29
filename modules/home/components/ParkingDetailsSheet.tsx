@@ -28,7 +28,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
       onCallParkingLot,
       onOpenMapDirection,
       onShowReportModal,
-      onChange,
+      onChange = () => {},
     },
     ref,
   ) => {

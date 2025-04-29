@@ -36,8 +36,8 @@ export const useHome = () => {
   const openMapDirection = async () => {
     const currentLat = deviceLocation?.[1]
     const currentLon = deviceLocation?.[0]
-    const destinationLat = 8.7985081
-    const destinationLon = -75.7149219
+    const destinationLat = currentParking?.latitude
+    const destinationLon = currentParking?.longitude
 
     if (Platform.OS === 'ios') {
       const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
