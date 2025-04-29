@@ -11,6 +11,7 @@ import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useFormik } from 'formik'
+import debounce from 'just-debounce-it'
 import { ChevronDown } from 'lucide-react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
@@ -252,6 +253,10 @@ export const SearchScreen = () => {
     setCameraPosition([parkingLot.longitude, parkingLot.latitude])
   }
 
+  const handleOnParkingListScroll = (parkingLot: ParkingLot) => {
+    handleParkingMarkerPress(parkingLot)
+  }
+
   useEffect(() => {
     if (place && mapLoaded) {
       const placeFromParams = JSON.parse(place as string) as Place
@@ -342,6 +347,7 @@ export const SearchScreen = () => {
             <ParkingResultsList
               parkingLots={parkingLots}
               onParkingLotPress={handleParkingCardPress}
+              onScroll={debounce(handleOnParkingListScroll, 500)}
             />
           </Box>
         </Box>
