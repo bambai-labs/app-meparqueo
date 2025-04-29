@@ -1,5 +1,5 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
-import { useAppSelector } from '@/modules/common'
+import { CITY_CENTER, useAppSelector } from '@/modules/common'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { useEffect, useRef, useState } from 'react'
@@ -17,13 +17,12 @@ export const useAllParkingLots = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
   const handleMapFinishLoading = () => {
-    deviceLocation &&
-      cameraRef.current?.setCamera({
-        centerCoordinate: deviceLocation,
-        zoomLevel: 14,
-        heading: 0,
-        animationDuration: 0,
-      })
+    cameraRef.current?.setCamera({
+      centerCoordinate: CITY_CENTER,
+      zoomLevel: 14,
+      heading: 0,
+      animationDuration: 0,
+    })
   }
 
   const fetchAllParkingLots = async () => {

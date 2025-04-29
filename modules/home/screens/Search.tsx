@@ -4,7 +4,7 @@ import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
-import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
 import { onChangeQuery, searchPlace } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
@@ -335,7 +335,7 @@ export const SearchScreen = () => {
             currentDestination={currentDestination}
             parkingLots={parkingLots}
             onFinishLoading={() => {
-              setCameraPosition(deviceLocation!, false)
+              setCameraPosition(CITY_CENTER, false)
               setMapLoaded(true)
             }}
             onParkingMarkerPress={handleParkingMarkerPress}
