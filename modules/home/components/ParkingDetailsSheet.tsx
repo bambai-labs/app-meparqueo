@@ -1,7 +1,7 @@
 import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { Icon } from '@/components/ui/icon'
+import { ChevronDownIcon, Icon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
@@ -47,6 +47,11 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         index={-1}
         snapPoints={['50%', '80%']}
         onChange={onChange}
+        handleComponent={() => (
+          <HStack className="items-center justify-center w-full">
+            <Icon as={ChevronDownIcon} className="w-9 h-9" />
+          </HStack>
+        )}
       >
         <BottomSheetView className="px-6 pb-4">
           <ScrollView>
