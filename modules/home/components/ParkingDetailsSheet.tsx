@@ -42,10 +42,8 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
 
     const windowHeight = Dimensions.get('window').height
 
-    // Calcular los snapPoints basados en la altura de la pantalla
     const snapPoints = useMemo(() => ['50%', '85%'], [windowHeight])
 
-    // Renderizado optimizado del contenido
     const renderContent = useCallback(() => {
       return (
         <View style={styles.contentContainer}>
@@ -163,12 +161,14 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
             </VStack>
           </HStack>
 
-          <Text
-            style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="mt-3 text-xl font-bold"
-          >
-            Servicios adicionales
-          </Text>
+          {services.length !== 0 && (
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="mt-3 text-xl font-bold"
+            >
+              Servicios adicionales
+            </Text>
+          )}
 
           <HStack>
             <Text
@@ -179,12 +179,14 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
             </Text>
           </HStack>
 
-          <Text
-            style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="mt-3 text-xl font-bold"
-          >
-            Métodos de pago
-          </Text>
+          {paymentMethods.length !== 0 && (
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="mt-3 text-xl font-bold"
+            >
+              Métodos de pago
+            </Text>
+          )}
 
           <Text
             style={{ fontFamily: 'Neuwelt-Bold' }}
