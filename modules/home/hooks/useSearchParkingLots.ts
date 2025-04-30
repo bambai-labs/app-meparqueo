@@ -1,6 +1,7 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
 import { setParkingLots } from '@/store'
+import { isAxiosError } from 'axios'
 import { useState } from 'react'
 import { ParkingLotAvailability, PaymentMethod } from '../types'
 
@@ -12,7 +13,7 @@ export const useSearchParkingLots = () => {
   const searchNearParkingLots = async (
     latitude: number,
     longitude: number,
-    radiusKm: string = '5',
+    radiusMt: string = '300',
     onlyAvailableParkingLots: boolean = false,
     onlyTransferPayment: boolean = false,
     onlyValetParking: boolean = false,
@@ -24,7 +25,7 @@ export const useSearchParkingLots = () => {
       const params: Record<string, any> = {
         lat: latitude,
         lng: longitude,
-        radiusKm,
+        radiusMt,
       }
 
       if (onlyAvailableParkingLots) {
@@ -53,6 +54,11 @@ export const useSearchParkingLots = () => {
 
       dispatch(setParkingLots(response.data.data))
     } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data)
+        return
+      }
+
       console.log(error)
     } finally {
       setLoading(false)

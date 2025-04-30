@@ -20,6 +20,7 @@ import {
   FilterModal,
   ParkingDetailsSheet,
   ParkingLotsMap,
+  ParkingResultCard,
   ParkingResultsList,
   ReportModal,
   SearchBar,
@@ -162,7 +163,7 @@ export const SearchScreen = () => {
 
   const { values, handleSubmit, setFieldValue } = useFormik<FilterModalValues>({
     initialValues: {
-      radiusKm: 5,
+      radiusMt: 300,
       onlyAvailable: false,
       paymentTransfer: false,
       valetParking: false,
@@ -183,7 +184,7 @@ export const SearchScreen = () => {
       searchNearParkingLots(
         currentDestination.location.latitude,
         currentDestination.location.longitude,
-        values.radiusKm.toString(),
+        values.radiusMt.toString(),
         values.onlyAvailable,
         values.paymentTransfer,
         values.valetParking,
@@ -200,7 +201,7 @@ export const SearchScreen = () => {
     searchNearParkingLots(
       place.location.latitude,
       place.location.longitude,
-      values.radiusKm.toString(),
+      values.radiusMt.toString(),
       values.onlyAvailable,
       values.paymentTransfer,
       values.valetParking,
@@ -264,7 +265,7 @@ export const SearchScreen = () => {
       searchNearParkingLots(
         placeFromParams.location.latitude,
         placeFromParams.location.longitude,
-        values.radiusKm.toString(),
+        values.radiusMt.toString(),
         values.onlyAvailable,
         values.paymentTransfer,
         values.valetParking,
@@ -344,11 +345,21 @@ export const SearchScreen = () => {
                 onPress={handleParkingCardPress}
               />
             )} */}
-            <ParkingResultsList
-              parkingLots={parkingLots}
-              onParkingLotPress={handleParkingCardPress}
-              onScroll={debounce(handleOnParkingListScroll, 500)}
-            />
+
+            {parkingLots.length === 1 ? (
+              currentParking && (
+                <ParkingResultCard
+                  parkingLot={currentParking}
+                  onPress={handleParkingCardPress}
+                />
+              )
+            ) : (
+              <ParkingResultsList
+                parkingLots={parkingLots}
+                onParkingLotPress={handleParkingCardPress}
+                onScroll={debounce(handleOnParkingListScroll, 500)}
+              />
+            )}
           </Box>
         </Box>
       </VStack>
