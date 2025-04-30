@@ -10,7 +10,7 @@ export interface ParkingLot {
   paymentMethods: PaymentMethod[]
   services: Service[]
   phoneNumber: string
-  distanceKm: number | null
+  distanceMt: number | null
   address: string
   reportsCount: number
 }

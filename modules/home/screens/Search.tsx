@@ -112,7 +112,7 @@ export const SearchScreen = () => {
           longitude: currentDestination?.location.longitude,
           searchTerm: query,
         },
-        distanceKm: currentParking?.distanceKm,
+        distanceMt: currentParking?.distanceMt,
       })
 
       console.log('Parking destination saved')
@@ -190,6 +190,7 @@ export const SearchScreen = () => {
         values.valetParking,
         values.twentyFourSeven,
       )
+      saveDestination()
     }
 
     hideFilterModal()
@@ -213,10 +214,8 @@ export const SearchScreen = () => {
   const saveDestination = async () => {
     try {
       await MeParqueoApi.post('/api/v1/user/search', {
-        filter: {
-          availability: [],
-          services: [],
-          paymentMethods: [],
+        filters: {
+          ...values,
         },
         destinationLocation: {
           latitude: currentDestination?.location.latitude,

@@ -1,11 +1,11 @@
 import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { ChevronDownIcon, Icon } from '@/components/ui/icon'
+import { AlertCircleIcon, Icon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { AlertCircleIcon, MapIcon, PhoneIcon } from 'lucide-react-native'
+import { ChevronsDown, MapIcon, PhoneIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { forwardRef, useMemo } from 'react'
 import { ScrollView, Text, View } from 'react-native'
@@ -49,7 +49,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         onChange={onChange}
         handleComponent={() => (
           <HStack className="items-center justify-center w-full">
-            <Icon as={ChevronDownIcon} className="w-9 h-9" />
+            <Icon as={ChevronsDown} className="w-9 h-9" />
           </HStack>
         )}
       >
@@ -121,21 +121,23 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
             />
 
             <HStack className="w-full justify-evenly mt-3">
-              <VStack className="items-center">
-                <Button
-                  onPress={onCallParkingLot}
-                  size="xl"
-                  className="w-16 h-16 rounded-xl"
-                >
-                  <Icon as={PhoneIcon} size="xl" color="white" />
-                </Button>
-                <Text
-                  style={{ fontFamily: 'Neuwelt-Bold' }}
-                  className="mt-2 text-gray-600"
-                >
-                  Llamar
-                </Text>
-              </VStack>
+              {parkingLot.phoneNumber?.length === 10 && (
+                <VStack className="items-center">
+                  <Button
+                    onPress={onCallParkingLot}
+                    size="xl"
+                    className="w-16 h-16 rounded-xl"
+                  >
+                    <Icon as={PhoneIcon} size="xl" color="white" />
+                  </Button>
+                  <Text
+                    style={{ fontFamily: 'Neuwelt-Bold' }}
+                    className="mt-2 text-gray-600"
+                  >
+                    Llamar
+                  </Text>
+                </VStack>
+              )}
 
               <VStack className="items-center">
                 <Button

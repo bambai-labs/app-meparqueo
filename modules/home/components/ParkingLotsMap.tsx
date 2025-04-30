@@ -79,12 +79,12 @@ const ParkingMarker = ({
             />
 
             <VStack className="bg-white p-1 rounded-xl items-center">
-              {parkingResult.distanceKm && (
+              {parkingResult.distanceMt && (
                 <Text
                   style={{ fontFamily: 'Neuwelt-Light' }}
                   className="text-[12px]"
                 >
-                  {parkingResult.distanceKm} km
+                  {parkingResult.distanceMt} m
                 </Text>
               )}
               <Text
