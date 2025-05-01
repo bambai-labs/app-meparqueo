@@ -4,14 +4,16 @@ import { Button, ButtonText } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
 import { Icon } from '@/components/ui/icon'
 import { VStack } from '@/components/ui/vstack'
-import { useAppDispatch, useAppSelector } from '@/modules/common'
-import { onChangeQuery, searchPlace } from '@/store'
+import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
+import { onChangeQuery, searchPlace, setIsSheetExpanded } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useFormik } from 'formik'
+import debounce from 'just-debounce-it'
 import { ChevronDown } from 'lucide-react-native'
+import Carousel from 'pinar'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -20,6 +22,7 @@ import {
   ParkingDetailsSheet,
   ParkingLotsMap,
   ParkingResultCard,
+  ParkingResultsList,
   ReportModal,
   SearchBar,
 } from '../components'
@@ -29,29 +32,15 @@ import { FilterModalValues, ParkingLot } from '../types'
 export const SearchScreen = () => {
   const { place } = useLocalSearchParams()
   const cameraRef = useRef<Camera>(null)
+  const carouselRef = useRef<Carousel>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
   const [mapLoaded, setMapLoaded] = useState(false)
-
-  const [reportModalOpen, setReportModalOpen] = useState(false)
-
   const [isFocused, setIsFocused] = useState(false)
 
-  const openReportModal = () => {
-    setReportModalOpen(true)
-  }
-
-  const closeReportModal = () => {
-    setReportModalOpen(false)
-  }
-
-  const {
-    loading: parkingLoading,
-    parkingLots,
-    searchNearParkingLots,
-  } = useSearchParkingLots()
+  const { parkingLots, searchNearParkingLots } = useSearchParkingLots()
 
   const [currentDestination, setCurrentDestination] = useState<Place | null>(
     null,
@@ -75,6 +64,10 @@ export const SearchScreen = () => {
 
   const openBottomSheet = () => {
     bottomSheetRef.current?.expand()
+  }
+
+  const handleSheetChange = (index: number) => {
+    dispatch(setIsSheetExpanded(index > -1))
   }
 
   const openMapDirection = async () => {
@@ -121,7 +114,7 @@ export const SearchScreen = () => {
           longitude: currentDestination?.location.longitude,
           searchTerm: query,
         },
-        distanceKm: currentParking?.distanceKm,
+        distanceMt: currentParking?.distanceMt,
       })
 
       console.log('Parking destination saved')
@@ -172,7 +165,7 @@ export const SearchScreen = () => {
 
   const { values, handleSubmit, setFieldValue } = useFormik<FilterModalValues>({
     initialValues: {
-      radiusKm: 5,
+      radiusMt: 300,
       onlyAvailable: false,
       paymentTransfer: false,
       valetParking: false,
@@ -193,12 +186,13 @@ export const SearchScreen = () => {
       searchNearParkingLots(
         currentDestination.location.latitude,
         currentDestination.location.longitude,
-        values.radiusKm.toString(),
+        values.radiusMt.toString(),
         values.onlyAvailable,
         values.paymentTransfer,
         values.valetParking,
         values.twentyFourSeven,
       )
+      saveDestination()
     }
 
     hideFilterModal()
@@ -210,7 +204,7 @@ export const SearchScreen = () => {
     searchNearParkingLots(
       place.location.latitude,
       place.location.longitude,
-      values.radiusKm.toString(),
+      values.radiusMt.toString(),
       values.onlyAvailable,
       values.paymentTransfer,
       values.valetParking,
@@ -222,10 +216,8 @@ export const SearchScreen = () => {
   const saveDestination = async () => {
     try {
       await MeParqueoApi.post('/api/v1/user/search', {
-        filter: {
-          availability: [],
-          services: [],
-          paymentMethods: [],
+        filters: {
+          ...values,
         },
         destinationLocation: {
           latitude: currentDestination?.location.latitude,
@@ -248,10 +240,11 @@ export const SearchScreen = () => {
   const setCameraPosition = (
     position: [number, number],
     animated: boolean = true,
+    zoomLevel: number = 17,
   ) => {
     cameraRef.current?.setCamera({
       centerCoordinate: position,
-      zoomLevel: 14,
+      zoomLevel,
       heading: 0,
       animationDuration: animated ? 1000 : 0,
     })
@@ -262,6 +255,10 @@ export const SearchScreen = () => {
     setCameraPosition([parkingLot.longitude, parkingLot.latitude])
   }
 
+  const handleOnParkingListScroll = (parkingLot: ParkingLot) => {
+    handleParkingMarkerPress(parkingLot)
+  }
+
   useEffect(() => {
     if (place && mapLoaded) {
       const placeFromParams = JSON.parse(place as string) as Place
@@ -269,7 +266,7 @@ export const SearchScreen = () => {
       searchNearParkingLots(
         placeFromParams.location.latitude,
         placeFromParams.location.longitude,
-        values.radiusKm.toString(),
+        values.radiusMt.toString(),
         values.onlyAvailable,
         values.paymentTransfer,
         values.valetParking,
@@ -335,30 +332,37 @@ export const SearchScreen = () => {
             currentDestination={currentDestination}
             parkingLots={parkingLots}
             onFinishLoading={() => {
-              setCameraPosition(deviceLocation!, false)
+              setCameraPosition(CITY_CENTER, false, 14)
               setMapLoaded(true)
             }}
-            onParkingMarkerPress={handleParkingMarkerPress}
+            onParkingMarkerPress={(parkingLot) => {
+              handleParkingMarkerPress(parkingLot)
+              carouselRef.current?.scrollToIndex({
+                index: parkingLots.indexOf(parkingLot),
+                animated: true,
+              })
+            }}
             ref={cameraRef}
           />
 
           <Box className="absolute bottom-5 right-0 w-full px-2">
-            {currentParking && (
-              <ParkingResultCard
-                parkingLot={currentParking}
-                onPress={handleParkingCardPress}
+            {parkingLots.length === 1 ? (
+              currentParking && (
+                <ParkingResultCard
+                  parkingLot={currentParking}
+                  onPress={handleParkingCardPress}
+                />
+              )
+            ) : (
+              <ParkingResultsList
+                ref={carouselRef}
+                parkingLots={parkingLots}
+                onParkingLotPress={handleParkingCardPress}
+                onScroll={debounce(handleOnParkingListScroll, 500)}
               />
             )}
           </Box>
         </Box>
-        {currentParking && (
-          <ReportModal
-            parkingLot={currentParking}
-            opened={isReportModalOpen}
-            onCancel={hideReportModal}
-            onConfirm={hideReportModal}
-          />
-        )}
       </VStack>
 
       {currentParking && (
@@ -368,6 +372,7 @@ export const SearchScreen = () => {
           onCallParkingLot={callParkingLot}
           onOpenMapDirection={openMapDirection}
           onShowReportModal={showReportModal}
+          onChange={handleSheetChange}
         />
       )}
 
@@ -378,6 +383,15 @@ export const SearchScreen = () => {
         opened={isFilterModalOpen}
         onCancel={hideFilterModal}
       />
+
+      {currentParking && (
+        <ReportModal
+          parkingLot={currentParking}
+          opened={isReportModalOpen}
+          onCancel={hideReportModal}
+          onConfirm={hideReportModal}
+        />
+      )}
     </GestureHandlerRootView>
   )
 }

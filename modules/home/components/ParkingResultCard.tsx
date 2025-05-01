@@ -49,11 +49,11 @@ export const ParkingResultCard = ({
               availability={parkingLot.availability}
             />
 
-            {parkingLot.distanceKm && (
+            {parkingLot.distanceMt && (
               <>
                 <Icon as={MapPin} size="md" />
                 <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
-                  {parkingLot.distanceKm} km
+                  {parkingLot.distanceMt} m
                 </Text>
               </>
             )}

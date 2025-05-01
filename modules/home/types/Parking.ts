@@ -10,7 +10,7 @@ export interface ParkingLot {
   paymentMethods: PaymentMethod[]
   services: Service[]
   phoneNumber: string
-  distanceKm: number | null
+  distanceMt: number | null
   address: string
   reportsCount: number
 }
@@ -87,6 +87,9 @@ export enum Service {
   BIKE_PARKING = 'BIKE_PARKING',
   TIRE_CHANGE = 'TIRE_CHANGE',
   VEHICLE_TUNING = 'VEHICLE_TUNING',
+  MONTHLY_PLAN = 'MONTHLY_PLAN',
+  ADVANCE_RESERVATION = 'ADVANCE_RESERVATION',
+  PHONE_CHARGING = 'PHONE_CHARGING',
 }
 
 export const getServices = (): Service[] => {

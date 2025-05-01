@@ -1,5 +1,5 @@
 export interface FilterModalValues {
-  radiusKm: number
+  radiusMt: number
   onlyAvailable: boolean
   paymentTransfer: boolean
   valetParking: boolean

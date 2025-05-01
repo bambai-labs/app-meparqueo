@@ -29,6 +29,9 @@ export const parseService = (service: Service) => {
     [Service.BIKE_PARKING]: 'Parqueadero para bicicletas',
     [Service.TIRE_CHANGE]: 'Cambio de llantas',
     [Service.VEHICLE_TUNING]: 'Afinamiento básico',
+    [Service.MONTHLY_PLAN]: 'Plan mensual',
+    [Service.ADVANCE_RESERVATION]: 'Reserva anticipada',
+    [Service.PHONE_CHARGING]: 'Carga de celulares',
   }
 
   return mapper[service]

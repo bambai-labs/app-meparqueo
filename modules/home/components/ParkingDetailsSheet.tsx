@@ -1,14 +1,14 @@
 import { Box } from '@/components/ui/box'
 import { Button } from '@/components/ui/button'
 import { HStack } from '@/components/ui/hstack'
-import { Icon } from '@/components/ui/icon'
+import { AlertCircleIcon, Icon } from '@/components/ui/icon'
 import { Image as GluestackImage } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { AlertCircleIcon, MapIcon, PhoneIcon } from 'lucide-react-native'
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet'
+import { ChevronsDown, MapIcon, PhoneIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
-import React, { forwardRef, useMemo } from 'react'
-import { ScrollView, Text, View } from 'react-native'
+import React, { forwardRef, useCallback, useMemo } from 'react'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { ParkingLot } from '../types'
 import { formatCurrency, parsePaymentMethod, parseService } from '../utils'
 import { AvailabilityIndicator } from './AvailabilityIndicator'
@@ -18,11 +18,18 @@ interface Props {
   onCallParkingLot: () => void
   onOpenMapDirection: () => void
   onShowReportModal: () => void
+  onChange?: (index: number) => void
 }
 
 export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
   (
-    { parkingLot, onCallParkingLot, onOpenMapDirection, onShowReportModal },
+    {
+      parkingLot,
+      onCallParkingLot,
+      onOpenMapDirection,
+      onShowReportModal,
+      onChange = () => {},
+    },
     ref,
   ) => {
     const services = useMemo(() => {
@@ -33,81 +40,77 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
       return parkingLot.paymentMethods.map(parsePaymentMethod).join(', ')
     }, [parkingLot])
 
-    return (
-      <BottomSheet
-        ref={ref}
-        enablePanDownToClose={true}
-        index={-1}
-        snapPoints={['50%', '80%']}
-      >
-        <BottomSheetView className="px-6 pb-4">
-          <ScrollView>
-            <Box className="h-96 rounded-2xl overflow-hidden">
-              {parkingLot && (
-                <Carousel
-                  key={parkingLot.id}
-                  autoplay
-                  autoplayInterval={5000}
-                  loop
-                  showsControls={true}
-                  showsDots
-                >
-                  {parkingLot.imageUrls.map((imageUri, index) => (
-                    <View key={imageUri} className="w-full">
-                      <GluestackImage
-                        size="full"
-                        source={{ uri: imageUri }}
-                        alt={`Slide ${index + 1}`}
-                      />
-                    </View>
-                  ))}
-                </Carousel>
-              )}
-            </Box>
+    const windowHeight = Dimensions.get('window').height
 
-            <Text
-              style={{ fontFamily: 'Neuwelt-Bold' }}
-              className="mt-4 text-3xl font-bold"
-            >
-              {parkingLot?.name}
-            </Text>
-            <HStack className="w-full justify-between items-center">
-              <HStack className="items-center">
-                <Text
-                  style={{ fontFamily: 'Neuwelt-Bold' }}
-                  className="text-xl"
-                >
-                  {formatCurrency(parkingLot.price ?? 0)}
-                </Text>
-                <Text
-                  style={{ fontFamily: 'Neuwelt-Bold' }}
-                  className="text-gray-600"
-                >
-                  {' '}
-                  / hora
-                </Text>
-              </HStack>
+    const snapPoints = useMemo(() => ['50%', '85%'], [windowHeight])
 
-              <HStack space="sm">
-                <Text
-                  style={{ fontFamily: 'Neuwelt-Bold' }}
-                  className="font-bold"
-                >
-                  {parkingLot.reportsCount}
-                </Text>
-                <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
-                  Reportes este mes
-                </Text>
-              </HStack>
+    const renderContent = useCallback(() => {
+      return (
+        <View style={styles.contentContainer}>
+          <Box className="h-80 rounded-2xl overflow-hidden">
+            {parkingLot && (
+              <Carousel
+                key={parkingLot.id}
+                autoplay
+                autoplayInterval={5000}
+                loop
+                showsControls={true}
+                showsDots
+              >
+                {parkingLot.imageUrls.map((imageUri, index) => (
+                  <View key={imageUri} className="w-full">
+                    <GluestackImage
+                      size="full"
+                      source={{ uri: imageUri }}
+                      alt={`Slide ${index + 1}`}
+                    />
+                  </View>
+                ))}
+              </Carousel>
+            )}
+          </Box>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="mt-4 text-3xl font-bold"
+          >
+            {parkingLot?.name}
+          </Text>
+          <HStack className="w-full justify-between items-center">
+            <HStack className="items-center">
+              <Text style={{ fontFamily: 'Neuwelt-Bold' }} className="text-xl">
+                {formatCurrency(parkingLot.price ?? 0)}
+              </Text>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="text-gray-600"
+              >
+                {' '}
+                / hora
+              </Text>
             </HStack>
 
-            <AvailabilityIndicator
-              className="mt-2"
-              availability={parkingLot.availability}
-              status={parkingLot.status}
-            />
+            <HStack space="sm">
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="font-bold"
+              >
+                {parkingLot.reportsCount}
+              </Text>
+              <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
+                Reportes este mes
+              </Text>
+            </HStack>
+          </HStack>
 
-            <HStack className="w-full justify-evenly mt-3">
+          <AvailabilityIndicator
+            className="mt-2"
+            availability={parkingLot.availability}
+            status={parkingLot.status}
+          />
+
+          <HStack className="w-full justify-evenly mt-3">
+            {parkingLot.phoneNumber?.length === 10 && (
               <VStack className="items-center">
                 <Button
                   onPress={onCallParkingLot}
@@ -123,72 +126,117 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
                   Llamar
                 </Text>
               </VStack>
+            )}
 
-              <VStack className="items-center">
-                <Button
-                  onPress={onOpenMapDirection}
-                  size="xl"
-                  className="w-16 h-16 rounded-xl"
-                >
-                  <Icon as={MapIcon} size="xl" color="white" />
-                </Button>
-                <Text
-                  style={{ fontFamily: 'Neuwelt-Bold' }}
-                  className="mt-2 text-gray-600"
-                >
-                  Trazar ruta
-                </Text>
-              </VStack>
+            <VStack className="items-center">
+              <Button
+                onPress={onOpenMapDirection}
+                size="xl"
+                className="w-16 h-16 rounded-xl"
+              >
+                <Icon as={MapIcon} size="xl" color="white" />
+              </Button>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="mt-2 text-gray-600"
+              >
+                Trazar ruta
+              </Text>
+            </VStack>
 
-              <VStack className="items-center">
-                <Button
-                  onPress={onShowReportModal}
-                  size="xl"
-                  className="w-16 h-16 rounded-xl"
-                >
-                  <Icon as={AlertCircleIcon} size="xl" color="white" />
-                </Button>
-                <Text
-                  style={{ fontFamily: 'Neuwelt-Bold' }}
-                  className="mt-2 text-gray-600"
-                >
-                  Reportar
-                </Text>
-              </VStack>
-            </HStack>
+            <VStack className="items-center">
+              <Button
+                onPress={onShowReportModal}
+                size="xl"
+                className="w-16 h-16 rounded-xl"
+              >
+                <Icon as={AlertCircleIcon} size="xl" color="white" />
+              </Button>
+              <Text
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                className="mt-2 text-gray-600"
+              >
+                Reportar
+              </Text>
+            </VStack>
+          </HStack>
 
+          {services.length !== 0 && (
             <Text
               style={{ fontFamily: 'Neuwelt-Bold' }}
               className="mt-3 text-xl font-bold"
             >
               Servicios adicionales
             </Text>
+          )}
 
-            <HStack>
-              <Text
-                style={{ fontFamily: 'Neuwelt-Bold' }}
-                className="text-gray-600 text-xl"
-              >
-                {services}
-              </Text>
-            </HStack>
+          <HStack>
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="text-gray-600 text-xl"
+            >
+              {services}
+            </Text>
+          </HStack>
 
+          {paymentMethods.length !== 0 && (
             <Text
               style={{ fontFamily: 'Neuwelt-Bold' }}
               className="mt-3 text-xl font-bold"
             >
               Métodos de pago
             </Text>
+          )}
 
-            <Text
-              style={{ fontFamily: 'Neuwelt-Bold' }}
-              className="text-gray-600 text-xl"
-            >
-              {paymentMethods}
-            </Text>
-          </ScrollView>
-        </BottomSheetView>
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="text-gray-600 text-xl mb-8"
+          >
+            {paymentMethods}
+          </Text>
+        </View>
+      )
+    }, [
+      parkingLot,
+      services,
+      paymentMethods,
+      onCallParkingLot,
+      onOpenMapDirection,
+      onShowReportModal,
+    ])
+
+    return (
+      <BottomSheet
+        ref={ref}
+        enablePanDownToClose={true}
+        index={-1}
+        snapPoints={snapPoints}
+        onChange={onChange}
+        handleComponent={() => (
+          <HStack className="items-center justify-center w-full">
+            <Icon as={ChevronsDown} className="w-9 h-9" />
+          </HStack>
+        )}
+        style={{
+          backgroundColor: '#f3f4f6',
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+        }}
+      >
+        <BottomSheetScrollView contentContainerStyle={styles.scrollViewContent}>
+          {renderContent()}
+        </BottomSheetScrollView>
       </BottomSheet>
     )
   },
 )
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    padding: 24,
+    paddingBottom: 100, // Padding adicional en la parte inferior
+  },
+  scrollViewContent: {
+    flexGrow: 1,
+  },
+})

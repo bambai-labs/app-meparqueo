@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { bottomSheetSlice } from './bottomsheet'
 import { counterSlice } from './counter'
 import { locationSlice } from './location'
 import { parkingSlice } from './parking'
@@ -10,6 +11,7 @@ export const store = configureStore({
     location: locationSlice.reducer,
     parking: parkingSlice.reducer,
     search: searchSlice.reducer,
+    bottomsheet: bottomSheetSlice.reducer,
   },
 })
 
