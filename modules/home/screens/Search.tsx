@@ -13,6 +13,7 @@ import { Stack, useLocalSearchParams } from 'expo-router'
 import { useFormik } from 'formik'
 import debounce from 'just-debounce-it'
 import { ChevronDown } from 'lucide-react-native'
+import Carousel from 'pinar'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -31,6 +32,7 @@ import { FilterModalValues, ParkingLot } from '../types'
 export const SearchScreen = () => {
   const { place } = useLocalSearchParams()
   const cameraRef = useRef<Camera>(null)
+  const carouselRef = useRef<Carousel>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
@@ -333,18 +335,17 @@ export const SearchScreen = () => {
               setCameraPosition(CITY_CENTER, false, 14)
               setMapLoaded(true)
             }}
-            onParkingMarkerPress={handleParkingMarkerPress}
+            onParkingMarkerPress={(parkingLot) => {
+              handleParkingMarkerPress(parkingLot)
+              carouselRef.current?.scrollToIndex({
+                index: parkingLots.indexOf(parkingLot),
+                animated: true,
+              })
+            }}
             ref={cameraRef}
           />
 
           <Box className="absolute bottom-5 right-0 w-full px-2">
-            {/* {currentParking && (
-              <ParkingResultCard
-                parkingLot={currentParking}
-                onPress={handleParkingCardPress}
-              />
-            )} */}
-
             {parkingLots.length === 1 ? (
               currentParking && (
                 <ParkingResultCard
@@ -354,6 +355,7 @@ export const SearchScreen = () => {
               )
             ) : (
               <ParkingResultsList
+                ref={carouselRef}
                 parkingLots={parkingLots}
                 onParkingLotPress={handleParkingCardPress}
                 onScroll={debounce(handleOnParkingListScroll, 500)}
