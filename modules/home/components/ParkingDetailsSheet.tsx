@@ -217,6 +217,11 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
             <Icon as={ChevronsDown} className="w-9 h-9" />
           </HStack>
         )}
+        style={{
+          backgroundColor: '#f3f4f6',
+          borderTopLeftRadius: 50,
+          borderTopRightRadius: 50,
+        }}
       >
         <BottomSheetScrollView contentContainerStyle={styles.scrollViewContent}>
           {renderContent()}
