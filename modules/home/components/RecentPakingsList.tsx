@@ -3,14 +3,21 @@ import { ActivityIndicator, FlatList, Text, View } from 'react-native'
 import { useParkingPagination } from '../hooks/'
 import { ParkingLot } from '../types'
 import { RecentParkingCard } from './RecentParkingCard'
+import { SponsorsCard } from './SponsorsCard'
 
 interface Props {
   onCardPress: (parkingLot: ParkingLot) => void
 }
 
 export const RecentParkingsList = ({ onCardPress }: Props) => {
-  const { recentParkings, loading, hasMore, fetchParkings, refreshParkings } =
-    useParkingPagination()
+  const {
+    recentParkings,
+    loading,
+    hasMore,
+    fetchParkings,
+    refreshParkings,
+    sponsors,
+  } = useParkingPagination()
 
   const handleEndReached = () => {
     if (!loading && hasMore) {
@@ -55,16 +62,14 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
     }
 
     return (
-      <View className="flex-1 items-center justify-center mt-12">
-        <Text
-          className="text-lg text-gray-500"
-          style={{
-            fontFamily: 'Neuwelt-Light',
-          }}
-        >
-          No se encontraron parqueaderos
+      <>
+        <Text className="text-center text-gray-500 text-base">
+          Encuentra parqueadero en el centro de Montería
         </Text>
-      </View>
+        <View className="flex-1 items-center justify-center mt-4">
+          <SponsorsCard sponsors={sponsors} />
+        </View>
+      </>
     )
   }
 
