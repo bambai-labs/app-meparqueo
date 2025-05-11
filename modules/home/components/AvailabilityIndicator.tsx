@@ -26,7 +26,9 @@ export const AvailabilityIndicator = ({
       {status === ParkingStatus.CLOSED ? (
         <>
           <Box className={`bg-gray-400 p-4 rounded-full`} />
-          <Text className="font-bold">Cerrado</Text>
+          <Text style={{ fontFamily: 'Neuwelt-Bold' }} className="font-bold">
+            Cerrado
+          </Text>
         </>
       ) : (
         <>

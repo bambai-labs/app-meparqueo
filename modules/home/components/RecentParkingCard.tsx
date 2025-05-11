@@ -20,12 +20,15 @@ export const RecentParkingCard = ({
     <Pressable onPress={() => onPress(recentParking.parkingLot)}>
       <VStack className="w-full py-3 px-4 bg-gray-100 rounded-xl border border-gray-600 shadow-xl">
         <HStack className="w-full justify-between">
-          <Text>
+          <Text style={{ fontFamily: 'Neuwelt-Bold' }}>
             {formatTimestamp(new Date(recentParking.viewedAt).getTime())}
           </Text>
           <Icon as={ExternalLinkIcon} size="md" color="gray" />
         </HStack>
-        <Text className="mt-2 font-bold text-2xl">
+        <Text
+          style={{ fontFamily: 'Neuwelt-Bold' }}
+          className="mt-2 font-bold text-2xl"
+        >
           {recentParking.parkingLot.name}
         </Text>
         <HStack className="w-full justify-between mt-2 items-center">
@@ -34,7 +37,10 @@ export const RecentParkingCard = ({
             status={recentParking.parkingLot.status}
           />
 
-          <Text className="text-gray-600">
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="text-gray-600"
+          >
             {recentParking.parkingLot.address}
           </Text>
         </HStack>

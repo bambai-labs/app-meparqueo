@@ -9,6 +9,12 @@ dist/
 web-build/
 expo-env.d.ts
 
+android/
+ios/
+
+GoogleService-info.plist
+google-services.json
+
 # Native
 *.orig.*
 *.jks

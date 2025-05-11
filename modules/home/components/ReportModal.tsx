@@ -50,7 +50,9 @@ export const ReportModal = ({
 
       <ModalContent>
         <ModalHeader>
-          <Heading>Reportar parqueadero</Heading>
+          <Heading style={{ fontFamily: 'Neuwelt-Bold' }}>
+            Reportar parqueadero
+          </Heading>
           <ModalCloseButton>
             <Icon
               as={CloseIcon}
@@ -74,7 +76,11 @@ export const ReportModal = ({
             className="w-full"
           >
             <SelectTrigger variant="outline" size="md">
-              <SelectInput placeholder="Razón del reporte" className="flex-1" />
+              <SelectInput
+                style={{ fontFamily: 'Neuwelt-Bold' }}
+                placeholder="Razón del reporte"
+                className="flex-1"
+              />
               <SelectIcon className="mr-3" as={ChevronDownIcon} />
             </SelectTrigger>
             <SelectPortal>
@@ -99,6 +105,7 @@ export const ReportModal = ({
 
           <Textarea size="md" className="mt-3">
             <TextareaInput
+              style={{ fontFamily: 'Neuwelt-Bold' }}
               value={values.comment}
               onChange={handleChange}
               placeholder="Comentarios"
@@ -116,7 +123,9 @@ export const ReportModal = ({
               resetForm()
             }}
           >
-            <ButtonText>Cancelar</ButtonText>
+            <ButtonText style={{ fontFamily: 'Neuwelt-Bold' }}>
+              Cancelar
+            </ButtonText>
           </Button>
           <Button
             disabled={loading}
@@ -125,7 +134,9 @@ export const ReportModal = ({
               onConfirm()
             }}
           >
-            <ButtonText>{loading ? 'Reportando...' : 'Reportar'}</ButtonText>
+            <ButtonText style={{ fontFamily: 'Neuwelt-Bold' }}>
+              {loading ? 'Reportando...' : 'Reportar'}
+            </ButtonText>
             {loading && <Spinner color="#fff" />}
           </Button>
         </ModalFooter>

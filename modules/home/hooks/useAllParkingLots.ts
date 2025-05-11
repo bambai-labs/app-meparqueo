@@ -1,5 +1,6 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
-import { useAppSelector } from '@/modules/common'
+import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
+import { setIsSheetExpanded } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { useEffect, useRef, useState } from 'react'
@@ -7,6 +8,7 @@ import { Alert, Linking, Platform } from 'react-native'
 import { ParkingLot } from '../types'
 
 export const useAllParkingLots = () => {
+  const dispatch = useAppDispatch()
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const { deviceLocation } = useAppSelector((state) => state.location)
@@ -17,13 +19,12 @@ export const useAllParkingLots = () => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
   const handleMapFinishLoading = () => {
-    deviceLocation &&
-      cameraRef.current?.setCamera({
-        centerCoordinate: deviceLocation,
-        zoomLevel: 14,
-        heading: 0,
-        animationDuration: 0,
-      })
+    cameraRef.current?.setCamera({
+      centerCoordinate: CITY_CENTER,
+      zoomLevel: 14,
+      heading: 0,
+      animationDuration: 0,
+    })
   }
 
   const fetchAllParkingLots = async () => {
@@ -44,7 +45,7 @@ export const useAllParkingLots = () => {
   ) => {
     cameraRef.current?.setCamera({
       centerCoordinate: position,
-      zoomLevel: 14,
+      zoomLevel: 17,
       heading: 0,
       animationDuration: animated ? 1000 : 0,
     })
@@ -116,6 +117,10 @@ export const useAllParkingLots = () => {
     setIsReportModalOpen(true)
   }
 
+  const handleSheetChange = (index: number) => {
+    dispatch(setIsSheetExpanded(index > -1))
+  }
+
   useEffect(() => {
     fetchAllParkingLots()
   })
@@ -134,5 +139,6 @@ export const useAllParkingLots = () => {
     hideReportModal,
     openMapDirection,
     callParkingLot,
+    handleSheetChange,
   }
 }

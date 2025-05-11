@@ -10,7 +10,7 @@ import {
 } from '@/modules/common'
 import { onChangeQuery, searchPlace } from '@/store'
 import { isAxiosError } from 'axios'
-import { Stack, useRouter } from 'expo-router'
+import { Stack, usePathname, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
@@ -23,12 +23,12 @@ import { useHome } from '../hooks'
 
 export const HomeScreen = () => {
   const {
+    isReportModalOpen,
     bottomSheetRef,
-    callParkingLot,
     currentParking,
+    callParkingLot,
     handleParkingCardPress,
     hideReportModal,
-    isReportModalOpen,
     openMapDirection,
     showReportModal,
   } = useHome()
@@ -36,16 +36,21 @@ export const HomeScreen = () => {
   const { loading, query, places } = useAppSelector((state) => state.search)
   const dispatch = useAppDispatch()
   const [isFocused, setIsFocused] = useState(false)
+  const pathName = usePathname()
 
   const handlePlacePress = async (place: Place) => {
+    const shouldNavigate = pathName === '/home'
+
     saveDestination(place)
     setIsFocused(false)
-    router.push({
-      pathname: '/home/search',
-      params: {
-        place: JSON.stringify(place),
-      },
-    })
+    if (shouldNavigate) {
+      router.push({
+        pathname: '/home/search',
+        params: {
+          place: JSON.stringify(place),
+        },
+      })
+    }
   }
 
   const saveDestination = async (destination: Place) => {

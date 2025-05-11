@@ -1,6 +1,7 @@
 import { HStack } from '@/components/ui/hstack'
 import { Icon } from '@/components/ui/icon'
 import { Image } from '@/components/ui/image'
+import { useAppSelector } from '@/modules/common'
 import { usePathname, useRouter } from 'expo-router'
 import { ArrowLeft } from 'lucide-react-native'
 import { useMemo } from 'react'
@@ -9,9 +10,10 @@ import { Pressable, Text, View } from 'react-native'
 export const HeaderLogo = () => {
   const router = useRouter()
   const pathName = usePathname()
+  const { isExpanded } = useAppSelector((state) => state.bottomsheet)
   const shouldShowBackArrow = useMemo(
-    () => pathName.startsWith('/home/') && pathName !== '/home',
-    [pathName],
+    () => pathName.startsWith('/home/') && pathName !== '/home' && !isExpanded,
+    [pathName, isExpanded],
   )
 
   const goBack = () => {

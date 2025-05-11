@@ -6,19 +6,9 @@ import {
 } from '@/components/ui/form-control'
 import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
-import { CloseIcon, Icon } from '@/components/ui/icon'
-import {
-  Modal,
-  ModalBackdrop,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-} from '@/components/ui/modal'
 import { Switch } from '@/components/ui/switch'
 import { VStack } from '@/components/ui/vstack'
-import { useEffect } from 'react'
+import Modal from 'react-native-modal'
 import { FilterModalValues } from '../types'
 
 interface Props {
@@ -36,81 +26,70 @@ export const FilterModal = ({
   handleSwitchChange,
   handleSubmit,
 }: Props) => {
-  useEffect(() => {
-    console.log('modal values', values)
-  })
-
   return (
-    <Modal isOpen={opened} onClose={onCancel}>
-      <ModalBackdrop />
+    <Modal
+      isVisible={opened}
+      onBackdropPress={onCancel}
+      onBackButtonPress={onCancel}
+      useNativeDriver={true}
+      avoidKeyboard={true}
+      propagateSwipe={true}
+    >
+      <VStack className="bg-white p-5 rounded-xl">
+        <FormControl>
+          <Heading>Filtros</Heading>
+          <VStack className="w-full space-y-4" space="md">
+            <HStack className="w-full justify-between">
+              <FormControlLabel>
+                <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                  Solo parqueaderos disponibles
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Switch
+                value={values.onlyAvailable}
+                onValueChange={handleSwitchChange('onlyAvailable')}
+              />
+            </HStack>
 
-      <ModalContent>
-        <ModalHeader>
-          <Heading style={{ fontFamily: 'Neuwelt-Light' }}>Filtros</Heading>
-          <ModalCloseButton>
-            <Icon
-              as={CloseIcon}
-              size="md"
-              className="stroke-background-400 group-[:hover]/modal-close-button:stroke-background-700 group-[:active]/modal-close-button:stroke-background-900 group-[:focus-visible]/modal-close-button:stroke-background-900"
-            />
-          </ModalCloseButton>
-        </ModalHeader>
+            <HStack className="w-full justify-between">
+              <FormControlLabel>
+                <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                  Acepta pagos por transferencia
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Switch
+                value={values.paymentTransfer}
+                onValueChange={handleSwitchChange('paymentTransfer')}
+              />
+            </HStack>
 
-        <ModalBody>
-          <FormControl>
-            <VStack className="w-full space-y-4">
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Solo parqueaderos disponibles
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={values.onlyAvailable}
-                  onValueChange={handleSwitchChange('onlyAvailable')}
-                />
-              </HStack>
+            <HStack className="w-full justify-between">
+              <FormControlLabel>
+                <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                  Valet parking
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Switch
+                value={values.valetParking}
+                onValueChange={handleSwitchChange('valetParking')}
+              />
+            </HStack>
 
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Acepta pagos por transferencia
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={values.paymentTransfer}
-                  onValueChange={handleSwitchChange('paymentTransfer')}
-                />
-              </HStack>
+            <HStack className="w-full justify-between">
+              <FormControlLabel>
+                <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                  Servicio 24/7
+                </FormControlLabelText>
+              </FormControlLabel>
+              <Switch
+                value={values.twentyFourSeven}
+                onValueChange={handleSwitchChange('twentyFourSeven')}
+              />
+            </HStack>
+          </VStack>
+        </FormControl>
 
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Valet parking
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={values.valetParking}
-                  onValueChange={handleSwitchChange('valetParking')}
-                />
-              </HStack>
-
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Servicio 24/7
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={values.twentyFourSeven}
-                  onValueChange={handleSwitchChange('twentyFourSeven')}
-                />
-              </HStack>
-            </VStack>
-          </FormControl>
-        </ModalBody>
-
-        <ModalFooter>
+        <HStack className="w-full justify-end mt-3" space="md">
           <Button variant="outline" action="secondary" onPress={onCancel}>
             <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
               Cancelar
@@ -121,8 +100,8 @@ export const FilterModal = ({
               Filtrar
             </ButtonText>
           </Button>
-        </ModalFooter>
-      </ModalContent>
+        </HStack>
+      </VStack>
     </Modal>
   )
 }

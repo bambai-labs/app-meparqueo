@@ -1,4 +1,5 @@
 import { MeParqueoApi, PaginationResponse } from '@/api'
+import { Sponsors, SponsorsResponse } from '@/api/responses/SponsosrsResponse'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
 import { pushRecentParkingLots, setRecentParkingLots } from '@/store'
 import { useCallback, useEffect, useState } from 'react'
@@ -10,6 +11,7 @@ export const useParkingPagination = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [initialLoadDone, setInitialLoadDone] = useState(false)
   const { recentParkings } = useAppSelector((state) => state.parking)
+  const [sponsors, setSponsors] = useState<Sponsors[]>([])
   const dispatch = useAppDispatch()
 
   const fetchParkings = useCallback(async () => {
@@ -83,11 +85,25 @@ export const useParkingPagination = () => {
     }
   }
 
+  const fetchSponsors = async () => {
+    try {
+      const { data } =
+        await MeParqueoApi.get<SponsorsResponse>('/api/v1/sponsors')
+      setSponsors(data.data.sponsors)
+    } catch (error) {
+      console.error('Error fetching sponsors:', error)
+    }
+  }
+
   useEffect(() => {
     if (!initialLoadDone) {
       fetchParkings()
     }
-  }, [initialLoadDone, fetchParkings])
+
+    if (!recentParkings.length) {
+      fetchSponsors()
+    }
+  }, [initialLoadDone, fetchParkings, fetchSponsors])
 
   return {
     recentParkings,
@@ -95,5 +111,6 @@ export const useParkingPagination = () => {
     hasMore,
     fetchParkings,
     refreshParkings,
+    sponsors,
   }
 }
