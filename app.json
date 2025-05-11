@@ -39,7 +39,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "imageWidth": 300,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
@@ -57,11 +57,14 @@
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY204cXprdWxtMHVkNzJrcTFhaHJjYzVzNyJ9.9CWHAAIrj2Cyod6JdmXAlw"
         }
       ],
-      ["expo-build-properties", {
-        "ios": {
-          "useFrameworks": "static"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
         }
-      }],
+      ],
       "@react-native-firebase/app",
       "@react-native-firebase/crashlytics"
     ],
