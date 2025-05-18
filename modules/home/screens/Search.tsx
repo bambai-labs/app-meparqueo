@@ -16,7 +16,6 @@ import { ChevronDown } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import {
   FilterModal,
   ParkingDetailsSheet,
@@ -284,7 +283,7 @@ export const SearchScreen = () => {
   }, [places])
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <>
       <Stack.Screen
         options={{
           headerShown: false,
@@ -363,18 +362,18 @@ export const SearchScreen = () => {
             )}
           </Box>
         </Box>
-      </VStack>
 
-      {currentParking && (
-        <ParkingDetailsSheet
-          ref={bottomSheetRef}
-          parkingLot={currentParking}
-          onCallParkingLot={callParkingLot}
-          onOpenMapDirection={openMapDirection}
-          onShowReportModal={showReportModal}
-          onChange={handleSheetChange}
-        />
-      )}
+        {currentParking && (
+          <ParkingDetailsSheet
+            ref={bottomSheetRef}
+            parkingLot={currentParking}
+            onCallParkingLot={callParkingLot}
+            onOpenMapDirection={openMapDirection}
+            onShowReportModal={showReportModal}
+            onChange={handleSheetChange}
+          />
+        )}
+      </VStack>
 
       <FilterModal
         values={values}
@@ -392,6 +391,6 @@ export const SearchScreen = () => {
           onConfirm={hideReportModal}
         />
       )}
-    </GestureHandlerRootView>
+    </>
   )
 }
