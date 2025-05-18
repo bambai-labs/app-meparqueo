@@ -1,23 +1,19 @@
 import React from 'react'
 import { ActivityIndicator, FlatList, Text, View } from 'react-native'
-import { useParkingPagination } from '../hooks/'
+import { useParkingPagination, useSponsors } from '../hooks/'
 import { ParkingLot } from '../types'
 import { RecentParkingCard } from './RecentParkingCard'
-import { SponsorsCard } from './SponsorsCard'
+import { SponsorsList } from './SponsorsList'
 
 interface Props {
   onCardPress: (parkingLot: ParkingLot) => void
 }
 
 export const RecentParkingsList = ({ onCardPress }: Props) => {
-  const {
-    recentParkings,
-    loading,
-    hasMore,
-    fetchParkings,
-    refreshParkings,
-    sponsors,
-  } = useParkingPagination()
+  const { recentParkings, loading, hasMore, fetchParkings, refreshParkings } =
+    useParkingPagination()
+
+  const { sponsors } = useSponsors()
 
   const handleEndReached = () => {
     if (!loading && hasMore) {
@@ -67,7 +63,7 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
           Encuentra parqueadero en el centro de Montería
         </Text>
         <View className="flex-1 items-center justify-center mt-4">
-          <SponsorsCard sponsors={sponsors} />
+          <SponsorsList sponsors={sponsors} />
         </View>
       </>
     )

@@ -3,10 +3,10 @@ export interface SponsorsResponse {
   timestamp: Date
   success: boolean
   message: string
-  data: Data
+  data: SponsorsData
 }
 
-export interface Data {
+export interface SponsorsData {
   sponsors: Sponsors[]
 }
 
