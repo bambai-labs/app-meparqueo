@@ -1,9 +1,11 @@
-import { MeParqueoApi, socketManager } from '@/api'
+import { MeParqueoApi, Place, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
-import { useAppSelector } from '@/modules/common'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { onChangeQuery, searchPlace } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useRouter } from 'expo-router'
+import { isAxiosError } from 'axios'
+import { usePathname, useRouter } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform } from 'react-native'
 import { v4 as uuidv4 } from 'uuid'
@@ -11,6 +13,7 @@ import { ParkingLot } from '../types'
 
 export const useHome = () => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const { deviceLocation } = useAppSelector((state) => state.location)
   const [chipSelected, setChipSelected] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
@@ -18,6 +21,63 @@ export const useHome = () => {
     undefined,
   )
   const [recentParkingLots, setRecentParkingLots] = useState<ParkingLot[]>([])
+
+  const { loading, query, places } = useAppSelector((state) => state.search)
+  const [isFocused, setIsFocused] = useState(false)
+  const pathName = usePathname()
+
+  const handlePlacePress = async (place: Place) => {
+    const shouldNavigate = pathName === '/home'
+
+    saveDestination(place)
+    setIsFocused(false)
+    if (shouldNavigate) {
+      router.push({
+        pathname: '/home/search',
+        params: {
+          place: JSON.stringify(place),
+        },
+      })
+    }
+  }
+
+  const saveDestination = async (destination: Place) => {
+    try {
+      await MeParqueoApi.post('/api/v1/user/search', {
+        filter: {
+          availability: [],
+          services: [],
+          paymentMethods: [],
+        },
+        destinationLocation: {
+          latitude: destination.location.latitude,
+          longitude: destination.location.longitude,
+          searchTerm: query,
+        },
+      })
+
+      console.log('destination saved')
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response)
+        return
+      }
+
+      console.log(error)
+    }
+  }
+
+  const handleQueryChange = (query: string) => {
+    dispatch(onChangeQuery(query))
+  }
+
+  const handleClearQuery = () => {
+    dispatch(onChangeQuery(''))
+  }
+
+  const handleSearch = (placeName: string) => {
+    dispatch(searchPlace(placeName))
+  }
 
   const toggleChip = () => {
     setChipSelected(!chipSelected)
@@ -112,22 +172,40 @@ export const useHome = () => {
     login()
   }
 
+  const handleViewAllParkingLots = () => {
+    router.push('/home/allparkinglots')
+  }
+
+  useEffect(() => {
+    if (places.length === 0) {
+      return
+    }
+    const firstPlace = places[0]
+    handlePlacePress(firstPlace)
+  }, [places])
+
   useEffect(() => {
     checkUserUuid()
   }, [])
 
   return {
-    chipSelected,
-    toggleChip,
+    isReportModalOpen,
+    bottomSheetRef,
+    currentParking,
+    loading,
+    query,
+    places,
+    isFocused,
+    handleViewAllParkingLots,
     handleParkingCardPress,
     openMapDirection,
     callParkingLot,
-    isReportModalOpen,
+    setIsFocused,
+    handleQueryChange,
+    handleClearQuery,
+    handleSearch,
+    handlePlacePress,
     hideReportModal,
     showReportModal,
-    handleSearchBarPress,
-    bottomSheetRef,
-    currentParking,
-    setCurrentParking,
   }
 }
