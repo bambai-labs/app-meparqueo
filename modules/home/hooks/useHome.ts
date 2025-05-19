@@ -1,7 +1,15 @@
 import { MeParqueoApi, Place, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
-import { onChangeQuery, searchPlace } from '@/store'
+import {
+  onChangeQuery,
+  searchPlace,
+  setOnlyAvailable,
+  setOnlyPaymentTransfer,
+  setRadiusMt,
+  setWithTwentyFourSeven,
+  setWithValetParking,
+} from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isAxiosError } from 'axios'
@@ -15,6 +23,13 @@ export const useHome = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const { deviceLocation } = useAppSelector((state) => state.location)
+  const {
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
+  } = useAppSelector((state) => state.search)
   const [chipSelected, setChipSelected] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
@@ -176,6 +191,26 @@ export const useHome = () => {
     router.push('/home/allparkinglots')
   }
 
+  const handleRadiusMtChange = (value: number) => {
+    dispatch(setRadiusMt(value))
+  }
+
+  const handleOnlyAvailableChange = (value: boolean) => {
+    dispatch(setOnlyAvailable(value))
+  }
+
+  const handleOnlyPaymentTransferChange = (value: boolean) => {
+    dispatch(setOnlyPaymentTransfer(value))
+  }
+
+  const handleWithValetParkingChange = (value: boolean) => {
+    dispatch(setWithValetParking(value))
+  }
+
+  const handleWithTwentyFourSevenChange = (value: boolean) => {
+    dispatch(setWithTwentyFourSeven(value))
+  }
+
   useEffect(() => {
     if (places.length === 0) {
       return
@@ -196,6 +231,11 @@ export const useHome = () => {
     query,
     places,
     isFocused,
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
     handleViewAllParkingLots,
     handleParkingCardPress,
     openMapDirection,
@@ -207,5 +247,10 @@ export const useHome = () => {
     handlePlacePress,
     hideReportModal,
     showReportModal,
+    handleRadiusMtChange,
+    handleOnlyAvailableChange,
+    handleOnlyPaymentTransferChange,
+    handleWithValetParkingChange,
+    handleWithTwentyFourSevenChange,
   }
 }

@@ -1,9 +1,15 @@
-import { ButtonText } from '@/components/ui/button'
+import { Button, ButtonText } from '@/components/ui/button'
+import {
+  FormControl,
+  FormControlLabel,
+  FormControlLabelText,
+} from '@/components/ui/form-control'
+import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
 import { VStack } from '@/components/ui/vstack'
 import { Chip, ScreenWrapper } from '@/modules/common'
 import { Stack } from 'expo-router'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { GestureHandlerRootView, Switch } from 'react-native-gesture-handler'
 import {
   ParkingDetailsSheet,
   RecentParkingsList,
@@ -21,6 +27,11 @@ export const HomeScreen = () => {
     query,
     places,
     isFocused,
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
     handleViewAllParkingLots,
     handleParkingCardPress,
     openMapDirection,
@@ -32,11 +43,16 @@ export const HomeScreen = () => {
     handlePlacePress,
     hideReportModal,
     showReportModal,
+    handleRadiusMtChange,
+    handleOnlyAvailableChange,
+    handleOnlyPaymentTransferChange,
+    handleWithValetParkingChange,
+    handleWithTwentyFourSevenChange,
   } = useHome()
 
   return (
     <GestureHandlerRootView>
-      <ScreenWrapper className="bg-white">
+      <ScreenWrapper className="bg-white pb-20">
         <Stack.Screen
           options={{
             headerShown: false,
@@ -67,7 +83,101 @@ export const HomeScreen = () => {
             </Chip>
           </HStack>
 
-          <RecentParkingsList onCardPress={handleParkingCardPress} />
+          <FormControl className="mt-2 w-full">
+            <Heading>Filtros</Heading>
+            <VStack className="w-full space-y-4" space="md">
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Solo parqueaderos disponibles
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={onlyAvailable}
+                  onValueChange={handleOnlyAvailableChange}
+                />
+              </HStack>
+
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Acepta pagos por transferencia
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={paymentTransfer}
+                  onValueChange={handleOnlyPaymentTransferChange}
+                />
+              </HStack>
+
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Valet parking
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={valetParking}
+                  onValueChange={handleWithValetParkingChange}
+                />
+              </HStack>
+
+              <HStack className="w-full justify-between">
+                <FormControlLabel>
+                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                    Servicio 24/7
+                  </FormControlLabelText>
+                </FormControlLabel>
+                <Switch
+                  value={twentyFourSeven}
+                  onValueChange={handleWithTwentyFourSevenChange}
+                />
+              </HStack>
+
+              <FormControlLabel>
+                <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
+                  Radio de búsqueda: {radiusMt}m
+                </FormControlLabelText>
+              </FormControlLabel>
+
+              <HStack space="md" className="mt-2 px-2">
+                <Button
+                  variant={radiusMt === 100 ? 'solid' : 'outline'}
+                  onPress={() => handleRadiusMtChange(100)}
+                  size="sm"
+                  action="primary"
+                  className="flex-1"
+                >
+                  <ButtonText>100m</ButtonText>
+                </Button>
+                <Button
+                  variant={radiusMt === 200 ? 'solid' : 'outline'}
+                  onPress={() => handleRadiusMtChange(200)}
+                  size="sm"
+                  action="primary"
+                  className="flex-1"
+                >
+                  <ButtonText>200m</ButtonText>
+                </Button>
+                <Button
+                  variant={radiusMt === 300 ? 'solid' : 'outline'}
+                  onPress={() => handleRadiusMtChange(300)}
+                  size="sm"
+                  action="primary"
+                  className="flex-1"
+                >
+                  <ButtonText>300m</ButtonText>
+                </Button>
+              </HStack>
+            </VStack>
+          </FormControl>
+
+          <Heading className="mt-2">Parqueaderos recientes</Heading>
+
+          <RecentParkingsList
+            className="mt-2"
+            onCardPress={handleParkingCardPress}
+          />
         </VStack>
 
         {currentParking && (

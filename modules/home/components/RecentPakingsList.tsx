@@ -6,10 +6,11 @@ import { RecentParkingCard } from './RecentParkingCard'
 import { SponsorsList } from './SponsorsList'
 
 interface Props {
+  className?: string
   onCardPress: (parkingLot: ParkingLot) => void
 }
 
-export const RecentParkingsList = ({ onCardPress }: Props) => {
+export const RecentParkingsList = ({ className = '', onCardPress }: Props) => {
   const { recentParkings, loading, hasMore, fetchParkings, refreshParkings } =
     useParkingPagination()
 
@@ -71,7 +72,7 @@ export const RecentParkingsList = ({ onCardPress }: Props) => {
 
   return (
     <FlatList
-      className="mt-5"
+      className={className}
       data={recentParkings}
       renderItem={({ item }) => (
         <RecentParkingCard

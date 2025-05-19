@@ -9,23 +9,52 @@ import { HStack } from '@/components/ui/hstack'
 import { Modal, ModalBackdrop, ModalContent } from '@/components/ui/modal'
 import { Switch } from '@/components/ui/switch'
 import { VStack } from '@/components/ui/vstack'
-import { FilterModalValues } from '../types'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
+import {
+  setOnlyAvailable,
+  setOnlyPaymentTransfer,
+  setRadiusMt,
+  setWithTwentyFourSeven,
+  setWithValetParking,
+} from '@/store'
 
 interface Props {
-  values: FilterModalValues
   opened: boolean
   onCancel: () => void
-  handleSwitchChange: (name: string) => (value: boolean) => void
-  handleSubmit: (e?: React.FormEvent<HTMLFormElement>) => void
+  handleSubmit: () => void
 }
 
-export const FilterModal = ({
-  values,
-  opened,
-  onCancel,
-  handleSwitchChange,
-  handleSubmit,
-}: Props) => {
+export const FilterModal = ({ opened, onCancel, handleSubmit }: Props) => {
+  const {
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
+  } = useAppSelector((state) => state.search)
+
+  const dispatch = useAppDispatch()
+
+  const handleOnlyAvailableChange = (value: boolean) => {
+    dispatch(setOnlyAvailable(value))
+  }
+
+  const handlePaymentTransferChange = (value: boolean) => {
+    dispatch(setOnlyPaymentTransfer(value))
+  }
+
+  const handleValetParkingChange = (value: boolean) => {
+    dispatch(setWithValetParking(value))
+  }
+
+  const handleTwentyFourSevenChange = (value: boolean) => {
+    dispatch(setWithTwentyFourSeven(value))
+  }
+
+  const handleRadiusMtChange = (value: number) => {
+    dispatch(setRadiusMt(value))
+  }
+
   return (
     <Modal isOpen={opened} onClose={onCancel} avoidKeyboard={true}>
       <ModalBackdrop />
@@ -41,8 +70,8 @@ export const FilterModal = ({
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.onlyAvailable}
-                  onValueChange={handleSwitchChange('onlyAvailable')}
+                  value={onlyAvailable}
+                  onValueChange={handleOnlyAvailableChange}
                 />
               </HStack>
 
@@ -53,8 +82,8 @@ export const FilterModal = ({
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.paymentTransfer}
-                  onValueChange={handleSwitchChange('paymentTransfer')}
+                  value={paymentTransfer}
+                  onValueChange={handlePaymentTransferChange}
                 />
               </HStack>
 
@@ -65,8 +94,8 @@ export const FilterModal = ({
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.valetParking}
-                  onValueChange={handleSwitchChange('valetParking')}
+                  value={valetParking}
+                  onValueChange={handleValetParkingChange}
                 />
               </HStack>
 
@@ -77,20 +106,52 @@ export const FilterModal = ({
                   </FormControlLabelText>
                 </FormControlLabel>
                 <Switch
-                  value={values.twentyFourSeven}
-                  onValueChange={handleSwitchChange('twentyFourSeven')}
+                  value={twentyFourSeven}
+                  onValueChange={handleTwentyFourSevenChange}
                 />
+              </HStack>
+
+              <Heading>Radio de búsqueda</Heading>
+
+              <HStack space="md">
+                <Button
+                  variant={radiusMt === 100 ? 'solid' : 'outline'}
+                  onPress={() => handleRadiusMtChange(100)}
+                  size="sm"
+                  action="primary"
+                  className="flex-1"
+                >
+                  <ButtonText>100m</ButtonText>
+                </Button>
+                <Button
+                  variant={radiusMt === 200 ? 'solid' : 'outline'}
+                  onPress={() => handleRadiusMtChange(200)}
+                  size="sm"
+                  action="primary"
+                  className="flex-1"
+                >
+                  <ButtonText>200m</ButtonText>
+                </Button>
+                <Button
+                  variant={radiusMt === 300 ? 'solid' : 'outline'}
+                  onPress={() => handleRadiusMtChange(300)}
+                  size="sm"
+                  action="primary"
+                  className="flex-1"
+                >
+                  <ButtonText>300m</ButtonText>
+                </Button>
               </HStack>
             </VStack>
           </FormControl>
 
-          <HStack className="w-full justify-end mt-3" space="md">
+          <HStack className="w-full justify-between mt-5" space="md">
             <Button variant="outline" action="secondary" onPress={onCancel}>
               <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
                 Cancelar
               </ButtonText>
             </Button>
-            <Button onPress={() => handleSubmit()}>
+            <Button onPress={handleSubmit}>
               <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
                 Filtrar
               </ButtonText>

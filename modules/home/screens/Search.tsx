@@ -10,7 +10,6 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'
 import { Stack, useLocalSearchParams } from 'expo-router'
-import { useFormik } from 'formik'
 import debounce from 'just-debounce-it'
 import { ChevronDown } from 'lucide-react-native'
 import Carousel from 'pinar'
@@ -33,6 +32,13 @@ export const SearchScreen = () => {
   const cameraRef = useRef<Camera>(null)
   const carouselRef = useRef<Carousel>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
+  const {
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
+  } = useAppSelector((state) => state.search)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
@@ -162,39 +168,33 @@ export const SearchScreen = () => {
     setIsFilterModalOpen(false)
   }
 
-  const { values, handleSubmit, setFieldValue } = useFormik<FilterModalValues>({
-    initialValues: {
-      radiusMt: 300,
-      onlyAvailable: false,
-      paymentTransfer: false,
-      valetParking: false,
-      twentyFourSeven: false,
-    },
-    onSubmit: (values) => {
-      console.log('values', values)
-      handleConfirmFilterModal(values)
-    },
-  })
-
-  const handleSwitchChange = (name: string) => (value: boolean) => {
-    setFieldValue(name, value)
-  }
-
   const handleConfirmFilterModal = (values: FilterModalValues) => {
     if (currentDestination) {
       searchNearParkingLots(
         currentDestination.location.latitude,
         currentDestination.location.longitude,
-        values.radiusMt.toString(),
-        values.onlyAvailable,
-        values.paymentTransfer,
-        values.valetParking,
-        values.twentyFourSeven,
+        radiusMt.toString(),
+        onlyAvailable,
+        paymentTransfer,
+        valetParking,
+        twentyFourSeven,
       )
       saveDestination()
     }
 
     hideFilterModal()
+  }
+
+  const handleSubmit = async () => {
+    if (currentDestination) {
+      handleConfirmFilterModal({
+        radiusMt,
+        onlyAvailable,
+        paymentTransfer,
+        valetParking,
+        twentyFourSeven,
+      })
+    }
   }
 
   const handlePlacePress = async (place: Place) => {
@@ -203,11 +203,11 @@ export const SearchScreen = () => {
     searchNearParkingLots(
       place.location.latitude,
       place.location.longitude,
-      values.radiusMt.toString(),
-      values.onlyAvailable,
-      values.paymentTransfer,
-      values.valetParking,
-      values.twentyFourSeven,
+      radiusMt.toString(),
+      onlyAvailable,
+      paymentTransfer,
+      valetParking,
+      twentyFourSeven,
     )
     saveDestination()
   }
@@ -216,7 +216,11 @@ export const SearchScreen = () => {
     try {
       await MeParqueoApi.post('/api/v1/user/search', {
         filters: {
-          ...values,
+          radiusMt: radiusMt.toString(),
+          onlyAvailable,
+          paymentTransfer,
+          valetParking,
+          twentyFourSeven,
         },
         destinationLocation: {
           latitude: currentDestination?.location.latitude,
@@ -265,11 +269,11 @@ export const SearchScreen = () => {
       searchNearParkingLots(
         placeFromParams.location.latitude,
         placeFromParams.location.longitude,
-        values.radiusMt.toString(),
-        values.onlyAvailable,
-        values.paymentTransfer,
-        values.valetParking,
-        values.twentyFourSeven,
+        radiusMt.toString(),
+        onlyAvailable,
+        paymentTransfer,
+        valetParking,
+        twentyFourSeven,
       )
     }
   }, [mapLoaded])
@@ -376,8 +380,6 @@ export const SearchScreen = () => {
       </VStack>
 
       <FilterModal
-        values={values}
-        handleSwitchChange={handleSwitchChange}
         handleSubmit={handleSubmit}
         opened={isFilterModalOpen}
         onCancel={hideFilterModal}
