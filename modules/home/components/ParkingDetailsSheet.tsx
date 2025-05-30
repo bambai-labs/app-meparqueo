@@ -227,12 +227,15 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         snapPoints={snapPoints}
         onChange={onChange}
         handleComponent={() => (
-          <HStack className="items-center justify-center w-full">
+          <HStack
+            className="items-center justify-center w-full bg-[#FAF9F6]"
+            style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50 }}
+          >
             <Icon as={ChevronsDown} className="w-9 h-9" />
           </HStack>
         )}
         style={{
-          backgroundColor: '#f3f4f6',
+          backgroundColor: '#FAF9F6',
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
         }}
@@ -249,6 +252,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 24,
     paddingBottom: 100, // Padding adicional en la parte inferior
+    backgroundColor: '#FAF9F6',
   },
   scrollViewContent: {
     flexGrow: 1,
