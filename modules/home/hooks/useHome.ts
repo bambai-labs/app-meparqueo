@@ -102,9 +102,10 @@ export const useHome = () => {
   }
 
   const handleParkingCardPress = (parking: ParkingLot) => {
-    console.log('parking pressed', parking)
     setCurrentParking(parking)
-    expandParkingDetailsSheet()
+    setTimeout(() => {
+      expandParkingDetailsSheet()
+    }, 100)
   }
 
   const openMapDirection = async () => {
