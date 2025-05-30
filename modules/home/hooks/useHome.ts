@@ -35,7 +35,6 @@ export const useHome = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
-  const [recentParkingLots, setRecentParkingLots] = useState<ParkingLot[]>([])
 
   const { loading, query, places } = useAppSelector((state) => state.search)
   const [isFocused, setIsFocused] = useState(false)

@@ -190,9 +190,23 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
 
           <Text
             style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="text-gray-600 text-xl mb-8"
+            className="text-gray-600 text-xl"
           >
             {paymentMethods}
+          </Text>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="mt-3 text-xl font-bold"
+          >
+            Acerca del parqueadero
+          </Text>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Light' }}
+            className="text-gray-600 text-xl mb-8"
+          >
+            {parkingLot.description}
           </Text>
         </View>
       )

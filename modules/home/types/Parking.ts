@@ -13,6 +13,7 @@ export interface ParkingLot {
   distanceMt: number | null
   address: string
   reportsCount: number
+  description: string
 }
 
 export enum PaymentMethod {
