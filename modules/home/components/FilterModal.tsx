@@ -59,10 +59,10 @@ export const FilterModal = ({ opened, onCancel, handleSubmit }: Props) => {
     <Modal isOpen={opened} onClose={onCancel} avoidKeyboard={true}>
       <ModalBackdrop />
       <ModalContent>
-        <VStack className="bg-white p-5 rounded-xl">
+        <VStack className="bg-white p-2 rounded-xl">
           <FormControl>
             <Heading>Filtros</Heading>
-            <VStack className="w-full space-y-4" space="md">
+            <VStack className="w-full" space="md">
               <HStack className="w-full justify-between">
                 <FormControlLabel>
                   <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
@@ -145,7 +145,7 @@ export const FilterModal = ({ opened, onCancel, handleSubmit }: Props) => {
             </VStack>
           </FormControl>
 
-          <HStack className="w-full justify-between mt-5" space="md">
+          <HStack className="w-full justify-between mt-8" space="md">
             <Button variant="outline" action="secondary" onPress={onCancel}>
               <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
                 Cancelar
