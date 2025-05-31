@@ -89,7 +89,6 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
                 / hora
               </Text>
             </HStack>
-
             <HStack space="sm">
               <Text
                 style={{ fontFamily: 'Neuwelt-Bold' }}
@@ -102,6 +101,13 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
               </Text>
             </HStack>
           </HStack>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Light', fontStyle: 'italic' }}
+            className="text-gray-600"
+          >
+            precio estimado
+          </Text>
 
           <AvailabilityIndicator
             className="mt-2"
