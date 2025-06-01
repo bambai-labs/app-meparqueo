@@ -1,3 +1,12 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionHeader,
+  AccordionIcon,
+  AccordionItem,
+  AccordionTitleText,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Button, ButtonText } from '@/components/ui/button'
 import {
   FormControl,
@@ -9,6 +18,8 @@ import { HStack } from '@/components/ui/hstack'
 import { VStack } from '@/components/ui/vstack'
 import { ScreenWrapper } from '@/modules/common'
 import { Stack } from 'expo-router'
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react-native'
+import React from 'react'
 import { GestureHandlerRootView, Switch } from 'react-native-gesture-handler'
 import {
   ParkingDetailsSheet,
@@ -76,97 +87,139 @@ export const HomeScreen = () => {
             />
           </VStack>
 
-          <FormControl className="w-full">
-            <Heading className="text-2xl mt-4 mb-2">Filtros</Heading>
-            <VStack
-              className="w-full space-y-4 shadow-2xl bg-white p-3 rounded-2xl"
-              space="md"
-            >
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Solo parqueaderos disponibles
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={onlyAvailable}
-                  onValueChange={handleOnlyAvailableChange}
-                />
-              </HStack>
+          <Accordion
+            size="md"
+            variant="filled"
+            type="single"
+            isCollapsible={true}
+            className="w-full"
+          >
+            <AccordionItem value="a">
+              <AccordionHeader>
+                <AccordionTrigger>
+                  {({ isExpanded }) => {
+                    return (
+                      <>
+                        <AccordionTitleText className="text-2xl">
+                          Filtros
+                        </AccordionTitleText>
+                        {isExpanded ? (
+                          <AccordionIcon as={ChevronUpIcon} className="ml-3" />
+                        ) : (
+                          <AccordionIcon
+                            as={ChevronDownIcon}
+                            className="ml-3"
+                          />
+                        )}
+                      </>
+                    )
+                  }}
+                </AccordionTrigger>
+              </AccordionHeader>
+              <AccordionContent>
+                <FormControl className="w-full">
+                  <VStack
+                    className="w-full space-y-4 shadow-2xl bg-white rounded-2xl"
+                    space="md"
+                  >
+                    <HStack className="w-full justify-between">
+                      <FormControlLabel>
+                        <FormControlLabelText
+                          style={{ fontFamily: 'Neuwelt-Light' }}
+                        >
+                          Solo parqueaderos disponibles
+                        </FormControlLabelText>
+                      </FormControlLabel>
+                      <Switch
+                        value={onlyAvailable}
+                        onValueChange={handleOnlyAvailableChange}
+                      />
+                    </HStack>
 
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Acepta pagos por transferencia
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={paymentTransfer}
-                  onValueChange={handleOnlyPaymentTransferChange}
-                />
-              </HStack>
+                    <HStack className="w-full justify-between">
+                      <FormControlLabel>
+                        <FormControlLabelText
+                          style={{ fontFamily: 'Neuwelt-Light' }}
+                        >
+                          Acepta pagos por transferencia
+                        </FormControlLabelText>
+                      </FormControlLabel>
+                      <Switch
+                        value={paymentTransfer}
+                        onValueChange={handleOnlyPaymentTransferChange}
+                      />
+                    </HStack>
 
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Valet parking
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={valetParking}
-                  onValueChange={handleWithValetParkingChange}
-                />
-              </HStack>
+                    <HStack className="w-full justify-between">
+                      <FormControlLabel>
+                        <FormControlLabelText
+                          style={{ fontFamily: 'Neuwelt-Light' }}
+                        >
+                          Valet parking
+                        </FormControlLabelText>
+                      </FormControlLabel>
+                      <Switch
+                        value={valetParking}
+                        onValueChange={handleWithValetParkingChange}
+                      />
+                    </HStack>
 
-              <HStack className="w-full justify-between">
-                <FormControlLabel>
-                  <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                    Servicio 24/7
-                  </FormControlLabelText>
-                </FormControlLabel>
-                <Switch
-                  value={twentyFourSeven}
-                  onValueChange={handleWithTwentyFourSevenChange}
-                />
-              </HStack>
+                    <HStack className="w-full justify-between">
+                      <FormControlLabel>
+                        <FormControlLabelText
+                          style={{ fontFamily: 'Neuwelt-Light' }}
+                        >
+                          Servicio 24/7
+                        </FormControlLabelText>
+                      </FormControlLabel>
+                      <Switch
+                        value={twentyFourSeven}
+                        onValueChange={handleWithTwentyFourSevenChange}
+                      />
+                    </HStack>
 
-              <FormControlLabel>
-                <FormControlLabelText style={{ fontFamily: 'Neuwelt-Light' }}>
-                  Radio: {radiusMt} m
-                </FormControlLabelText>
-              </FormControlLabel>
+                    <FormControlLabel>
+                      <FormControlLabelText
+                        style={{ fontFamily: 'Neuwelt-Light' }}
+                      >
+                        Radio: {radiusMt} m
+                      </FormControlLabelText>
+                    </FormControlLabel>
 
-              <HStack space="md" className="mt-2 px-2">
-                <Button
-                  variant={radiusMt === 100 ? 'solid' : 'outline'}
-                  onPress={() => handleRadiusMtChange(100)}
-                  size="sm"
-                  action="primary"
-                  className="flex-1"
-                >
-                  <ButtonText>100m</ButtonText>
-                </Button>
-                <Button
-                  variant={radiusMt === 200 ? 'solid' : 'outline'}
-                  onPress={() => handleRadiusMtChange(200)}
-                  size="sm"
-                  action="primary"
-                  className="flex-1"
-                >
-                  <ButtonText>200m</ButtonText>
-                </Button>
-                <Button
-                  variant={radiusMt === 300 ? 'solid' : 'outline'}
-                  onPress={() => handleRadiusMtChange(300)}
-                  size="sm"
-                  action="primary"
-                  className="flex-1"
-                >
-                  <ButtonText>300m</ButtonText>
-                </Button>
-              </HStack>
-            </VStack>
-          </FormControl>
+                    <HStack space="md" className="mt-2 px-2">
+                      <Button
+                        variant={radiusMt === 100 ? 'solid' : 'outline'}
+                        onPress={() => handleRadiusMtChange(100)}
+                        size="sm"
+                        action="primary"
+                        className="flex-1"
+                      >
+                        <ButtonText>100m</ButtonText>
+                      </Button>
+                      <Button
+                        variant={radiusMt === 200 ? 'solid' : 'outline'}
+                        onPress={() => handleRadiusMtChange(200)}
+                        size="sm"
+                        action="primary"
+                        className="flex-1"
+                      >
+                        <ButtonText>200m</ButtonText>
+                      </Button>
+                      <Button
+                        variant={radiusMt === 300 ? 'solid' : 'outline'}
+                        onPress={() => handleRadiusMtChange(300)}
+                        size="sm"
+                        action="primary"
+                        className="flex-1"
+                      >
+                        <ButtonText>300m</ButtonText>
+                      </Button>
+                    </HStack>
+                  </VStack>
+                </FormControl>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
 
           <Button
             className="mt-4 bg-white shadow-xl"
