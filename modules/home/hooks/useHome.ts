@@ -19,6 +19,8 @@ import { Alert, Linking, Platform } from 'react-native'
 import { v4 as uuidv4 } from 'uuid'
 import { ParkingLot } from '../types'
 
+const HAS_SEEN_ACCORDION_ANIMATION_KEY = '@has_seen_accordion_animation'
+
 export const useHome = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -35,10 +37,40 @@ export const useHome = () => {
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
+  const [accordionValue, setAccordionValue] = useState<string[]>([])
 
   const { loading, query, places } = useAppSelector((state) => state.search)
   const [isFocused, setIsFocused] = useState(false)
   const pathName = usePathname()
+
+  useEffect(() => {
+    const checkAndShowAnimation = async () => {
+      try {
+        const hasSeenAnimation = await AsyncStorage.getItem(
+          HAS_SEEN_ACCORDION_ANIMATION_KEY,
+        )
+
+        if (!hasSeenAnimation) {
+          const timer = setTimeout(() => {
+            setAccordionValue(['a'])
+            setTimeout(async () => {
+              setAccordionValue([])
+              await AsyncStorage.setItem(
+                HAS_SEEN_ACCORDION_ANIMATION_KEY,
+                'true',
+              )
+            }, 1500)
+          }, 1000)
+
+          return () => clearTimeout(timer)
+        }
+      } catch (error) {
+        console.error('Error al verificar el estado de la animación:', error)
+      }
+    }
+
+    checkAndShowAnimation()
+  }, [])
 
   const handlePlacePress = async (place: Place) => {
     const shouldNavigate = pathName === '/home'
@@ -236,6 +268,8 @@ export const useHome = () => {
     paymentTransfer,
     valetParking,
     twentyFourSeven,
+    accordionValue,
+    setAccordionValue,
     handleViewAllParkingLots,
     handleParkingCardPress,
     openMapDirection,

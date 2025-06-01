@@ -43,6 +43,8 @@ export const HomeScreen = () => {
     paymentTransfer,
     valetParking,
     twentyFourSeven,
+    accordionValue,
+    setAccordionValue,
     handleViewAllParkingLots,
     handleParkingCardPress,
     openMapDirection,
@@ -93,6 +95,8 @@ export const HomeScreen = () => {
             type="single"
             isCollapsible={true}
             className="w-full"
+            value={accordionValue}
+            onValueChange={setAccordionValue}
           >
             <AccordionItem value="a">
               <AccordionHeader>
