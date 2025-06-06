@@ -11,7 +11,7 @@
       "env": {
         "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY200ZjJzcjMwMDhtdjJqcTJkemd4bDY4MyJ9.dsrTOPOrlWzqEGr8GNFJXw",
         "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyC4tzwgyAkTPBxTDkUwnew-wmbHQSJpRzA",
-        "EXPO_PUBLIC_MEPARQUEO_API": "https://api-meparqueo.digital.cligro.tech/"
+        "EXPO_PUBLIC_MEPARQUEO_API": "https://api-meparqueo.bambai.tech/"
       }
     },
     "preview": {
@@ -20,7 +20,7 @@
       "env": {
         "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY200ZjJzcjMwMDhtdjJqcTJkemd4bDY4MyJ9.dsrTOPOrlWzqEGr8GNFJXw",
         "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyC4tzwgyAkTPBxTDkUwnew-wmbHQSJpRzA",
-        "EXPO_PUBLIC_MEPARQUEO_API": "https://api-meparqueo.digital.cligro.tech/"
+        "EXPO_PUBLIC_MEPARQUEO_API": "https://api-meparqueo.bambai.tech/"
       }
     },
     "production": {
@@ -29,7 +29,7 @@
       "env": {
         "EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN": "pk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY200ZjJzcjMwMDhtdjJqcTJkemd4bDY4MyJ9.dsrTOPOrlWzqEGr8GNFJXw",
         "EXPO_PUBLIC_GOOGLE_PLACES_API_KEY": "AIzaSyC4tzwgyAkTPBxTDkUwnew-wmbHQSJpRzA",
-        "EXPO_PUBLIC_MEPARQUEO_API": "https://api-meparqueo.digital.cligro.tech/"
+        "EXPO_PUBLIC_MEPARQUEO_API": "https://api-meparqueo.bambai.tech/"
       }
     }
   },
