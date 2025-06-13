@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.markuswater.meparqueoapp",
+      "bundleIdentifier": "com.bambailabs.meparqueoapp",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
