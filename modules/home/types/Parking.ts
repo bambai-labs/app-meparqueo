@@ -133,6 +133,10 @@ export enum ParkingStatus {
   CLOSED = 'CLOSED',
 }
 
+export const getParkingStatuses = (): ParkingStatus[] => {
+  return [ParkingStatus.OPEN, ParkingStatus.CLOSED]
+}
+
 export interface RecentParkingLot extends ParkingLot {
   timestamp: number
 }

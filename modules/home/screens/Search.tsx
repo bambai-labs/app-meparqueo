@@ -286,6 +286,16 @@ export const SearchScreen = () => {
     handlePlacePress(firstPlace)
   }, [places])
 
+  useEffect(() => {
+    const updatedCurrentParkingLot = parkingLots.find(
+      (parkingLot) => parkingLot.id === currentParking?.id,
+    )
+
+    if (updatedCurrentParkingLot) {
+      setCurrentParking(updatedCurrentParkingLot)
+    }
+  }, [parkingLots])
+
   return (
     <>
       <Stack.Screen
