@@ -1,5 +1,5 @@
 import { RecentParkingLotResponse } from '@/api'
-import { ParkingLot, ParkingUpdateEstatus } from '@/modules'
+import { ParkingLot, ParkingUpdateEstatus, updateParkingLot } from '@/modules'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface ParkingSliceState {
@@ -28,69 +28,32 @@ export const parkingSlice = createSlice({
       state: ParkingSliceState,
       action: PayloadAction<ParkingUpdateEstatus>,
     ) => {
-      const { payload } = action
-      const { availability, parkingLotId, status } = payload
+      const { parkingLotId, availability, status } = action.payload
 
-      const parkingLotIndex = state.parkingLots.findIndex(
-        (parkingLot) => parkingLot.id === parkingLotId,
-      )
+      state.parkingLots = updateParkingLot(state.parkingLots, parkingLotId, {
+        availability,
+        status,
+      })
 
-      const recentParkingLotIndex = state.recentParkings.findIndex(
-        (parkingLot) => parkingLot.parkingLot.id === parkingLotId,
-      )
-
-      const allParkingLotsIndex = state.allParkingLots.findIndex(
-        (parkingLot) => parkingLot.id === parkingLotId,
-      )
-
-      if (parkingLotIndex !== -1) {
-        const newParkings = state.parkingLots.map((parking) => {
-          if (parking.id === parkingLotId) {
-            return {
-              ...parking,
-              availability: availability,
-              status: status,
-            }
+      state.recentParkings = state.recentParkings.map((recentParking) => {
+        if (recentParking.parkingLot.id === parkingLotId) {
+          return {
+            ...recentParking,
+            parkingLot: {
+              ...recentParking.parkingLot,
+              availability,
+              status,
+            },
           }
+        }
+        return recentParking
+      })
 
-          return parking
-        })
-        state.parkingLots = newParkings
-      }
-
-      if (recentParkingLotIndex !== -1) {
-        const newParkings = state.recentParkings.map((parking) => {
-          const { id, viewedAt } = parking
-
-          if (parking.parkingLot.id === parkingLotId) {
-            return {
-              id,
-              viewedAt,
-              parkingLot: {
-                ...parking.parkingLot,
-                availability: availability,
-                status: status,
-              },
-            }
-          }
-          return parking
-        })
-        state.recentParkings = newParkings
-      }
-
-      if (allParkingLotsIndex !== -1) {
-        const newParkings = state.allParkingLots.map((parking) => {
-          if (parking.id === parkingLotId) {
-            return {
-              ...parking,
-              availability: availability,
-              status: status,
-            }
-          }
-          return parking
-        })
-        state.allParkingLots = newParkings
-      }
+      state.allParkingLots = updateParkingLot(
+        state.allParkingLots,
+        parkingLotId,
+        { availability, status },
+      )
     },
     pushRecentParkingLots: (
       state: ParkingSliceState,
