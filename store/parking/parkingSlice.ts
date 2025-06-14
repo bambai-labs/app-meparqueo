@@ -5,11 +5,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface ParkingSliceState {
   recentParkings: RecentParkingLotResponse[]
   parkingLots: ParkingLot[]
+  allParkingLots: ParkingLot[]
 }
 
 const initialState: ParkingSliceState = {
   recentParkings: [],
   parkingLots: [],
+  allParkingLots: [],
 }
 
 export const parkingSlice = createSlice({
@@ -35,6 +37,10 @@ export const parkingSlice = createSlice({
 
       const recentParkingLotIndex = state.recentParkings.findIndex(
         (parkingLot) => parkingLot.parkingLot.id === parkingLotId,
+      )
+
+      const allParkingLotsIndex = state.allParkingLots.findIndex(
+        (parkingLot) => parkingLot.id === parkingLotId,
       )
 
       if (parkingLotIndex !== -1) {
@@ -69,8 +75,21 @@ export const parkingSlice = createSlice({
           }
           return parking
         })
-
         state.recentParkings = newParkings
+      }
+
+      if (allParkingLotsIndex !== -1) {
+        const newParkings = state.allParkingLots.map((parking) => {
+          if (parking.id === parkingLotId) {
+            return {
+              ...parking,
+              availability: availability,
+              status: status,
+            }
+          }
+          return parking
+        })
+        state.allParkingLots = newParkings
       }
     },
     pushRecentParkingLots: (
@@ -85,6 +104,12 @@ export const parkingSlice = createSlice({
     ) => {
       state.recentParkings = action.payload
     },
+    setAllParkingLots: (
+      state: ParkingSliceState,
+      action: PayloadAction<ParkingLot[]>,
+    ) => {
+      state.allParkingLots = action.payload
+    },
   },
 })
 
@@ -94,4 +119,5 @@ export const {
   updateParkingLotAvailability,
   pushRecentParkingLots,
   setRecentParkingLots,
+  setAllParkingLots,
 } = parkingSlice.actions
