@@ -1,6 +1,7 @@
 import { Box } from '@/components/ui/box'
-import Carousel from 'pinar'
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useEffect } from 'react'
+import { Dimensions } from 'react-native'
+import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel'
 import { ParkingLot } from '../types'
 import { ParkingResultCard } from './ParkingResultCard'
 
@@ -10,32 +11,39 @@ interface Props {
   onScroll?: (centeredParkingLot: ParkingLot) => void
 }
 
-export const ParkingResultsList = forwardRef<Carousel, Props>(
+const width = Dimensions.get('window').width
+
+export const ParkingResultsList = forwardRef<ICarouselInstance, Props>(
   function ParkingResultsList(
     { parkingLots, onParkingLotPress, onScroll },
     ref,
   ) {
+    useEffect(() => {
+      if (ref) {
+        // move to the first item
+      }
+    }, [parkingLots.length])
+
     return (
-      <Box className="w-full h-28">
+      <Box className="w-full">
         <Carousel
           ref={ref}
-          autoplay={false}
-          showsControls={false}
-          showsDots={false}
-          onIndexChanged={({ index }) => {
+          width={width}
+          height={128}
+          data={parkingLots}
+          onScrollEnd={(index) => {
             const centered = parkingLots[index]
             onScroll?.(centered)
           }}
-        >
-          {parkingLots.map((parkingLot) => (
+          loop={false}
+          renderItem={({ item }) => (
             <ParkingResultCard
-              key={parkingLot.id}
-              parkingLot={parkingLot}
+              key={item.id}
+              parkingLot={item}
               onPress={onParkingLotPress}
-              className="w-screen overflow-x-hidden"
             />
-          ))}
-        </Carousel>
+          )}
+        ></Carousel>
       </Box>
     )
   },

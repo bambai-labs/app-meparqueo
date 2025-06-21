@@ -12,9 +12,9 @@ import { isAxiosError } from 'axios'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import debounce from 'just-debounce-it'
 import { ChevronDown } from 'lucide-react-native'
-import Carousel from 'pinar'
 import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
+import type { ICarouselInstance } from 'react-native-reanimated-carousel'
 import {
   FilterModal,
   ParkingDetailsSheet,
@@ -30,7 +30,7 @@ import { FilterModalValues, ParkingLot } from '../types'
 export const SearchScreen = () => {
   const { place } = useLocalSearchParams()
   const cameraRef = useRef<Camera>(null)
-  const carouselRef = useRef<Carousel>(null)
+  const carouselRef = useRef<ICarouselInstance>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const {
     radiusMt,
@@ -350,7 +350,7 @@ export const SearchScreen = () => {
             }}
             onParkingMarkerPress={(parkingLot) => {
               handleParkingMarkerPress(parkingLot)
-              carouselRef.current?.scrollToIndex({
+              carouselRef.current?.scrollTo({
                 index: parkingLots.indexOf(parkingLot),
                 animated: true,
               })
@@ -358,7 +358,7 @@ export const SearchScreen = () => {
             ref={cameraRef}
           />
 
-          <Box className="absolute bottom-5 right-0 w-full px-2">
+          <Box className="absolute bottom-0 right-0 w-full px-2">
             {parkingLots.length === 1 ? (
               currentParking && (
                 <ParkingResultCard
