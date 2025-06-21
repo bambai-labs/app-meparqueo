@@ -1,5 +1,5 @@
 import { Box } from '@/components/ui/box'
-import React, { forwardRef, useEffect } from 'react'
+import React, { forwardRef } from 'react'
 import { Dimensions } from 'react-native'
 import Carousel, { ICarouselInstance } from 'react-native-reanimated-carousel'
 import { ParkingLot } from '../types'
@@ -18,12 +18,6 @@ export const ParkingResultsList = forwardRef<ICarouselInstance, Props>(
     { parkingLots, onParkingLotPress, onScroll },
     ref,
   ) {
-    useEffect(() => {
-      if (ref) {
-        // move to the first item
-      }
-    }, [parkingLots.length])
-
     return (
       <Box className="w-full">
         <Carousel
@@ -35,7 +29,6 @@ export const ParkingResultsList = forwardRef<ICarouselInstance, Props>(
             const centered = parkingLots[index]
             onScroll?.(centered)
           }}
-          loop={false}
           renderItem={({ item }) => (
             <ParkingResultCard
               key={item.id}
