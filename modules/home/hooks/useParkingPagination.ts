@@ -10,6 +10,7 @@ export const useParkingPagination = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [initialLoadDone, setInitialLoadDone] = useState(false)
   const { recentParkings } = useAppSelector((state) => state.parking)
+
   const dispatch = useAppDispatch()
 
   const fetchParkings = useCallback(async () => {

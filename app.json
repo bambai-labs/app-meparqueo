@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.markuswater.meparqueoapp",
+      "bundleIdentifier": "com.bambailabs.meparqueoapp",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -39,7 +39,7 @@
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
+          "imageWidth": 300,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
@@ -47,7 +47,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Show current location on map."
+          "locationWhenInUsePermission": "We use your location to show nearby parking spots and help you navigate to them from where you are. This improves your experience by making it easier to find and reach available parking."
         }
       ],
       [
@@ -57,11 +57,14 @@
           "RNMapboxMapsDownloadToken": "sk.eyJ1IjoibWFya3Vzd2F0ZXIiLCJhIjoiY204cXprdWxtMHVkNzJrcTFhaHJjYzVzNyJ9.9CWHAAIrj2Cyod6JdmXAlw"
         }
       ],
-      ["expo-build-properties", {
-        "ios": {
-          "useFrameworks": "static"
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
         }
-      }],
+      ],
       "@react-native-firebase/app",
       "@react-native-firebase/crashlytics"
     ],

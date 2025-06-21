@@ -32,7 +32,7 @@ export const ParkingResultsList = forwardRef<Carousel, Props>(
               key={parkingLot.id}
               parkingLot={parkingLot}
               onPress={onParkingLotPress}
-              className="w-screen"
+              className="w-screen overflow-x-hidden"
             />
           ))}
         </Carousel>

@@ -1,6 +1,6 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
 import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
-import { setIsSheetExpanded } from '@/store'
+import { setAllParkingLots, setIsSheetExpanded } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { useEffect, useRef, useState } from 'react'
@@ -12,7 +12,7 @@ export const useAllParkingLots = () => {
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const { deviceLocation } = useAppSelector((state) => state.location)
-  const [parkingLots, setParkingLots] = useState<ParkingLot[]>([])
+  const { allParkingLots } = useAppSelector((state) => state.parking)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
@@ -33,7 +33,7 @@ export const useAllParkingLots = () => {
         '/api/v1/parking-lot',
       )
 
-      setParkingLots(response.data.data)
+      dispatch(setAllParkingLots(response.data.data))
     } catch (error) {
       console.log(error)
     }
@@ -122,13 +122,23 @@ export const useAllParkingLots = () => {
   }
 
   useEffect(() => {
+    const updatedCurrentParkingLot = allParkingLots.find(
+      (parkingLot) => parkingLot.id === currentParking?.id,
+    )
+
+    if (updatedCurrentParkingLot) {
+      setCurrentParking(updatedCurrentParkingLot)
+    }
+  }, [allParkingLots])
+
+  useEffect(() => {
     fetchAllParkingLots()
-  })
+  }, [])
 
   return {
     isReportModalOpen,
     currentParking,
-    parkingLots,
+    parkingLots: allParkingLots,
     cameraRef,
     bottomSheetRef,
     handleMapFinishLoading,

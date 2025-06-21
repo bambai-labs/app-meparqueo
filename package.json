@@ -17,6 +17,7 @@
   "dependencies": {
     "@expo/html-elements": "0.4.2",
     "@expo/vector-icons": "^14.0.2",
+    "@gluestack-ui/accordion": "^1.0.14",
     "@gluestack-ui/actionsheet": "^0.2.52",
     "@gluestack-ui/button": "^1.0.14",
     "@gluestack-ui/form-control": "^0.1.19",
@@ -27,6 +28,7 @@
     "@gluestack-ui/nativewind-utils": "^1.0.26",
     "@gluestack-ui/overlay": "^0.1.22",
     "@gluestack-ui/select": "^0.1.31",
+    "@gluestack-ui/slider": "^0.1.32",
     "@gluestack-ui/spinner": "^0.1.15",
     "@gluestack-ui/switch": "^0.1.29",
     "@gluestack-ui/textarea": "^0.1.24",

@@ -89,7 +89,6 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
                 / hora
               </Text>
             </HStack>
-
             <HStack space="sm">
               <Text
                 style={{ fontFamily: 'Neuwelt-Bold' }}
@@ -102,6 +101,13 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
               </Text>
             </HStack>
           </HStack>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Light', fontStyle: 'italic' }}
+            className="text-gray-600"
+          >
+            precio estimado
+          </Text>
 
           <AvailabilityIndicator
             className="mt-2"
@@ -190,9 +196,23 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
 
           <Text
             style={{ fontFamily: 'Neuwelt-Bold' }}
-            className="text-gray-600 text-xl mb-8"
+            className="text-gray-600 text-xl"
           >
             {paymentMethods}
+          </Text>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="mt-3 text-xl font-bold"
+          >
+            Acerca del parqueadero
+          </Text>
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Light' }}
+            className="text-gray-600 text-xl mb-8"
+          >
+            {parkingLot.description}
           </Text>
         </View>
       )
@@ -213,12 +233,15 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
         snapPoints={snapPoints}
         onChange={onChange}
         handleComponent={() => (
-          <HStack className="items-center justify-center w-full">
+          <HStack
+            className="items-center justify-center w-full bg-[#FAF9F6]"
+            style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50 }}
+          >
             <Icon as={ChevronsDown} className="w-9 h-9" />
           </HStack>
         )}
         style={{
-          backgroundColor: '#f3f4f6',
+          backgroundColor: '#FAF9F6',
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
         }}
@@ -235,6 +258,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 24,
     paddingBottom: 100, // Padding adicional en la parte inferior
+    backgroundColor: '#FAF9F6',
   },
   scrollViewContent: {
     flexGrow: 1,

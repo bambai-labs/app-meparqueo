@@ -16,6 +16,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import { View } from 'react-native'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import { Provider } from 'react-redux'
 
@@ -46,26 +47,28 @@ export default function RootLayout() {
   }
 
   return (
-    <GluestackUIProvider mode="light">
-      <Provider store={store}>
-        <ThemeProvider
-          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-        >
-          <View
-            style={{
-              paddingTop: Constants.statusBarHeight,
-              backgroundColor: '#ffffff',
-            }}
-          />
-          <HeaderLogo />
-          <Stack />
-          <StatusBar
-            style="dark"
-            backgroundColor="#ffffff"
-            translucent={false}
-          />
-        </ThemeProvider>
-      </Provider>
-    </GluestackUIProvider>
+    <GestureHandlerRootView>
+      <GluestackUIProvider mode="light">
+        <Provider store={store}>
+          <ThemeProvider
+            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+          >
+            <View
+              style={{
+                paddingTop: Constants.statusBarHeight,
+                backgroundColor: '#ffffff',
+              }}
+            />
+            <HeaderLogo />
+            <Stack />
+            <StatusBar
+              style="dark"
+              backgroundColor="#ffffff"
+              translucent={false}
+            />
+          </ThemeProvider>
+        </Provider>
+      </GluestackUIProvider>
+    </GestureHandlerRootView>
   )
 }

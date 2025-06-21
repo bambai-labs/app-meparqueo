@@ -13,6 +13,7 @@ export interface ParkingLot {
   distanceMt: number | null
   address: string
   reportsCount: number
+  description: string
 }
 
 export enum PaymentMethod {
@@ -130,6 +131,10 @@ export const getAvailabilities = (): ParkingLotAvailability[] => {
 export enum ParkingStatus {
   OPEN = 'OPEN',
   CLOSED = 'CLOSED',
+}
+
+export const getParkingStatuses = (): ParkingStatus[] => {
+  return [ParkingStatus.OPEN, ParkingStatus.CLOSED]
 }
 
 export interface RecentParkingLot extends ParkingLot {

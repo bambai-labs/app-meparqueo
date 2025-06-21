@@ -1,23 +1,129 @@
-import { MeParqueoApi, socketManager } from '@/api'
+import { MeParqueoApi, Place, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
-import { useAppSelector } from '@/modules/common'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
+import {
+  onChangeQuery,
+  searchPlace,
+  setOnlyAvailable,
+  setOnlyPaymentTransfer,
+  setRadiusMt,
+  setWithTwentyFourSeven,
+  setWithValetParking,
+} from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useRouter } from 'expo-router'
+import { isAxiosError } from 'axios'
+import { usePathname, useRouter } from 'expo-router'
 import { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform } from 'react-native'
 import { v4 as uuidv4 } from 'uuid'
 import { ParkingLot } from '../types'
 
+const HAS_SEEN_ACCORDION_ANIMATION_KEY = '@has_seen_accordion_animation'
+
 export const useHome = () => {
   const router = useRouter()
+  const dispatch = useAppDispatch()
   const { deviceLocation } = useAppSelector((state) => state.location)
+  const {
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
+  } = useAppSelector((state) => state.search)
   const [chipSelected, setChipSelected] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
-  const [recentParkingLots, setRecentParkingLots] = useState<ParkingLot[]>([])
+  const [accordionValue, setAccordionValue] = useState<string[]>([])
+
+  const { loading, query, places } = useAppSelector((state) => state.search)
+  const [isFocused, setIsFocused] = useState(false)
+  const pathName = usePathname()
+
+  useEffect(() => {
+    const checkAndShowAnimation = async () => {
+      try {
+        const hasSeenAnimation = await AsyncStorage.getItem(
+          HAS_SEEN_ACCORDION_ANIMATION_KEY,
+        )
+
+        if (!hasSeenAnimation) {
+          const timer = setTimeout(() => {
+            setAccordionValue(['a'])
+            setTimeout(async () => {
+              setAccordionValue([])
+              await AsyncStorage.setItem(
+                HAS_SEEN_ACCORDION_ANIMATION_KEY,
+                'true',
+              )
+            }, 1500)
+          }, 1000)
+
+          return () => clearTimeout(timer)
+        }
+      } catch (error) {
+        console.error('Error al verificar el estado de la animación:', error)
+      }
+    }
+
+    checkAndShowAnimation()
+  }, [])
+
+  const handlePlacePress = async (place: Place) => {
+    const shouldNavigate = pathName === '/home'
+
+    saveDestination(place)
+    setIsFocused(false)
+    if (shouldNavigate) {
+      router.push({
+        pathname: '/home/search',
+        params: {
+          place: JSON.stringify(place),
+        },
+      })
+    }
+  }
+
+  const saveDestination = async (destination: Place) => {
+    try {
+      await MeParqueoApi.post('/api/v1/user/search', {
+        filter: {
+          availability: [],
+          services: [],
+          paymentMethods: [],
+        },
+        destinationLocation: {
+          latitude: destination.location.latitude,
+          longitude: destination.location.longitude,
+          searchTerm: query,
+        },
+      })
+
+      console.log('destination saved')
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response)
+        return
+      }
+
+      console.log(error)
+    }
+  }
+
+  const handleQueryChange = (query: string) => {
+    dispatch(onChangeQuery(query))
+  }
+
+  const handleClearQuery = () => {
+    dispatch(onChangeQuery(''))
+  }
+
+  const handleSearch = (placeName: string) => {
+    dispatch(searchPlace(placeName))
+  }
 
   const toggleChip = () => {
     setChipSelected(!chipSelected)
@@ -28,9 +134,10 @@ export const useHome = () => {
   }
 
   const handleParkingCardPress = (parking: ParkingLot) => {
-    console.log('parking pressed', parking)
     setCurrentParking(parking)
-    expandParkingDetailsSheet()
+    setTimeout(() => {
+      expandParkingDetailsSheet()
+    }, 100)
   }
 
   const openMapDirection = async () => {
@@ -112,22 +219,72 @@ export const useHome = () => {
     login()
   }
 
+  const handleViewAllParkingLots = () => {
+    router.push('/home/allparkinglots')
+  }
+
+  const handleRadiusMtChange = (value: number) => {
+    dispatch(setRadiusMt(value))
+  }
+
+  const handleOnlyAvailableChange = (value: boolean) => {
+    dispatch(setOnlyAvailable(value))
+  }
+
+  const handleOnlyPaymentTransferChange = (value: boolean) => {
+    dispatch(setOnlyPaymentTransfer(value))
+  }
+
+  const handleWithValetParkingChange = (value: boolean) => {
+    dispatch(setWithValetParking(value))
+  }
+
+  const handleWithTwentyFourSevenChange = (value: boolean) => {
+    dispatch(setWithTwentyFourSeven(value))
+  }
+
+  useEffect(() => {
+    if (places.length === 0) {
+      return
+    }
+    const firstPlace = places[0]
+    handlePlacePress(firstPlace)
+  }, [places])
+
   useEffect(() => {
     checkUserUuid()
   }, [])
 
   return {
-    chipSelected,
-    toggleChip,
+    isReportModalOpen,
+    bottomSheetRef,
+    currentParking,
+    loading,
+    query,
+    places,
+    isFocused,
+    radiusMt,
+    onlyAvailable,
+    paymentTransfer,
+    valetParking,
+    twentyFourSeven,
+    accordionValue,
+    setAccordionValue,
+    handleViewAllParkingLots,
     handleParkingCardPress,
     openMapDirection,
     callParkingLot,
-    isReportModalOpen,
+    setIsFocused,
+    handleQueryChange,
+    handleClearQuery,
+    handleSearch,
+    handlePlacePress,
     hideReportModal,
     showReportModal,
-    handleSearchBarPress,
-    bottomSheetRef,
-    currentParking,
-    setCurrentParking,
+    handleRadiusMtChange,
+    handleOnlyAvailableChange,
+    handleOnlyPaymentTransferChange,
+    handleWithValetParkingChange,
+    handleWithTwentyFourSevenChange,
   }
 }

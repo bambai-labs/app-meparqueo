@@ -139,7 +139,7 @@ export const SearchBar = ({
           }}
         >
           {loading ? (
-            <ActivityIndicator />
+            <ActivityIndicator color="#fff" />
           ) : (
             <Icon as={Search} size="md" color="white" />
           )}
