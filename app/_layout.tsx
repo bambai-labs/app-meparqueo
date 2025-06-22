@@ -3,6 +3,7 @@ import '@/global.css'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { HeaderLogo } from '@/modules/home/components'
 import { store } from '@/store'
+import { firebase } from '@react-native-firebase/analytics'
 import {
   DarkTheme,
   DefaultTheme,
@@ -40,6 +41,10 @@ export default function RootLayout() {
   useEffect(() => {
     Mapbox.setAccessToken(process.env.EXPO_PUBLIC_MAPBOX_ACCESS_TOKEN ?? '')
     Mapbox.setTelemetryEnabled(false)
+
+    if (process.env.EXPO_PUBLIC_DEV_MODE === 'dev') {
+      firebase.analytics().setAnalyticsCollectionEnabled(false)
+    }
   }, [])
 
   if (!loaded) {
