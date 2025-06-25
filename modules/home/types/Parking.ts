@@ -14,6 +14,7 @@ export interface ParkingLot {
   address: string
   reportsCount: number
   description: string
+  acceptedVehicleTypes: VehicleType[]
 }
 
 export enum PaymentMethod {
@@ -154,4 +155,9 @@ export enum ParkingReport {
   SAFETY_ISSUE = 'SAFETY_ISSUE',
   BAD_SERVICE = 'BAD_SERVICE',
   OTHER = 'OTHER',
+}
+
+export enum VehicleType {
+  CAR = 'CAR',
+  MOTORCYCLE = 'MOTORCYCLE',
 }

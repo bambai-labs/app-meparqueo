@@ -29,7 +29,7 @@ export const useParkingPagination = () => {
 
       const { data, pagination } = response.data.data
 
-      console.log('respuesta de la paginacion:', data)
+      console.log('respuesta de la paginacion:', JSON.stringify(data))
 
       setTotalPages(pagination.totalPages)
       setInitialLoadDone(true)

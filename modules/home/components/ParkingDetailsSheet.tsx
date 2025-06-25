@@ -11,7 +11,12 @@ import React, { forwardRef, useCallback, useMemo } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { useParkingDetailsSheet } from '../hooks'
 import { ParkingLot } from '../types'
-import { formatCurrency, parsePaymentMethod, parseService } from '../utils'
+import {
+  formatCurrency,
+  parsePaymentMethod,
+  parseService,
+  parseVehicleType,
+} from '../utils'
 import { AvailabilityIndicator } from './AvailabilityIndicator'
 
 interface Props {
@@ -46,6 +51,10 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
 
     const paymentMethods = useMemo(() => {
       return parkingLot.paymentMethods.map(parsePaymentMethod).join(', ')
+    }, [parkingLot])
+
+    const vehicleTypes = useMemo(() => {
+      return parkingLot.acceptedVehicleTypes.map(parseVehicleType).join(', ')
     }, [parkingLot])
 
     const windowHeight = Dimensions.get('window').height
@@ -192,6 +201,22 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
               {services}
             </Text>
           </HStack>
+
+          {vehicleTypes.length !== 0 && (
+            <Text
+              style={{ fontFamily: 'Neuwelt-Bold' }}
+              className="mt-3 text-xl font-bold"
+            >
+              Vehículos aceptados
+            </Text>
+          )}
+
+          <Text
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+            className="text-gray-600 text-xl"
+          >
+            {vehicleTypes}
+          </Text>
 
           {paymentMethods.length !== 0 && (
             <Text
