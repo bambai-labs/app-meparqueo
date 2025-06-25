@@ -9,6 +9,7 @@ import { ChevronsDown, MapIcon, PhoneIcon } from 'lucide-react-native'
 import Carousel from 'pinar'
 import React, { forwardRef, useCallback, useMemo } from 'react'
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { useParkingDetailsSheet } from '../hooks'
 import { ParkingLot } from '../types'
 import { formatCurrency, parsePaymentMethod, parseService } from '../utils'
 import { AvailabilityIndicator } from './AvailabilityIndicator'
@@ -32,6 +33,13 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
     },
     ref,
   ) => {
+    const { handleShowReviewModal } = useParkingDetailsSheet()
+
+    const handleMapButtonPress = () => {
+      handleShowReviewModal()
+      onOpenMapDirection()
+    }
+
     const services = useMemo(() => {
       return parkingLot.services.map(parseService).join(', ')
     }, [parkingLot])
@@ -136,7 +144,7 @@ export const ParkingDetailsSheet = forwardRef<BottomSheet, Props>(
 
             <VStack className="items-center">
               <Button
-                onPress={onOpenMapDirection}
+                onPress={handleMapButtonPress}
                 size="xl"
                 className="w-16 h-16 rounded-xl"
               >

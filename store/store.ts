@@ -3,6 +3,7 @@ import { bottomSheetSlice } from './bottomsheet'
 import { counterSlice } from './counter'
 import { locationSlice } from './location'
 import { parkingSlice } from './parking'
+import { reviewSlice } from './review'
 import { searchSlice } from './search'
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     parking: parkingSlice.reducer,
     search: searchSlice.reducer,
     bottomsheet: bottomSheetSlice.reducer,
+    review: reviewSlice.reducer,
   },
 })
 

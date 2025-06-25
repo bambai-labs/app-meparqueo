@@ -12,11 +12,12 @@ import {
 import Mapbox from '@rnmapbox/maps'
 import Constants from 'expo-constants'
 import { useFonts } from 'expo-font'
+import * as Notifications from 'expo-notifications'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
-import { View } from 'react-native'
+import { Alert, Platform, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import { Provider } from 'react-redux'
@@ -32,6 +33,16 @@ export default function RootLayout() {
     'Neuwelt-Light': require('@/assets/fonts/Neuwelt-Light.ttf'),
   })
 
+  const requestNotificationPermission = async () => {
+    const { status } = await Notifications.requestPermissionsAsync()
+    if (status !== 'granted') {
+      Alert.alert(
+        'Permiso denegado',
+        'Por favor, habilita las notificaciones para recibir alertas de parqueo.',
+      )
+    }
+  }
+
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync()
@@ -44,6 +55,10 @@ export default function RootLayout() {
 
     if (process.env.EXPO_PUBLIC_DEV_MODE === 'dev') {
       firebase.analytics().setAnalyticsCollectionEnabled(false)
+    }
+
+    if (Platform.OS !== 'web') {
+      requestNotificationPermission()
     }
   }, [])
 
@@ -65,7 +80,14 @@ export default function RootLayout() {
               }}
             />
             <HeaderLogo />
-            <Stack />
+            <Stack>
+              <Stack.Screen
+                name="home"
+                options={{
+                  headerShown: false,
+                }}
+              />
+            </Stack>
             <StatusBar
               style="dark"
               backgroundColor="#ffffff"
