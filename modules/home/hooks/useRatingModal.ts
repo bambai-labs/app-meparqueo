@@ -1,6 +1,6 @@
 import { MeParqueoApi } from '@/api'
 import { useAppDispatch } from '@/modules/common'
-import { cancelRateNotificationReminder } from '@/store'
+import { cancelRateNotificationReminder, closeReviewModal } from '@/store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFormik } from 'formik'
 import { useState } from 'react'
@@ -30,6 +30,7 @@ export const useRatingModal = () => {
       await MeParqueoApi.post('api/v1/feedback', values)
       await AsyncStorage.setItem('reviewModalSubmitted', 'true')
       dispatch(cancelRateNotificationReminder())
+      dispatch(closeReviewModal())
       Alert.alert('Gracias por tus comentarios!')
     } catch (err) {
       console.log(err)
