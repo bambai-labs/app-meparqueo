@@ -1,13 +1,9 @@
 import { Button, ButtonText } from '@/components/ui/button'
-import {
-  FormControl,
-  FormControlLabel,
-  FormControlLabelText,
-} from '@/components/ui/form-control'
+import { FormControl } from '@/components/ui/form-control'
 import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
-import { Input, InputField } from '@/components/ui/input'
 import { Modal, ModalBackdrop, ModalContent } from '@/components/ui/modal'
+import { Textarea, TextareaInput } from '@/components/ui/textarea'
 import { VStack } from '@/components/ui/vstack'
 import { Text } from 'react-native'
 import StarRating from 'react-native-star-rating-widget'
@@ -32,50 +28,50 @@ export const RatingModal = ({ opened, onHide }: Props) => {
       <ModalContent>
         <VStack className="bg-white p-2 rounded-xl">
           <FormControl>
-            <Heading>¿Que te parece MeParqueo?</Heading>
+            <VStack>
+              <Heading>¿Que te parece MeParqueo?</Heading>
 
-            <StarRating
-              style={{
-                marginTop: 10,
-              }}
-              maxStars={5}
-              rating={values.rate}
-              onChange={handleStarRateChange}
-            />
-
-            {errors.rate && touched.rate && (
-              <Text className="text-red-500 font-bold my-2">{errors.rate}</Text>
-            )}
-
-            <FormControlLabel>
-              <FormControlLabelText className="text-lg">
-                Cuentanos sobre que opinas de MeParqueo
-              </FormControlLabelText>
-            </FormControlLabel>
-            <Input variant="outline" size="md">
-              <InputField
-                value={values.comment}
-                onChangeText={handleChange('comment')}
-                placeholder="Dejanos tus sugerencias aquí :)"
+              <StarRating
+                style={{
+                  marginTop: 10,
+                  width: '100%',
+                }}
+                maxStars={5}
+                rating={values.rate}
+                onChange={handleStarRateChange}
               />
-            </Input>
 
-            {errors.comment && touched.comment && (
-              <Text className="text-red-500 font-bold ,y2">
-                {errors.comment}*
-              </Text>
-            )}
+              {errors.rate && touched.rate && (
+                <Text className="text-red-500 font-bold my-2">
+                  {errors.rate}
+                </Text>
+              )}
 
-            <HStack className="w-full justify-end mt-3">
-              <HStack space="md">
-                <Button variant="outline" onPress={onHide}>
-                  <ButtonText>Cancelar</ButtonText>
-                </Button>
-                <Button onPress={() => handleSubmit()}>
-                  <ButtonText>Enviar</ButtonText>
-                </Button>
+              <Textarea size="md" className="w-full mt-3">
+                <TextareaInput
+                  value={values.comment}
+                  onChangeText={handleChange('comment')}
+                  placeholder="Dejanos tus sugerencias aquí :)"
+                />
+              </Textarea>
+
+              {errors.comment && touched.comment && (
+                <Text className="text-red-500 font-bold ,y2">
+                  {errors.comment}*
+                </Text>
+              )}
+
+              <HStack className="w-full justify-end mt-5">
+                <HStack space="md">
+                  <Button variant="outline" onPress={onHide}>
+                    <ButtonText>Cancelar</ButtonText>
+                  </Button>
+                  <Button onPress={() => handleSubmit()}>
+                    <ButtonText>Enviar</ButtonText>
+                  </Button>
+                </HStack>
               </HStack>
-            </HStack>
+            </VStack>
           </FormControl>
         </VStack>
       </ModalContent>

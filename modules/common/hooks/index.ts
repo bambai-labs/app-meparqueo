@@ -1,2 +1,3 @@
-export { useAppSelector } from './useAppSelector';
-export { useAppDispatch } from "./useAppDispatch"
+export { useAppDispatch } from './useAppDispatch'
+export { useAppSelector } from './useAppSelector'
+export { useNotificationNavigationHandler } from './useNotificationNavigationHandler'

@@ -31,6 +31,9 @@ export const useParkingDetailsSheet = () => {
         body: 'Ayúdanos a mejorar nuestra app con tu opinión.',
         autoDismiss: true,
         priority: Notifications.AndroidNotificationPriority.HIGH,
+        data: {
+          showReviewModal: true,
+        },
       },
       trigger: {
         seconds: TWO_HOURS_IN_SECONDS,
