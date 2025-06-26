@@ -23,7 +23,7 @@ export const RatingModal = ({ opened, onHide }: Props) => {
   }
 
   return (
-    <Modal isOpen={opened} onClose={onHide}>
+    <Modal avoidKeyboard={true} isOpen={opened} onClose={onHide}>
       <ModalBackdrop />
       <ModalContent>
         <VStack className="bg-white p-2 rounded-xl">
