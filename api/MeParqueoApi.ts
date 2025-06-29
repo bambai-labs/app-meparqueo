@@ -16,7 +16,7 @@ MeParqueoApi.interceptors.request.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
       try {
-        const userUuid = AsyncStorage.getItem('userUuid')
+        const userUuid = await AsyncStorage.getItem('userUuid')
         const { data } = await axios.post(
           `${process.env.EXPO_PUBLIC_MEPARQUEO_API}/api/v1/auth/client`,
           {
