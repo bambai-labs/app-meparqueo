@@ -15,11 +15,10 @@ export const useParkingPagination = () => {
   const [initialLoadDone, setInitialLoadDone] = useState(false)
   const { authStatus } = useAppSelector((state) => state.auth)
   const { recentParkings } = useAppSelector((state) => state.parking)
-
   const dispatch = useAppDispatch()
 
   const fetchParkings = useCallback(async () => {
-    if (loading || !hasMore) return
+    if (loading || !hasMore || authStatus !== AuthStatus.AUTHENTICATED) return
 
     if (initialLoadDone && totalPages > 0 && page > totalPages) {
       setHasMore(false)
@@ -51,20 +50,19 @@ export const useParkingPagination = () => {
     } finally {
       setLoading(false)
     }
-  }, [page, loading, totalPages, hasMore, initialLoadDone])
+  }, [page, loading, totalPages, hasMore, initialLoadDone, authStatus])
 
   const refreshParkings = async () => {
-    // Primero actualizamos el estado local
+    if (authStatus !== AuthStatus.AUTHENTICATED) return
+
     setPage(1)
     setHasMore(true)
     setTotalPages(0)
     setInitialLoadDone(false)
     setLoading(true)
 
-    // Limpiamos los datos en redux
     dispatch(setRecentParkingLots([]))
 
-    // Hacemos la petición directamente aquí en lugar de llamar a fetchParkings
     try {
       const response = await MeParqueoApi.get<PaginationResponse>(
         `/api/v1/user/recently/stored/parkings?limit=10&page=1`,
@@ -90,16 +88,10 @@ export const useParkingPagination = () => {
   }
 
   useEffect(() => {
-    if (authStatus === AuthStatus.AUTHENTICATED) {
+    if (authStatus === AuthStatus.AUTHENTICATED && !initialLoadDone) {
       fetchParkings()
     }
-  }, [authStatus])
-
-  useEffect(() => {
-    if (!initialLoadDone) {
-      fetchParkings()
-    }
-  }, [initialLoadDone, fetchParkings])
+  }, [authStatus, initialLoadDone, fetchParkings])
 
   return {
     recentParkings,
