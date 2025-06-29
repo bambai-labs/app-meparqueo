@@ -193,10 +193,6 @@ export const useHome = () => {
     setIsReportModalOpen(true)
   }
 
-  const handleSearchBarPress = () => {
-    router.push('/home/search')
-  }
-
   const login = async () => {
     const userUuid = await AsyncStorage.getItem('userUuid')
     const result = await MeParqueoApi.post<LoginResponse>(
