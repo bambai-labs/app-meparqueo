@@ -1,6 +1,10 @@
 import { MeParqueoApi, PaginationResponse } from '@/api'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
-import { pushRecentParkingLots, setRecentParkingLots } from '@/store'
+import {
+  AuthStatus,
+  pushRecentParkingLots,
+  setRecentParkingLots,
+} from '@/store'
 import { useCallback, useEffect, useState } from 'react'
 
 export const useParkingPagination = () => {
@@ -9,6 +13,7 @@ export const useParkingPagination = () => {
   const [hasMore, setHasMore] = useState(true)
   const [totalPages, setTotalPages] = useState(0)
   const [initialLoadDone, setInitialLoadDone] = useState(false)
+  const { authStatus } = useAppSelector((state) => state.auth)
   const { recentParkings } = useAppSelector((state) => state.parking)
 
   const dispatch = useAppDispatch()
@@ -83,6 +88,12 @@ export const useParkingPagination = () => {
       setLoading(false)
     }
   }
+
+  useEffect(() => {
+    if (authStatus === AuthStatus.AUTHENTICATED) {
+      fetchParkings()
+    }
+  }, [authStatus])
 
   useEffect(() => {
     if (!initialLoadDone) {

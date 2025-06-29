@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { authSlice } from './auth'
 import { bottomSheetSlice } from './bottomsheet'
 import { counterSlice } from './counter'
 import { locationSlice } from './location'
@@ -14,6 +15,7 @@ export const store = configureStore({
     search: searchSlice.reducer,
     bottomsheet: bottomSheetSlice.reducer,
     review: reviewSlice.reducer,
+    auth: authSlice.reducer,
   },
 })
 
