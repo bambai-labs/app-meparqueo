@@ -26,6 +26,7 @@ import {
   RecentParkingsList,
   ReportModal,
   SearchBar,
+  SurveyBanner,
 } from '../components'
 import { useHome } from '../hooks'
 
@@ -65,14 +66,14 @@ export const HomeScreen = () => {
 
   return (
     <GestureHandlerRootView>
-      <ScreenWrapper className="bg-white pb-20">
+      <ScreenWrapper className="bg-white pb-3">
         <Stack.Screen
           options={{
             headerShown: false,
           }}
         />
 
-        <VStack className="w-full">
+        <VStack className="w-full flex-1">
           <VStack className="w-full">
             <SearchBar
               query={query}
@@ -238,9 +239,11 @@ export const HomeScreen = () => {
           <Heading className="text-2xl mt-4">Parqueaderos recientes</Heading>
 
           <RecentParkingsList
-            className="mt-2"
+            className="mt-2 flex-1"
             onCardPress={handleParkingCardPress}
           />
+
+          <SurveyBanner />
         </VStack>
 
         {currentParking && (

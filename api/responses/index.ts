@@ -1,4 +1,5 @@
 export * from './AppVersionResponse'
+export * from './BannerDataResponse'
 export * from './NearbyParkingLotsResponse'
 export * from './PaginationResponse'
 export * from './PlacesResponse'
