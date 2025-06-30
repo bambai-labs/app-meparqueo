@@ -1,10 +1,11 @@
-import { MeParqueoApi, socketManager } from '@/api'
+import { AppVersionResponse, MeParqueoApi, socketManager } from '@/api'
 import { getPermissions, ParkingUpdateEstatus, useAppDispatch } from '@/modules'
 import { setLocation, updateParkingLotAvailability } from '@/store'
 import { isAxiosError } from 'axios'
+import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import { useRootNavigationState, useRouter } from 'expo-router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ActivityIndicator, Alert } from 'react-native'
 import 'react-native-get-random-values'
 
@@ -12,6 +13,7 @@ export default function Index() {
   const router = useRouter()
   const navigationState = useRootNavigationState()
   const dispatch = useAppDispatch()
+  const [isInitialized, setIsInitialized] = useState(false)
 
   const startWatchingLocation = async () => {
     const hasPermission = await getPermissions()
@@ -64,16 +66,53 @@ export default function Index() {
     dispatch(updateParkingLotAvailability(data))
   }
 
-  useEffect(() => {
-    startWatchingLocation()
-    initializeSocket()
-  }, [])
+  const isAppUpdated = async (): Promise<boolean> => {
+    try {
+      const { data } = await MeParqueoApi.get<AppVersionResponse>(
+        '/api/v1/config/version',
+      )
+      const currentVersion = Constants.expoConfig?.version
+
+      console.log(
+        `Client version: ${currentVersion} - Server version: ${data.data.app.version}`,
+      )
+
+      return data.data.app.version === currentVersion
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+  }
+
+  const handleAppInitialization = async () => {
+    try {
+      const isUpdated = await isAppUpdated()
+
+      if (!isUpdated) {
+        router.replace('/home/outdated')
+        return
+      }
+      await startWatchingLocation()
+      await initializeSocket()
+
+      setIsInitialized(true)
+    } catch (error) {
+      console.error('Error during app initialization:', error)
+      // TODO: Handle error
+    }
+  }
 
   useEffect(() => {
     if (navigationState?.key) {
-      router.replace('/home')
+      handleAppInitialization()
     }
   }, [navigationState?.key])
+
+  useEffect(() => {
+    if (isInitialized && navigationState?.key) {
+      router.replace('/home')
+    }
+  }, [isInitialized, navigationState?.key])
 
   return <ActivityIndicator />
 }

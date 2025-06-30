@@ -1,3 +1,4 @@
+export * from './AppVersionResponse'
 export * from './NearbyParkingLotsResponse'
 export * from './PaginationResponse'
 export * from './PlacesResponse'
