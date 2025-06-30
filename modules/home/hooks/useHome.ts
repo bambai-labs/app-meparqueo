@@ -2,8 +2,10 @@ import { MeParqueoApi, Place, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
 import {
+  AuthStatus,
   onChangeQuery,
   searchPlace,
+  setAuthStatus,
   setOnlyAvailable,
   setOnlyPaymentTransfer,
   setRadiusMt,
@@ -204,6 +206,7 @@ export const useHome = () => {
 
     await AsyncStorage.setItem('userToken', result.data.data.token)
     await socketManager.updateToken(result.data.data.token)
+    dispatch(setAuthStatus(AuthStatus.AUTHENTICATED))
   }
 
   const checkUserUuid = async () => {

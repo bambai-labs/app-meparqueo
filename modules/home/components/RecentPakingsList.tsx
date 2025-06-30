@@ -1,9 +1,10 @@
+import { Image } from '@/components/ui/image'
+import { VStack } from '@/components/ui/vstack'
 import React from 'react'
 import { ActivityIndicator, FlatList, Text, View } from 'react-native'
-import { useParkingPagination, useSponsors } from '../hooks/'
+import { useParkingPagination } from '../hooks/'
 import { ParkingLot } from '../types'
 import { RecentParkingCard } from './RecentParkingCard'
-import { SponsorsList } from './SponsorsList'
 
 interface Props {
   className?: string
@@ -13,8 +14,6 @@ interface Props {
 export const RecentParkingsList = ({ className = '', onCardPress }: Props) => {
   const { recentParkings, loading, hasMore, fetchParkings, refreshParkings } =
     useParkingPagination()
-
-  const { sponsors } = useSponsors()
 
   const handleEndReached = () => {
     if (!loading && hasMore) {
@@ -59,14 +58,16 @@ export const RecentParkingsList = ({ className = '', onCardPress }: Props) => {
     }
 
     return (
-      <>
+      <VStack className="flex-1 items-center justify-center mt-12">
+        <Image
+          size="2xl"
+          source={require('@/assets/images/empty_parking.png')}
+          alt="No hay parqueaderos recientes"
+        />
         <Text className="text-center text-gray-500 text-base">
-          Encuentra parqueadero en el centro de Montería
+          No hay parqueaderos recientes
         </Text>
-        <View className="flex-1 items-center justify-center mt-4">
-          <SponsorsList sponsors={sponsors} />
-        </View>
-      </>
+      </VStack>
     )
   }
 
