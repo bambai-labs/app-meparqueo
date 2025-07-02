@@ -45,7 +45,7 @@ export const ReportModal = ({
     useReportParkingLot(parkingLot.id)
 
   return (
-    <Modal isOpen={opened} onClose={onCancel}>
+    <Modal avoidKeyboard={true} isOpen={opened} onClose={onCancel}>
       <ModalBackdrop />
 
       <ModalContent>
@@ -107,7 +107,6 @@ export const ReportModal = ({
             <TextareaInput
               style={{ fontFamily: 'Neuwelt-Bold' }}
               value={values.comment}
-              onChange={handleChange}
               placeholder="Comentarios"
               onChangeText={handleChange('comment')}
             />
