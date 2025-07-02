@@ -3,6 +3,7 @@ import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
 import { setAllParkingLots, setIsSheetExpanded } from '@/store'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
+import { isAxiosError } from 'axios'
 import { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform } from 'react-native'
 import { ParkingLot } from '../types'
@@ -72,6 +73,8 @@ export const useAllParkingLots = () => {
     const destinationLat = currentParking?.latitude
     const destinationLon = currentParking?.longitude
 
+    saveRecentParking()
+
     if (Platform.OS === 'ios') {
       const appleMapsScheme = `maps://?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
       const appleMapsFallback = `http://maps.apple.com/?saddr=${currentLat},${currentLon}&daddr=${destinationLat},${destinationLon}`
@@ -96,6 +99,29 @@ export const useAllParkingLots = () => {
       Linking.openURL(schemeURL)
     } else {
       Linking.openURL(fallbackURL)
+    }
+  }
+
+  const saveRecentParking = async () => {
+    try {
+      await MeParqueoApi.post('/api/v1/user/recently-parked', {
+        parkingLotId: currentParking?.id,
+        destinationLocation: {
+          latitude: currentParking?.latitude,
+          longitude: currentParking?.longitude,
+          searchTerm: currentParking?.name,
+        },
+        distanceMt: 0,
+      })
+
+      console.log('Parking destination saved')
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error.response?.data)
+        return
+      }
+
+      console.log(error)
     }
   }
 
