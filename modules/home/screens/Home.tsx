@@ -2,7 +2,6 @@ import {
   Accordion,
   AccordionContent,
   AccordionHeader,
-  AccordionIcon,
   AccordionItem,
   AccordionTitleText,
   AccordionTrigger,
@@ -18,8 +17,9 @@ import { HStack } from '@/components/ui/hstack'
 import { VStack } from '@/components/ui/vstack'
 import { ScreenWrapper } from '@/modules/common'
 import { Stack } from 'expo-router'
-import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react-native'
+import { Filter } from 'lucide-react-native'
 import React from 'react'
+import { Animated, Easing, View } from 'react-native'
 import { GestureHandlerRootView, Switch } from 'react-native-gesture-handler'
 import {
   HomeBanner,
@@ -78,7 +78,7 @@ export const HomeScreen = () => {
             <SearchBar
               query={query}
               onQueryChange={handleQueryChange}
-              placeholder="A que lugar del centro quieres ir?"
+              placeholder="Escribe una zona o dirección"
               className="mt-3 bg-white rounded-lg"
               onSearch={handleSearch}
               loading={loading}
@@ -103,22 +103,59 @@ export const HomeScreen = () => {
               <AccordionHeader>
                 <AccordionTrigger className="px-1">
                   {({ isExpanded }) => {
+                    const [blinkAnim] = React.useState(new Animated.Value(1))
+                    React.useEffect(() => {
+                      const loop = Animated.loop(
+                        Animated.sequence([
+                          Animated.timing(blinkAnim, {
+                            toValue: 0.2,
+                            duration: 500,
+                            easing: Easing.linear,
+                            useNativeDriver: true,
+                          }),
+                          Animated.timing(blinkAnim, {
+                            toValue: 1,
+                            duration: 500,
+                            easing: Easing.linear,
+                            useNativeDriver: true,
+                          }),
+                        ]),
+                      )
+                      loop.start()
+                      return () => loop.stop()
+                    }, [])
                     return (
                       <>
                         <AccordionTitleText
                           style={{ fontFamily: 'Neuwelt-Bold' }}
                           className="text-xl"
                         >
-                          Filtros
+                          Filtra tu búsqueda
                         </AccordionTitleText>
-                        {isExpanded ? (
-                          <AccordionIcon as={ChevronUpIcon} className="ml-3" />
-                        ) : (
-                          <AccordionIcon
-                            as={ChevronDownIcon}
-                            className="ml-3"
+                        <View
+                          style={{
+                            marginLeft: 12,
+                            position: 'relative',
+                            width: 24,
+                            height: 24,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        >
+                          <Filter size={24} color="#222" />
+                          <Animated.View
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              right: 0,
+                              width: 8,
+                              height: 8,
+                              borderRadius: 4,
+                              backgroundColor: '#2196f3',
+                              opacity: blinkAnim,
+                            }}
                           />
-                        )}
+                        </View>
                       </>
                     )
                   }}
@@ -230,7 +267,7 @@ export const HomeScreen = () => {
                       variant="outline"
                     >
                       <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
-                        Ver todos los parqueaderos
+                        Mostrar todos los parqueaderos (ignorar filtros)
                       </ButtonText>
                     </Button>
                   </VStack>
@@ -239,7 +276,21 @@ export const HomeScreen = () => {
             </AccordionItem>
           </Accordion>
 
-          <Heading className="text-2xl mt-4">Visitados recientemente</Heading>
+          <View
+            style={{
+              height: 1,
+              backgroundColor: '#e0e0e0',
+              marginVertical: 2,
+              borderRadius: 1,
+            }}
+          />
+
+          <Heading
+            className="text-2xl mt-3 text-gray-900"
+            style={{ fontFamily: 'Neuwelt-Bold' }}
+          >
+            Visitados recientemente
+          </Heading>
 
           <RecentParkingsList
             className="mt-2 flex-1"
