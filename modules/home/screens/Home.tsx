@@ -236,7 +236,7 @@ export const HomeScreen = () => {
             </ButtonText>
           </Button>
 
-          <Heading className="text-2xl mt-4">Parqueaderos recientes</Heading>
+          <Heading className="text-2xl mt-4">Visitados recientemente</Heading>
 
           <RecentParkingsList
             className="mt-2 flex-1"
