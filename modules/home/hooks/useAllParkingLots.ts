@@ -1,6 +1,7 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
 import { CITY_CENTER, useAppDispatch, useAppSelector } from '@/modules/common'
-import { setAllParkingLots, setIsSheetExpanded } from '@/store'
+import { setIsSheetExpanded } from '@/store/bottomsheet/bottomSheetSlice'
+import { setAllParkingLots } from '@/store/parking/parkingSlice'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { Camera } from '@rnmapbox/maps'
 import { isAxiosError } from 'axios'

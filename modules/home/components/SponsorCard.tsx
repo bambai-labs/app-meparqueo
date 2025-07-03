@@ -17,6 +17,7 @@ export const SponsorCard = ({ sponsor }: Props) => {
           alignSelf: 'center',
         }}
         source={{ uri: sponsor.image }}
+        alt="Logo del patrocinador"
       />
     </View>
   )

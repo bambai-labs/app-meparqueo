@@ -1,6 +1,6 @@
 import { MeParqueoApi, NearbyParkingLotsResponse } from '@/api'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
-import { setParkingLots } from '@/store'
+import { setParkingLots } from '@/store/parking/parkingSlice'
 import { isAxiosError } from 'axios'
 import { useState } from 'react'
 import { ParkingLotAvailability, PaymentMethod } from '../types'

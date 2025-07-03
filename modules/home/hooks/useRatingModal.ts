@@ -1,6 +1,7 @@
 import { MeParqueoApi } from '@/api'
 import { useAppDispatch } from '@/modules/common'
-import { cancelRateNotificationReminder, closeReviewModal } from '@/store'
+import { closeReviewModal } from '@/store/review/reviewSlice'
+import { cancelRateNotificationReminder } from '@/store/review/thunks'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFormik } from 'formik'
 import { useState } from 'react'

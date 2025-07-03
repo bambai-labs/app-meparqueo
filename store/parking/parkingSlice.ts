@@ -1,6 +1,7 @@
 import { RecentParkingLotResponse } from '@/api'
-import { ParkingLot, ParkingUpdateEstatus, updateParkingLot } from '@/modules'
+import { ParkingLot } from '@/modules'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ParkingUpdateEstatus, updateParkingLot } from './utils'
 
 interface ParkingSliceState {
   recentParkings: RecentParkingLotResponse[]

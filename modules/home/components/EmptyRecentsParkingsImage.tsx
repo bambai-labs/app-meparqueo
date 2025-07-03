@@ -9,6 +9,7 @@ export const EmptyRecentsParkingsImage = () => {
         source={require('@/assets/images/parking.png')}
         resizeMode="contain"
         className="w-[250px] h-[200px]"
+        alt="Sin parqueaderos recientes"
       />
       <View>
         <Text className="font-bold text-2xl text-center">

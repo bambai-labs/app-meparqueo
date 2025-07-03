@@ -1,5 +1,5 @@
 import { useAppDispatch } from '@/modules/common'
-import { openReviewModal } from '@/store'
+import { openReviewModal } from '@/store/review/reviewSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Notifications from 'expo-notifications'
 

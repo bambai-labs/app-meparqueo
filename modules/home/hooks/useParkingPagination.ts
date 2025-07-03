@@ -1,10 +1,10 @@
 import { MeParqueoApi, PaginationResponse } from '@/api'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { AuthStatus } from '@/store/auth/auth-status.enum'
 import {
-  AuthStatus,
   pushRecentParkingLots,
   setRecentParkingLots,
-} from '@/store'
+} from '@/store/parking/parkingSlice'
 import { useCallback, useEffect, useState } from 'react'
 
 export const useParkingPagination = () => {

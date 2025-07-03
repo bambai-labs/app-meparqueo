@@ -2,7 +2,7 @@ import { Place } from '@/api'
 import { Box } from '@/components/ui/box'
 import { Image } from '@/components/ui/image'
 import { VStack } from '@/components/ui/vstack'
-import { useAppSelector } from '@/modules'
+import { useAppSelector } from '@/modules/common/hooks'
 import { Camera, MapView, MarkerView } from '@rnmapbox/maps'
 import { ForwardedRef, forwardRef, useRef } from 'react'
 import { Animated, Pressable, Text, View } from 'react-native'
@@ -156,6 +156,7 @@ export const ParkingLotsMap = forwardRef<Camera, Props>(
               <Image
                 source={require('@/assets/images/pin_destination.png')}
                 className="w-[45px] h-[50px]"
+                alt="Destino seleccionado"
               />
             </VStack>
           </MarkerView>

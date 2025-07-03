@@ -1,17 +1,17 @@
 import { MeParqueoApi, Place, socketManager } from '@/api'
 import { LoginResponse } from '@/api/responses/LoginResponse'
 import { useAppDispatch, useAppSelector } from '@/modules/common'
+import { AuthStatus } from '@/store/auth/auth-status.enum'
+import { setAuthStatus } from '@/store/auth/authSlice'
 import {
-  AuthStatus,
   onChangeQuery,
-  searchPlace,
-  setAuthStatus,
   setOnlyAvailable,
   setOnlyPaymentTransfer,
   setRadiusMt,
   setWithTwentyFourSeven,
   setWithValetParking,
-} from '@/store'
+} from '@/store/search/searchSlice'
+import { searchPlace } from '@/store/search/thunks'
 import BottomSheet from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { isAxiosError } from 'axios'

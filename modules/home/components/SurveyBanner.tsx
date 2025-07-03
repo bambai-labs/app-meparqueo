@@ -15,6 +15,7 @@ export const SurveyBanner = () => {
               uri: bannerData.image,
             }}
             className="w-full h-[110px] rounded-2xl"
+            alt="Banner de encuesta"
           />
         </TouchableOpacity>
       )}
