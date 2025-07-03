@@ -8,28 +8,35 @@ export const useSurveyBanner = () => {
     undefined,
   )
 
+  // Genera una clave única para el banner actual
+  const getBannerKey = (banner?: BannerData) => {
+    if (!banner) return ''
+    return `${banner.image || ''}|${banner.link || ''}`
+  }
+
   const fetchBannerData = async () => {
     try {
-      const bannerTouched = Boolean(
-        (await AsyncStorage.getItem('bannerTouched')) ?? false,
-      )
-
-      if (bannerTouched) {
-        return
-      }
+      // Obtener el banner actual desde la API
       const { data } = await MeParqueoApi.get<BannerDataResponse>(
         '/api/v1/config/banner',
       )
-
-      setBannerData(data.data)
+      const banner = data.data
+      const bannerKey = getBannerKey(banner)
+      const touchedKey = await AsyncStorage.getItem('bannerTouchedKey')
+      if (bannerKey && touchedKey === bannerKey) {
+        setBannerData(undefined)
+        return
+      }
+      setBannerData(banner)
     } catch (error) {
       console.log(error)
     }
   }
 
   const handleBannerPress = async () => {
-    if (bannerData) {
-      await AsyncStorage.setItem('bannerTouched', 'true')
+    if (bannerData && bannerData.link) {
+      const bannerKey = getBannerKey(bannerData)
+      await AsyncStorage.setItem('bannerTouchedKey', bannerKey)
       await Linking.openURL(bannerData.link)
       setBannerData(undefined)
     }
