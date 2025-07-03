@@ -128,7 +128,7 @@ export const HomeScreen = () => {
                       <>
                         <AccordionTitleText
                           style={{ fontFamily: 'Neuwelt-Bold' }}
-                          className="text-xl"
+                          className="text-xl text-gray-900 italic"
                         >
                           Filtra tu búsqueda
                         </AccordionTitleText>
@@ -289,7 +289,7 @@ export const HomeScreen = () => {
             className="text-2xl mt-3 text-gray-900"
             style={{ fontFamily: 'Neuwelt-Bold' }}
           >
-            Visitados recientemente
+            Parqueaderos recientes
           </Heading>
 
           <RecentParkingsList
