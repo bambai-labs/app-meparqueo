@@ -22,11 +22,11 @@ import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react-native'
 import React from 'react'
 import { GestureHandlerRootView, Switch } from 'react-native-gesture-handler'
 import {
+  HomeBanner,
   ParkingDetailsSheet,
   RecentParkingsList,
   ReportModal,
   SearchBar,
-  SurveyBanner,
 } from '../components'
 import { useHome } from '../hooks'
 
@@ -243,7 +243,7 @@ export const HomeScreen = () => {
             onCardPress={handleParkingCardPress}
           />
 
-          <SurveyBanner />
+          <HomeBanner />
         </VStack>
 
         {currentParking && (

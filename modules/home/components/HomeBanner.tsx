@@ -1,10 +1,10 @@
 import { Box } from '@/components/ui/box'
 import { Image } from '@/components/ui/image'
 import { TouchableOpacity } from 'react-native'
-import { useSurveyBanner } from '../hooks'
+import { useHomeBanner } from '../hooks'
 
-export const SurveyBanner = () => {
-  const { bannerData, handleBannerPress } = useSurveyBanner()
+export const HomeBanner = () => {
+  const { bannerData, handleBannerPress } = useHomeBanner()
 
   if (!bannerData || !bannerData.visibility) return null
 

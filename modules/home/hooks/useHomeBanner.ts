@@ -3,7 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useEffect, useState } from 'react'
 import { Linking } from 'react-native'
 
-export const useSurveyBanner = () => {
+export const useHomeBanner = () => {
   const [bannerData, setBannerData] = useState<BannerData | undefined>(
     undefined,
   )
