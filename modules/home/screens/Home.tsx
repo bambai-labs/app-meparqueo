@@ -78,7 +78,7 @@ export const HomeScreen = () => {
             <SearchBar
               query={query}
               onQueryChange={handleQueryChange}
-              placeholder="A donde quieres ir?"
+              placeholder="A que lugar del centro quieres ir?"
               className="mt-3 bg-white rounded-lg"
               onSearch={handleSearch}
               loading={loading}
@@ -101,11 +101,14 @@ export const HomeScreen = () => {
           >
             <AccordionItem value="a">
               <AccordionHeader>
-                <AccordionTrigger>
+                <AccordionTrigger className="px-1">
                   {({ isExpanded }) => {
                     return (
                       <>
-                        <AccordionTitleText className="text-2xl">
+                        <AccordionTitleText
+                          style={{ fontFamily: 'Neuwelt-Bold' }}
+                          className="text-xl"
+                        >
                           Filtros
                         </AccordionTitleText>
                         {isExpanded ? (
@@ -191,7 +194,7 @@ export const HomeScreen = () => {
                       </FormControlLabelText>
                     </FormControlLabel>
 
-                    <HStack space="md" className="mt-2 px-2">
+                    <HStack space="md" className="mt-0">
                       <Button
                         variant={radiusMt === 100 ? 'solid' : 'outline'}
                         onPress={() => handleRadiusMtChange(100)}
@@ -220,21 +223,21 @@ export const HomeScreen = () => {
                         <ButtonText>300m</ButtonText>
                       </Button>
                     </HStack>
+
+                    <Button
+                      className="bg-white shadow-xl mt-2"
+                      onPress={handleViewAllParkingLots}
+                      variant="outline"
+                    >
+                      <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
+                        Ver todos los parqueaderos
+                      </ButtonText>
+                    </Button>
                   </VStack>
                 </FormControl>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
-          <Button
-            className="mt-4 bg-white shadow-xl"
-            onPress={handleViewAllParkingLots}
-            variant="outline"
-          >
-            <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
-              Ver todos los parqueaderos
-            </ButtonText>
-          </Button>
 
           <Heading className="text-2xl mt-4">Visitados recientemente</Heading>
 

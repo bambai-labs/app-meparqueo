@@ -311,7 +311,7 @@ export const SearchScreen = () => {
             query={query}
             onQueryChange={handleQueryChange}
             onClear={handleClearQuery}
-            placeholder="A donde quieres ir?"
+            placeholder="A que lugar del centro quieres ir?"
             className="mt-3"
             onSearch={handleSearch}
             loading={loading}
