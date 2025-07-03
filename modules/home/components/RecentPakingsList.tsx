@@ -23,11 +23,16 @@ export const RecentParkingsList = ({ className = '', onCardPress }: Props) => {
 
   const renderFooter = () => {
     if (loading) {
-      return (
+      return null
+      {
+        /**
+       return (
         <View className="py-5 items-center justify-center">
           <ActivityIndicator size="large" />
         </View>
       )
+      */
+      }
     }
 
     if (recentParkings.length > 0 && !hasMore) {
