@@ -1,6 +1,7 @@
 export { AvailabilityIndicator } from './AvailabilityIndicator'
 export { EmptyRecentsParkingsImage } from './EmptyRecentsParkingsImage'
 export * from './FilterModal'
+export { FilterSheet } from './FilterSheet'
 export { HeaderLogo } from './HeaderLogo'
 export { HomeBanner } from './HomeBanner'
 export { ParkingDetailsSheet } from './ParkingDetailsSheet'

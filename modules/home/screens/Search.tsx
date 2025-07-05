@@ -16,7 +16,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Alert, Linking, Platform, Text } from 'react-native'
 import type { ICarouselInstance } from 'react-native-reanimated-carousel'
 import {
-  FilterModal,
+  FilterSheet,
   ParkingDetailsSheet,
   ParkingLotsMap,
   ParkingResultCard,
@@ -33,6 +33,7 @@ export const SearchScreen = () => {
   const carouselRef = useRef<ICarouselInstance>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const reportSheetRef = useRef<BottomSheet>(null)
+  const filterSheetRef = useRef<BottomSheet>(null)
   const {
     radiusMt,
     onlyAvailable,
@@ -160,12 +161,12 @@ export const SearchScreen = () => {
     reportSheetRef.current?.expand()
   }
 
-  const showFilterModal = () => {
-    setIsFilterModalOpen(true)
+  const showFilterSheet = () => {
+    filterSheetRef.current?.expand()
   }
 
-  const hideFilterModal = () => {
-    setIsFilterModalOpen(false)
+  const hideFilterSheet = () => {
+    filterSheetRef.current?.close()
   }
 
   const handleConfirmFilterModal = (values: FilterModalValues) => {
@@ -182,7 +183,7 @@ export const SearchScreen = () => {
       saveDestination()
     }
 
-    hideFilterModal()
+    hideFilterSheet()
   }
 
   const handleSubmit = async () => {
@@ -323,7 +324,7 @@ export const SearchScreen = () => {
           <HStack className="mt-3 w-full items-center justify-between">
             <HStack space="md">
               <Button
-                onPress={showFilterModal}
+                onPress={showFilterSheet}
                 variant="outline"
                 className="border-gray-400 rounded-lg"
               >
@@ -389,10 +390,10 @@ export const SearchScreen = () => {
         )}
       </VStack>
 
-      <FilterModal
+      <FilterSheet
         handleSubmit={handleSubmit}
-        opened={isFilterModalOpen}
-        onCancel={hideFilterModal}
+        onCancel={hideFilterSheet}
+        ref={filterSheetRef}
       />
 
       {currentParking && (
