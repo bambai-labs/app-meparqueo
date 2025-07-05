@@ -6,7 +6,7 @@ import {
   ParkingDetailsSheet,
   ParkingLotsMap,
   ParkingResultCard,
-  ReportModal,
+  ReportSheet,
 } from '../components'
 import { useAllParkingLots } from '../hooks'
 
@@ -16,12 +16,12 @@ export const AllParkingLotsScreen = () => {
     cameraRef,
     bottomSheetRef,
     parkingLots,
-    isReportModalOpen,
+    reportSheetRef,
     handleMapFinishLoading,
     handleParkingMarkerPress,
     handleParkingCardPress,
-    hideReportModal,
-    showReportModal,
+    hideReportSheet,
+    showReportSheet,
     callParkingLot,
     openMapDirection,
     handleSheetChange,
@@ -59,17 +59,16 @@ export const AllParkingLotsScreen = () => {
             parkingLot={currentParking}
             onCallParkingLot={callParkingLot}
             onOpenMapDirection={openMapDirection}
-            onShowReportModal={showReportModal}
+            onShowReportModal={showReportSheet}
             onChange={handleSheetChange}
           />
         )}
 
         {currentParking && (
-          <ReportModal
+          <ReportSheet
             parkingLot={currentParking}
-            opened={isReportModalOpen}
-            onCancel={hideReportModal}
-            onConfirm={hideReportModal}
+            onConfirm={hideReportSheet}
+            ref={reportSheetRef}
           />
         )}
       </VStack>

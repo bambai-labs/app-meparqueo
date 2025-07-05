@@ -21,7 +21,7 @@ import {
   ParkingLotsMap,
   ParkingResultCard,
   ParkingResultsList,
-  ReportModal,
+  ReportSheet,
   SearchBar,
 } from '../components'
 import { useSearchParkingLots } from '../hooks'
@@ -32,6 +32,7 @@ export const SearchScreen = () => {
   const cameraRef = useRef<Camera>(null)
   const carouselRef = useRef<ICarouselInstance>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
+  const reportSheetRef = useRef<BottomSheet>(null)
   const {
     radiusMt,
     onlyAvailable,
@@ -149,15 +150,14 @@ export const SearchScreen = () => {
     openBottomSheet()
   }
 
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
 
-  const hideReportModal = () => {
-    setIsReportModalOpen(false)
+  const hideReportSheet = () => {
+    reportSheetRef.current?.close()
   }
 
-  const showReportModal = () => {
-    setIsReportModalOpen(true)
+  const showReportSheet = () => {
+    reportSheetRef.current?.expand()
   }
 
   const showFilterModal = () => {
@@ -383,7 +383,7 @@ export const SearchScreen = () => {
             parkingLot={currentParking}
             onCallParkingLot={callParkingLot}
             onOpenMapDirection={openMapDirection}
-            onShowReportModal={showReportModal}
+            onShowReportModal={showReportSheet}
             onChange={handleSheetChange}
           />
         )}
@@ -396,11 +396,10 @@ export const SearchScreen = () => {
       />
 
       {currentParking && (
-        <ReportModal
+        <ReportSheet
           parkingLot={currentParking}
-          opened={isReportModalOpen}
-          onCancel={hideReportModal}
-          onConfirm={hideReportModal}
+          onConfirm={hideReportSheet}
+          ref={reportSheetRef}
         />
       )}
     </>

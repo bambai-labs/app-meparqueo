@@ -13,12 +13,12 @@ export const useAllParkingLots = () => {
   const dispatch = useAppDispatch()
   const cameraRef = useRef<Camera>(null)
   const bottomSheetRef = useRef<BottomSheet>(null)
+  const reportSheetRef = useRef<BottomSheet>(null)
   const { deviceLocation } = useAppSelector((state) => state.location)
   const { allParkingLots } = useAppSelector((state) => state.parking)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
   )
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
 
   const handleMapFinishLoading = () => {
     cameraRef.current?.setCamera({
@@ -136,12 +136,12 @@ export const useAllParkingLots = () => {
     }
   }
 
-  const hideReportModal = () => {
-    setIsReportModalOpen(false)
+  const hideReportSheet = () => {
+    reportSheetRef.current?.close()
   }
 
-  const showReportModal = () => {
-    setIsReportModalOpen(true)
+  const showReportSheet = () => {
+    reportSheetRef.current?.expand()
   }
 
   const handleSheetChange = (index: number) => {
@@ -163,7 +163,7 @@ export const useAllParkingLots = () => {
   }, [])
 
   return {
-    isReportModalOpen,
+    reportSheetRef,
     currentParking,
     parkingLots: allParkingLots,
     cameraRef,
@@ -172,8 +172,8 @@ export const useAllParkingLots = () => {
     handleParkingMarkerPress,
     handleParkingCardPress,
     openBottomSheet,
-    showReportModal,
-    hideReportModal,
+    showReportSheet,
+    hideReportSheet,
     openMapDirection,
     callParkingLot,
     handleSheetChange,

@@ -25,14 +25,13 @@ import {
   HomeBanner,
   ParkingDetailsSheet,
   RecentParkingsList,
-  ReportModal,
+  ReportSheet,
   SearchBar,
 } from '../components'
 import { useHome } from '../hooks'
 
 export const HomeScreen = () => {
   const {
-    isReportModalOpen,
     bottomSheetRef,
     currentParking,
     loading,
@@ -45,6 +44,7 @@ export const HomeScreen = () => {
     valetParking,
     twentyFourSeven,
     accordionValue,
+    reportSheetRef,
     setAccordionValue,
     handleViewAllParkingLots,
     handleParkingCardPress,
@@ -55,8 +55,8 @@ export const HomeScreen = () => {
     handleClearQuery,
     handleSearch,
     handlePlacePress,
-    hideReportModal,
-    showReportModal,
+    hideReportSheet,
+    showReportSheet,
     handleRadiusMtChange,
     handleOnlyAvailableChange,
     handleOnlyPaymentTransferChange,
@@ -306,16 +306,15 @@ export const HomeScreen = () => {
             parkingLot={currentParking}
             onCallParkingLot={callParkingLot}
             onOpenMapDirection={openMapDirection}
-            onShowReportModal={showReportModal}
+            onShowReportModal={showReportSheet}
           />
         )}
 
         {currentParking && (
-          <ReportModal
+          <ReportSheet
+            ref={reportSheetRef}
             parkingLot={currentParking}
-            opened={isReportModalOpen}
-            onCancel={hideReportModal}
-            onConfirm={hideReportModal}
+            onConfirm={hideReportSheet}
           />
         )}
       </ScreenWrapper>

@@ -34,7 +34,6 @@ export const useHome = () => {
     valetParking,
     twentyFourSeven,
   } = useAppSelector((state) => state.search)
-  const [chipSelected, setChipSelected] = useState(false)
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentParking, setCurrentParking] = useState<ParkingLot | undefined>(
     undefined,
@@ -44,6 +43,7 @@ export const useHome = () => {
   const { loading, query, places } = useAppSelector((state) => state.search)
   const [isFocused, setIsFocused] = useState(false)
   const pathName = usePathname()
+  const reportSheetRef = useRef<BottomSheet>(null)
 
   useEffect(() => {
     const checkAndShowAnimation = async () => {
@@ -127,10 +127,6 @@ export const useHome = () => {
     dispatch(searchPlace(placeName))
   }
 
-  const toggleChip = () => {
-    setChipSelected(!chipSelected)
-  }
-
   const expandParkingDetailsSheet = () => {
     bottomSheetRef.current?.expand()
   }
@@ -185,14 +181,12 @@ export const useHome = () => {
     }
   }
 
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
-
-  const hideReportModal = () => {
-    setIsReportModalOpen(false)
+  const hideReportSheet = () => {
+    reportSheetRef.current?.close()
   }
 
-  const showReportModal = () => {
-    setIsReportModalOpen(true)
+  const showReportSheet = () => {
+    reportSheetRef.current?.expand()
   }
 
   const login = async () => {
@@ -255,7 +249,6 @@ export const useHome = () => {
   }, [])
 
   return {
-    isReportModalOpen,
     bottomSheetRef,
     currentParking,
     loading,
@@ -268,6 +261,7 @@ export const useHome = () => {
     valetParking,
     twentyFourSeven,
     accordionValue,
+    reportSheetRef,
     setAccordionValue,
     handleViewAllParkingLots,
     handleParkingCardPress,
@@ -278,8 +272,8 @@ export const useHome = () => {
     handleClearQuery,
     handleSearch,
     handlePlacePress,
-    hideReportModal,
-    showReportModal,
+    hideReportSheet,
+    showReportSheet,
     handleRadiusMtChange,
     handleOnlyAvailableChange,
     handleOnlyPaymentTransferChange,
