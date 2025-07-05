@@ -1,22 +1,13 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-  useNotificationNavigationHandler,
-} from '@/modules'
-import { RatingModal } from '@/modules/home/components'
-import { checkRateModalSubmited, closeReviewModal } from '@/store'
+import { useAppDispatch, useNotificationNavigationHandler } from '@/modules'
+import { RatingSheet } from '@/modules/home/components'
+import { checkRateModalSubmited } from '@/store'
 import { Stack } from 'expo-router'
 import React, { useEffect } from 'react'
 
 export default function HomeLayout() {
-  const { reviewModalVisible } = useAppSelector((state) => state.review)
   const dispatch = useAppDispatch()
 
   useNotificationNavigationHandler()
-
-  const handleCloseReviewModal = () => {
-    dispatch(closeReviewModal())
-  }
 
   useEffect(() => {
     dispatch(checkRateModalSubmited())
@@ -26,12 +17,13 @@ export default function HomeLayout() {
     <>
       <Stack />
 
-      {reviewModalVisible && (
+      {/* {reviewModalVisible && (
         <RatingModal
           opened={reviewModalVisible}
           onHide={handleCloseReviewModal}
         />
-      )}
+      )} */}
+      <RatingSheet />
     </>
   )
 }

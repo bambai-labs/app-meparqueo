@@ -1,10 +1,11 @@
 import { MeParqueoApi } from '@/api'
-import { useAppDispatch } from '@/modules/common'
+import { useAppDispatch, useAppSelector } from '@/modules/common'
 import { closeReviewModal } from '@/store/review/reviewSlice'
 import { cancelRateNotificationReminder } from '@/store/review/thunks'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 import * as Yup from 'yup'
 
@@ -15,7 +16,9 @@ interface FormValues {
 
 export const useRatingModal = () => {
   const [loading, setLoading] = useState(false)
+  const { reviewModalVisible } = useAppSelector((state) => state.review)
   const dispatch = useAppDispatch()
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const validationSchema = Yup.object().shape({
     rate: Yup.number()
@@ -50,12 +53,28 @@ export const useRatingModal = () => {
       onSubmit,
     })
 
+  const handleCancel = () => {
+    dispatch(closeReviewModal())
+  }
+
+  useEffect(() => {
+    if (reviewModalVisible) {
+      console.log('expanding')
+      bottomSheetModalRef.current?.expand()
+      return
+    }
+    bottomSheetModalRef.current?.close()
+    console.log('closing')
+  }, [reviewModalVisible])
+
   return {
     values,
     errors,
     touched,
     loading,
+    bottomSheetModalRef,
     handleChange,
     handleSubmit,
+    handleCancel,
   }
 }

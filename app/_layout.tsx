@@ -3,6 +3,7 @@ import '@/global.css'
 import { useColorScheme } from '@/hooks/useColorScheme'
 import { HeaderLogo } from '@/modules/home/components'
 import { store } from '@/store'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { firebase } from '@react-native-firebase/analytics'
 import {
   DarkTheme,
@@ -68,34 +69,36 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView>
-      <GluestackUIProvider mode="light">
-        <Provider store={store}>
-          <ThemeProvider
-            value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-          >
-            <View
-              style={{
-                paddingTop: Constants.statusBarHeight,
-                backgroundColor: '#ffffff',
-              }}
-            />
-            <HeaderLogo />
-            <Stack>
-              <Stack.Screen
-                name="home"
-                options={{
-                  headerShown: false,
+      <BottomSheetModalProvider>
+        <GluestackUIProvider mode="light">
+          <Provider store={store}>
+            <ThemeProvider
+              value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+            >
+              <View
+                style={{
+                  paddingTop: Constants.statusBarHeight,
+                  backgroundColor: '#ffffff',
                 }}
               />
-            </Stack>
-            <StatusBar
-              style="dark"
-              backgroundColor="#ffffff"
-              translucent={false}
-            />
-          </ThemeProvider>
-        </Provider>
-      </GluestackUIProvider>
+              <HeaderLogo />
+              <Stack>
+                <Stack.Screen
+                  name="home"
+                  options={{
+                    headerShown: false,
+                  }}
+                />
+              </Stack>
+              <StatusBar
+                style="dark"
+                backgroundColor="#ffffff"
+                translucent={false}
+              />
+            </ThemeProvider>
+          </Provider>
+        </GluestackUIProvider>
+      </BottomSheetModalProvider>
     </GestureHandlerRootView>
   )
 }
