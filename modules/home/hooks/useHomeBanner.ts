@@ -8,7 +8,6 @@ export const useHomeBanner = () => {
     undefined,
   )
 
-  // Genera una clave única para el banner actual
   const getBannerKey = (banner?: BannerData) => {
     if (!banner) return ''
     return `${banner.image || ''}|${banner.link || ''}`
@@ -16,7 +15,6 @@ export const useHomeBanner = () => {
 
   const fetchBannerData = async () => {
     try {
-      // Obtener el banner actual desde la API
       const { data } = await MeParqueoApi.get<BannerDataResponse>(
         '/api/v1/config/banner',
       )
