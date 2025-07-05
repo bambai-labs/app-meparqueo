@@ -21,6 +21,7 @@ export default function Index() {
       Alert.alert(
         'Debes permitir el acceso a tu ubicación para usar la aplicación',
       )
+      router.replace('/nopermissions')
       return
     }
 

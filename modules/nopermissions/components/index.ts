@@ -1,0 +1,1 @@
+export { NoPermissionsModal } from './NoPermissionsModal'
