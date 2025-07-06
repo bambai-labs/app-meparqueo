@@ -262,12 +262,17 @@ export const HomeScreen = () => {
                     </HStack>
 
                     <Button
-                      className="bg-white shadow-xl mt-2"
+                      className=" shadow-xl mt-2"
                       onPress={handleViewAllParkingLots}
                       variant="outline"
                     >
-                      <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
-                        Mostrar todos los parqueaderos (ignorar filtros)
+                      <ButtonText
+                        style={{
+                          fontFamily: 'Neuwelt-Light',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        Mostrar todos los parqueaderos
                       </ButtonText>
                     </Button>
                   </VStack>

@@ -141,7 +141,7 @@ export const SearchBar = ({
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Icon as={Search} size="md" color="white" />
+            <Icon as={Search} size="xl" color="white" />
           )}
         </Button>
       </HStack>
