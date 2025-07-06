@@ -9,9 +9,9 @@ import { setLocation, updateParkingLotAvailability } from '@/store'
 import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import * as Location from 'expo-location'
-import { useRootNavigationState, useRouter } from 'expo-router'
+import { Stack, useRootNavigationState, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, View } from 'react-native'
+import { ActivityIndicator, Alert, View } from 'react-native'
 import 'react-native-get-random-values'
 
 export default function Index() {
@@ -23,7 +23,6 @@ export default function Index() {
   const [isCheckingPermissions, setIsCheckingPermissions] = useState(false)
 
   const startWatchingLocation = async () => {
-    // Ya verificamos permisos en handleAppInitialization, así que asumimos que están concedidos
     Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.High,
@@ -93,14 +92,12 @@ export default function Index() {
         return
       }
 
-      // Verificar permisos primero
       const hasPermission = await getPermissions()
       if (!hasPermission) {
         setPermissionsModalVisible(true)
-        return // No continuar si no hay permisos
+        return
       }
 
-      // Solo continuar si hay permisos
       await startWatchingLocation()
       await initializeSocket()
 
@@ -119,11 +116,13 @@ export default function Index() {
 
       if (hasPermission) {
         setPermissionsModalVisible(false)
-        // Continuar con el flujo normal
         await startWatchingLocation()
         await initializeSocket()
         setIsInitialized(true)
+        return
       }
+
+      Alert.alert('Debes permitir el acceso a tu ubicación para continuar.')
     } catch (error) {
       console.error('Error checking permissions:', error)
     } finally {
@@ -145,11 +144,12 @@ export default function Index() {
 
   return (
     <View>
+      <Stack.Screen options={{ headerShown: false }} />
       <ActivityIndicator />
 
       <NoPermissionsModal
         isOpen={permissionsModalVisible}
-        onClose={() => setPermissionsModalVisible(false)}
+        onClose={() => {}}
         onCheckPermissions={handleCheckPermissions}
         isCheckingPermissions={isCheckingPermissions}
       />

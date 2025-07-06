@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/modal'
 import { Spinner } from '@/components/ui/spinner'
 import { VStack } from '@/components/ui/vstack'
-import { Download } from 'lucide-react-native'
+import { MapPin } from 'lucide-react-native'
 import { Text } from 'react-native'
 import { useNoPermissionsModal } from '../hooks'
 
@@ -35,10 +35,10 @@ export const NoPermissionsModal = ({
       <ModalBackdrop />
       <ModalContent>
         <HStack className="w-full justify-center" space="md">
-          <Icon size="xl" as={Download} color="#3b7ef6" />
+          <Icon style={{ width: 50, height: 50 }} as={MapPin} color="#3b7ef6" />
         </HStack>
 
-        <ModalHeader>
+        <ModalHeader className="mt-4">
           <Heading>Permisos requeridos</Heading>
         </ModalHeader>
 

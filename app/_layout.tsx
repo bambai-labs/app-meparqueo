@@ -82,6 +82,7 @@ export default function RootLayout() {
                 }}
               />
               <HeaderLogo />
+
               <Stack>
                 <Stack.Screen
                   name="home"
