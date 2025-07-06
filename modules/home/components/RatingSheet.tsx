@@ -72,21 +72,13 @@ export const RatingSheet = () => {
             </Textarea>
 
             {errors.comment && touched.comment && (
-              <Text className="text-red-500 font-bold ,y2">
+              <Text className="text-red-500 font-bold mt-2">
                 {errors.comment}*
               </Text>
             )}
-
-            <HStack className="w-full justify-end mt-5">
-              <HStack space="md">
-                <Button variant="outline" onPress={() => {}}>
-                  <ButtonText>Cancelar</ButtonText>
-                </Button>
-                <Button onPress={() => handleSubmit()}>
-                  <ButtonText>Enviar</ButtonText>
-                </Button>
-              </HStack>
-            </HStack>
+            <Button className="w-full mt-5" onPress={() => handleSubmit()}>
+              <ButtonText>Enviar</ButtonText>
+            </Button>
           </VStack>
         </FormControl>
       </BottomSheetView>

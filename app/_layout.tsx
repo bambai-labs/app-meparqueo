@@ -18,7 +18,7 @@ import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
-import { Alert, Platform, View } from 'react-native'
+import { Platform, View } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 import { Provider } from 'react-redux'
@@ -35,13 +35,13 @@ export default function RootLayout() {
   })
 
   const requestNotificationPermission = async () => {
-    const { status } = await Notifications.requestPermissionsAsync()
-    if (status !== 'granted') {
-      Alert.alert(
-        'Permiso denegado',
-        'Por favor, habilita las notificaciones para recibir alertas de parqueo.',
-      )
-    }
+    await Notifications.requestPermissionsAsync()
+    // if (status !== 'granted') {
+    //   Alert.alert(
+    //     'Permiso denegado',
+    //     'Por favor, habilita las notificaciones para recibir alertas de parqueo.',
+    //   )
+    // }
   }
 
   useEffect(() => {
