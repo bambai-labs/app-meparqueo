@@ -6,6 +6,7 @@ import {
   useAppDispatch,
 } from '@/modules'
 import { setLocation, updateParkingLotAvailability } from '@/store'
+import NetInfo from '@react-native-community/netinfo'
 import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import * as Location from 'expo-location'
@@ -85,6 +86,13 @@ export default function Index() {
 
   const handleAppInitialization = async () => {
     try {
+      const connectionInfo = await NetInfo.fetch()
+
+      if (!connectionInfo.isInternetReachable) {
+        router.replace('/nointernet')
+        return
+      }
+
       const isUpdated = await isAppUpdated()
 
       if (!isUpdated) {
@@ -104,7 +112,7 @@ export default function Index() {
       setIsInitialized(true)
     } catch (error) {
       console.error('Error during app initialization:', error)
-      // TODO: Handle error
+      router.replace('/nointernet')
     }
   }
 
