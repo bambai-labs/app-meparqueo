@@ -3,9 +3,11 @@ import { FormControl } from '@/components/ui/form-control'
 import { Heading } from '@/components/ui/heading'
 import { HStack } from '@/components/ui/hstack'
 import { Icon } from '@/components/ui/icon'
-import { Textarea, TextareaInput } from '@/components/ui/textarea'
 import { VStack } from '@/components/ui/vstack'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+  BottomSheetScrollView,
+  BottomSheetTextInput,
+} from '@gorhom/bottom-sheet'
 import { ChevronDown } from 'lucide-react-native'
 import { Text } from 'react-native'
 import StarRating from 'react-native-star-rating-widget'
@@ -31,6 +33,9 @@ export const RatingSheet = () => {
       ref={bottomSheetModalRef}
       snapPoints={['25%']}
       index={-1}
+      keyboardBehavior="interactive"
+      keyboardBlurBehavior="restore"
+      android_keyboardInputMode="adjustResize"
       style={{
         backgroundColor: '#f3f4f6',
         borderTopLeftRadius: 50,
@@ -45,7 +50,7 @@ export const RatingSheet = () => {
         </HStack>
       )}
     >
-      <BottomSheetView>
+      <BottomSheetScrollView>
         <FormControl className="w-full p-4 bg-[#f3f4f6]">
           <VStack className="w-full items-center">
             <Heading>¿Que te parece MeParqueo?</Heading>
@@ -63,13 +68,20 @@ export const RatingSheet = () => {
               <Text className="text-red-500 font-bold my-2">{errors.rate}</Text>
             )}
 
-            <Textarea size="md" className="w-full mt-3 rounded-md bg-white">
-              <TextareaInput
-                value={values.comment}
-                onChangeText={handleChange('comment')}
-                placeholder="Dejanos tus sugerencias aquí :)"
-              />
-            </Textarea>
+            <BottomSheetTextInput
+              className="w-full mt-4"
+              value={values.comment}
+              onChangeText={handleChange('comment')}
+              placeholder="Dejanos tus sugerencias aquí :)"
+              multiline
+              style={{
+                minHeight: 80,
+                padding: 12,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+                borderRadius: 6,
+              }}
+            />
 
             {errors.comment && touched.comment && (
               <Text className="text-red-500 font-bold mt-2">
@@ -81,7 +93,7 @@ export const RatingSheet = () => {
             </Button>
           </VStack>
         </FormControl>
-      </BottomSheetView>
+      </BottomSheetScrollView>
     </BottomSheet>
   )
 }

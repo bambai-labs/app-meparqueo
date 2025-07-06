@@ -16,8 +16,10 @@ import {
   SelectTrigger,
 } from '@/components/ui/select'
 import { Spinner } from '@/components/ui/spinner'
-import { Textarea, TextareaInput } from '@/components/ui/textarea'
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
+import BottomSheet, {
+  BottomSheetScrollView,
+  BottomSheetTextInput,
+} from '@gorhom/bottom-sheet'
 import { ChevronDown, ChevronDownIcon } from 'lucide-react-native'
 import React, { forwardRef } from 'react'
 import { useReportParkingLot } from '../hooks'
@@ -45,6 +47,9 @@ export const ReportSheet = forwardRef<BottomSheet, Props>(
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
         }}
+        keyboardBehavior="interactive"
+        keyboardBlurBehavior="restore"
+        android_keyboardInputMode="adjustResize"
         handleComponent={() => (
           <HStack
             className="items-center justify-center w-full bg-[#f3f4f6]"
@@ -54,7 +59,7 @@ export const ReportSheet = forwardRef<BottomSheet, Props>(
           </HStack>
         )}
       >
-        <BottomSheetView>
+        <BottomSheetScrollView>
           <FormControl className="p-5 gap-3 bg-[#f3f4f6]">
             <Heading style={{ fontFamily: 'Neuwelt-Bold' }}>
               Reportar parqueadero
@@ -63,7 +68,7 @@ export const ReportSheet = forwardRef<BottomSheet, Props>(
             <Select
               selectedValue={values.reason}
               onValueChange={handleChange('reason')}
-              className="w-full"
+              className="w-full bg-white"
             >
               <SelectTrigger variant="outline" size="md">
                 <SelectInput
@@ -93,14 +98,20 @@ export const ReportSheet = forwardRef<BottomSheet, Props>(
               </SelectPortal>
             </Select>
 
-            <Textarea size="md" className="mt-3">
-              <TextareaInput
-                style={{ fontFamily: 'Neuwelt-Bold' }}
-                value={values.comment}
-                placeholder="Comentarios"
-                onChangeText={handleChange('comment')}
-              />
-            </Textarea>
+            <BottomSheetTextInput
+              className="w-full mt-4"
+              value={values.comment}
+              onChangeText={handleChange('comment')}
+              placeholder="Comentarios"
+              multiline
+              style={{
+                minHeight: 80,
+                padding: 12,
+                textAlignVertical: 'top',
+                backgroundColor: 'white',
+                borderRadius: 6,
+              }}
+            />
 
             <Button
               disabled={loading}
@@ -115,7 +126,7 @@ export const ReportSheet = forwardRef<BottomSheet, Props>(
               {loading && <Spinner color="#fff" />}
             </Button>
           </FormControl>
-        </BottomSheetView>
+        </BottomSheetScrollView>
       </BottomSheet>
     )
   },
