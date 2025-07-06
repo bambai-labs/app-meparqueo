@@ -1,12 +1,17 @@
 import { AppVersionResponse, MeParqueoApi, socketManager } from '@/api'
-import { getPermissions, ParkingUpdateEstatus, useAppDispatch } from '@/modules'
+import {
+  getPermissions,
+  NoPermissionsModal,
+  ParkingUpdateEstatus,
+  useAppDispatch,
+} from '@/modules'
 import { setLocation, updateParkingLotAvailability } from '@/store'
 import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import { useRootNavigationState, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import 'react-native-get-random-values'
 
 export default function Index() {
@@ -14,17 +19,11 @@ export default function Index() {
   const navigationState = useRootNavigationState()
   const dispatch = useAppDispatch()
   const [isInitialized, setIsInitialized] = useState(false)
+  const [permissionsModalVisible, setPermissionsModalVisible] = useState(false)
+  const [isCheckingPermissions, setIsCheckingPermissions] = useState(false)
 
   const startWatchingLocation = async () => {
-    const hasPermission = await getPermissions()
-    if (!hasPermission) {
-      Alert.alert(
-        'Debes permitir el acceso a tu ubicación para usar la aplicación',
-      )
-      router.replace('/nopermissions')
-      return
-    }
-
+    // Ya verificamos permisos en handleAppInitialization, así que asumimos que están concedidos
     Location.watchPositionAsync(
       {
         accuracy: Location.Accuracy.High,
@@ -93,6 +92,15 @@ export default function Index() {
         router.replace('/home/outdated')
         return
       }
+
+      // Verificar permisos primero
+      const hasPermission = await getPermissions()
+      if (!hasPermission) {
+        setPermissionsModalVisible(true)
+        return // No continuar si no hay permisos
+      }
+
+      // Solo continuar si hay permisos
       await startWatchingLocation()
       await initializeSocket()
 
@@ -100,6 +108,26 @@ export default function Index() {
     } catch (error) {
       console.error('Error during app initialization:', error)
       // TODO: Handle error
+    }
+  }
+
+  const handleCheckPermissions = async () => {
+    setIsCheckingPermissions(true)
+
+    try {
+      const hasPermission = await getPermissions()
+
+      if (hasPermission) {
+        setPermissionsModalVisible(false)
+        // Continuar con el flujo normal
+        await startWatchingLocation()
+        await initializeSocket()
+        setIsInitialized(true)
+      }
+    } catch (error) {
+      console.error('Error checking permissions:', error)
+    } finally {
+      setIsCheckingPermissions(false)
     }
   }
 
@@ -115,5 +143,16 @@ export default function Index() {
     }
   }, [isInitialized, navigationState?.key])
 
-  return <ActivityIndicator />
+  return (
+    <View>
+      <ActivityIndicator />
+
+      <NoPermissionsModal
+        isOpen={permissionsModalVisible}
+        onClose={() => setPermissionsModalVisible(false)}
+        onCheckPermissions={handleCheckPermissions}
+        isCheckingPermissions={isCheckingPermissions}
+      />
+    </View>
+  )
 }

@@ -9,16 +9,29 @@ import {
   ModalContent,
   ModalHeader,
 } from '@/components/ui/modal'
+import { Spinner } from '@/components/ui/spinner'
 import { VStack } from '@/components/ui/vstack'
 import { Download } from 'lucide-react-native'
 import { Text } from 'react-native'
 import { useNoPermissionsModal } from '../hooks'
 
-export const NoPermissionsModal = () => {
+interface Props {
+  isOpen: boolean
+  onClose: () => void
+  onCheckPermissions: () => void
+  isCheckingPermissions?: boolean
+}
+
+export const NoPermissionsModal = ({
+  isOpen,
+  onClose,
+  onCheckPermissions,
+  isCheckingPermissions = false,
+}: Props) => {
   const { handleOpenConfig } = useNoPermissionsModal()
 
   return (
-    <Modal isOpen={true} onClose={() => {}}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalBackdrop />
       <ModalContent>
         <HStack className="w-full justify-center" space="md">
@@ -39,6 +52,21 @@ export const NoPermissionsModal = () => {
 
             <Button onPress={handleOpenConfig}>
               <ButtonText>Abrir configuración</ButtonText>
+            </Button>
+
+            <Button
+              onPress={onCheckPermissions}
+              disabled={isCheckingPermissions}
+              variant="outline"
+            >
+              {isCheckingPermissions ? (
+                <HStack space="sm" className="items-center">
+                  <Spinner />
+                  <ButtonText>Verificando permisos...</ButtonText>
+                </HStack>
+              ) : (
+                <ButtonText>Verificar permisos</ButtonText>
+              )}
             </Button>
           </VStack>
         </ModalBody>
