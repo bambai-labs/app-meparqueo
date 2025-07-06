@@ -329,7 +329,7 @@ export const SearchScreen = () => {
                 className="border-gray-400 rounded-lg"
               >
                 <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
-                  Filtrar
+                  Filtra tu búsqueda
                 </ButtonText>
                 <Icon as={ChevronDown} size="sm" />
               </Button>
