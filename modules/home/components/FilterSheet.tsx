@@ -41,13 +41,13 @@ export const FilterSheet = forwardRef<BottomSheet, Props>(
         snapPoints={['25%']}
         index={-1}
         style={{
-          backgroundColor: '#FFFAFA',
+          backgroundColor: '#f3f4f6',
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
         }}
         handleComponent={() => (
           <HStack
-            className="items-center justify-center w-full bg-[#FFFAFA]"
+            className="items-center justify-center w-full bg-[#f3f4f6]"
             style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50 }}
           >
             <Icon as={ChevronDown} className="w-9 h-9" />
@@ -55,7 +55,7 @@ export const FilterSheet = forwardRef<BottomSheet, Props>(
         )}
       >
         <BottomSheetView>
-          <FormControl className="p-5 gap-3 w-full bg-[#FFFAFA]">
+          <FormControl className="p-5 gap-3 w-full bg-[#f3f4f6]">
             <Heading>Filtros</Heading>
             <VStack className="w-full" space="md">
               <HStack className="w-full justify-between">
@@ -141,7 +141,7 @@ export const FilterSheet = forwardRef<BottomSheet, Props>(
 
             <Button onPress={handleSubmit}>
               <ButtonText style={{ fontFamily: 'Neuwelt-Light' }}>
-                Filtrar
+                Aplicar filtros
               </ButtonText>
             </Button>
           </FormControl>

@@ -32,13 +32,13 @@ export const RatingSheet = () => {
       snapPoints={['25%']}
       index={-1}
       style={{
-        backgroundColor: '#FFFAFA',
+        backgroundColor: '#f3f4f6',
         borderTopLeftRadius: 50,
         borderTopRightRadius: 50,
       }}
       handleComponent={() => (
         <HStack
-          className="items-center justify-center w-full bg-[#FFFAFA]"
+          className="items-center justify-center w-full bg-[#f3f4f6]"
           style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50 }}
         >
           <Icon as={ChevronDown} className="w-9 h-9" />
@@ -46,7 +46,7 @@ export const RatingSheet = () => {
       )}
     >
       <BottomSheetView>
-        <FormControl className="w-full p-4 bg-[#FFFAFA]">
+        <FormControl className="w-full p-4 bg-[#f3f4f6]">
           <VStack className="w-full items-center">
             <Heading>¿Que te parece MeParqueo?</Heading>
 
