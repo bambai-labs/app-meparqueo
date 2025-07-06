@@ -365,6 +365,7 @@ export const SearchScreen = () => {
                 <ParkingResultCard
                   parkingLot={currentParking}
                   onPress={handleParkingCardPress}
+                  className="mb-3"
                 />
               )
             ) : (

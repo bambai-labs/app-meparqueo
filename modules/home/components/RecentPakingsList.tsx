@@ -21,38 +21,6 @@ export const RecentParkingsList = ({ className = '', onCardPress }: Props) => {
     }
   }
 
-  const renderFooter = () => {
-    if (loading) {
-      return null
-      {
-        /**
-       return (
-        <View className="py-5 items-center justify-center">
-          <ActivityIndicator size="large" />
-        </View>
-      )
-      */
-      }
-    }
-
-    if (recentParkings.length > 0 && !hasMore) {
-      return (
-        <View className="py-5 items-center justify-center">
-          <Text
-            className="text-gray-500 text-base"
-            style={{
-              fontFamily: 'Neuwelt-Light',
-            }}
-          >
-            No hay más parqueaderos
-          </Text>
-        </View>
-      )
-    }
-
-    return null
-  }
-
   const renderEmptyList = () => {
     if (loading && recentParkings.length === 0) {
       return (
@@ -104,7 +72,6 @@ export const RecentParkingsList = ({ className = '', onCardPress }: Props) => {
       onEndReachedThreshold={0.1}
       refreshing={loading && recentParkings.length > 0}
       onRefresh={refreshParkings}
-      ListFooterComponent={renderFooter}
       ListEmptyComponent={renderEmptyList}
       ItemSeparatorComponent={() => {
         return <View className="h-4" />

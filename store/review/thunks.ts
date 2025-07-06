@@ -14,8 +14,12 @@ export const checkRateModalSubmited = () => {
         Number(await AsyncStorage.getItem('openMapDirectionTapCount')) ?? 0
 
       if (!isSubmitted && openMapDirectionTapCount === 2) {
+        console.log('opening review modal')
         dispatch(openReviewModal())
+        return
       }
+
+      console.log('not opening review modal')
     } catch (err) {
       console.log(err)
     }

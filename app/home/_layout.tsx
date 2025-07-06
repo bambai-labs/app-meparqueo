@@ -16,13 +16,6 @@ export default function HomeLayout() {
   return (
     <>
       <Stack />
-
-      {/* {reviewModalVisible && (
-        <RatingModal
-          opened={reviewModalVisible}
-          onHide={handleCloseReviewModal}
-        />
-      )} */}
       <RatingSheet />
     </>
   )

@@ -6,10 +6,10 @@ import {
   useAppDispatch,
 } from '@/modules'
 import { setLocation, updateParkingLotAvailability } from '@/store'
-import NetInfo from '@react-native-community/netinfo'
 import { isAxiosError } from 'axios'
 import Constants from 'expo-constants'
 import * as Location from 'expo-location'
+import * as Network from 'expo-network'
 import { Stack, useRootNavigationState, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, View } from 'react-native'
@@ -87,7 +87,7 @@ export default function Index() {
 
   const handleAppInitialization = async () => {
     try {
-      const connectionInfo = await NetInfo.fetch()
+      const connectionInfo = await Network.getNetworkStateAsync()
 
       if (!connectionInfo.isInternetReachable) {
         router.replace('/nointernet')
