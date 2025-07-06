@@ -20,6 +20,7 @@ interface Props {
   onClose: () => void
   onCheckPermissions: () => void
   isCheckingPermissions?: boolean
+  errorMessage?: string | null
 }
 
 export const NoPermissionsModal = ({
@@ -27,6 +28,7 @@ export const NoPermissionsModal = ({
   onClose,
   onCheckPermissions,
   isCheckingPermissions = false,
+  errorMessage,
 }: Props) => {
   const { handleOpenConfig } = useNoPermissionsModal()
 
@@ -68,6 +70,11 @@ export const NoPermissionsModal = ({
                 <ButtonText>Verificar permisos</ButtonText>
               )}
             </Button>
+            {errorMessage && (
+              <Text className="text-red-500 font-bold mt-1 text-center">
+                {errorMessage}
+              </Text>
+            )}
           </VStack>
         </ModalBody>
       </ModalContent>

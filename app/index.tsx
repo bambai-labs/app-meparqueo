@@ -12,7 +12,7 @@ import Constants from 'expo-constants'
 import * as Location from 'expo-location'
 import { Stack, useRootNavigationState, useRouter } from 'expo-router'
 import { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, View } from 'react-native'
+import { ActivityIndicator, View } from 'react-native'
 import 'react-native-get-random-values'
 
 export default function Index() {
@@ -22,6 +22,7 @@ export default function Index() {
   const [isInitialized, setIsInitialized] = useState(false)
   const [permissionsModalVisible, setPermissionsModalVisible] = useState(false)
   const [isCheckingPermissions, setIsCheckingPermissions] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
   const startWatchingLocation = async () => {
     Location.watchPositionAsync(
@@ -118,6 +119,7 @@ export default function Index() {
 
   const handleCheckPermissions = async () => {
     setIsCheckingPermissions(true)
+    setErrorMessage(null)
 
     try {
       const hasPermission = await getPermissions()
@@ -130,7 +132,7 @@ export default function Index() {
         return
       }
 
-      Alert.alert('Debes permitir el acceso a tu ubicación para continuar.')
+      setErrorMessage('Debes permitir el acceso a tu ubicación para continuar.')
     } catch (error) {
       console.error('Error checking permissions:', error)
     } finally {
@@ -160,6 +162,7 @@ export default function Index() {
         onClose={() => {}}
         onCheckPermissions={handleCheckPermissions}
         isCheckingPermissions={isCheckingPermissions}
+        errorMessage={errorMessage}
       />
     </View>
   )
