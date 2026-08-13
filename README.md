@@ -9,11 +9,11 @@ MeParqueo es un sistema IoT de parqueo inteligente en tiempo real. Repos de la o
 | Repo | Rol |
 | ---- | --- |
 | **[app-meparqueo](https://github.com/bambai-labs/app-meparqueo)** (este repo) | App móvil React Native para conductores |
-| api-meparqueo (privado) | Backend — API REST + Socket.IO que consume esta app |
-| nodo-meparqueo (privado) | Firmware del sensor ESP32 (LoRaWAN) |
-| web-meparqueo (privado) | Frontend web |
-| landing-meparqueo (privado) | Landing page |
-| survey-meparqueo (privado) | Encuestas y validación |
+| [api-meparqueo](https://github.com/bambai-labs/api-meparqueo) (público) | Backend — API REST + Socket.IO que consume esta app |
+| [nodo-meparqueo](https://github.com/bambai-labs/nodo-meparqueo) (público) | Firmware del sensor ESP32 (LoRaWAN) |
+| [web-meparqueo](https://github.com/bambai-labs/web-meparqueo) (público) | Frontend web |
+| [landing-meparqueo](https://github.com/bambai-labs/landing-meparqueo) (público) | Landing page |
+| [survey-meparqueo](https://github.com/bambai-labs/survey-meparqueo) (público) | Encuestas y validación |
 
 ## ✨ Características
 
